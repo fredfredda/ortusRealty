@@ -36,7 +36,7 @@ const FilterItems = ({filterFunctions}) => {
   useEffect(() => {
     if (filterFunctions.activeTab === 'investing') {
       filterFunctions.handlepropertyTypes("development project");
-    }
+    } el
   }, [filterFunctions.activeTab]);
 
   return (
