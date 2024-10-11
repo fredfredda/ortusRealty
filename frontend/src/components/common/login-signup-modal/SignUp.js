@@ -1,10 +1,10 @@
 "use client";
 import { useState, useRef } from "react";
 import { handleLogin } from "@/utilis/auth";
-import { useRouter } from "next/navigation";
-// import { useRouter } from "next/compat/router";
 import { toast } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
+import { getSession } from "@/utilis/auth";
+import { sessionStore } from "@/store/session";
 
 const override = {
   display: "block",
@@ -12,9 +12,8 @@ const override = {
   borderColor: "white",
 };
 
-const SignUp = ({handleSessionChange}) => {
-  const router = useRouter();
-  const ref = useRef(null);
+const SignUp = () => {
+  const setSession = sessionStore((state) => state.setSession);
 
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -53,13 +52,14 @@ const SignUp = ({handleSessionChange}) => {
         email: data.email,
         username: data.username,
       });
-      handleSessionChange();
+      setSession(await getSession());
+      document.getElementById("signupForm").reset();
     }
     setIsLoading(false);
   };
 
   return (
-    <form className="form-style1" ref={ref} onSubmit={handleSubmit}>
+    <form id="signupform" className="form-style1" onSubmit={handleSubmit}>
       <div className="mb25">
         <label className="form-label fw600 dark-color">First Name</label>
         <input

@@ -8,6 +8,8 @@ import "rc-slider/assets/index.css";
 import { DM_Sans, Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
+import { getSession } from "@/utilis/auth";
+import { sessionStore } from "@/store/session";
 
 if (typeof window !== "undefined") {
   import("bootstrap");
@@ -28,6 +30,21 @@ const poppins = Poppins({
 });
 
 export default function RootLayout({ children }) {
+  const setSession = sessionStore((state) => state.setSession);
+  const deleteSession = sessionStore((state) => state.deleteSession);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session_ = await getSession();
+      if (session_ !== null) {
+        setSession(session_);
+      } else {
+        deleteSession();
+      }
+    };
+    checkSession();
+  }, []);
+
   useEffect(() => {
     Aos.init({
       duration: 1200,

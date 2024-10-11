@@ -9,7 +9,6 @@ const FilterItems = ({filterFunctions}) => {
     { value: "land", label: "Lands" },
     { value: "home", label: "Homes" },
     { value: "construction site", label: "Construction sites" },
-    { value: "development project", label: "Development projects" },
   ];
   const locationOptions = [
     { value: "Bujumbura Mairie", label: "Bujumbura Mairie" },
@@ -37,10 +36,7 @@ const FilterItems = ({filterFunctions}) => {
   useEffect(() => {
     if (filterFunctions.activeTab === 'investing') {
       filterFunctions.handlepropertyTypes("development project");
-    } else {
-      filterFunctions.handlepropertyTypes(catOptions[0].value);
     }
-    filterFunctions.handlelocation(locationOptions[0].value);
   }, [filterFunctions.activeTab]);
 
   return (
@@ -50,7 +46,7 @@ const FilterItems = ({filterFunctions}) => {
       <div className="col-md-12">
         <div className="bootselect-multiselect mb20">
           <Select
-            defaultValue={[catOptions[0]]}
+            defaultValue={[catOptions[1]]}
             name="colors"
             options={catOptions}
             styles={customStyles}

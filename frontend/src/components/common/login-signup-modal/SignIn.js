@@ -1,8 +1,9 @@
 "use client";
-import { useState, useRef } from "react";
-import { handleLogin } from "@/utilis/auth";
+import { useState, useRef, useEffect } from "react";
+import { getSession, handleLogin } from "@/utilis/auth";
 import { toast } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
+import { sessionStore } from "@/store/session";
 
 const override = {
   display: "block",
@@ -10,7 +11,10 @@ const override = {
   borderColor: "white",
 };
 
-const SignIn = ({handleSessionChange}) => {
+const SignIn = () => {
+  const session = sessionStore((state) => state.session);
+  const setSession = sessionStore((state) => state.setSession);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +40,6 @@ const SignIn = ({handleSessionChange}) => {
       });
       const data = await response.json();
       if (data.error) {
-        console.log(data.error);
         toast.error(data.error);
       } else {
         await handleLogin({
@@ -44,7 +47,7 @@ const SignIn = ({handleSessionChange}) => {
           email: data.email,
           username: data.username,
         });
-        handleSessionChange();
+        setSession(await getSession());
         document.getElementById('loginForm').reset();
       }
     } catch (error) {

@@ -5,6 +5,11 @@ import { redirect } from "next/navigation";
 
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
+const cookie = {
+    name: "session",
+    options: { httpOnly: true, secure: true, sameSite: "lax", path: "/" },
+    duration: 24 * 60 * 60 * 1000,
+}
 
 const encrypt = async (payload) => {
     return await new SignJWT(payload)
@@ -22,22 +27,27 @@ const decrypt = async (input) => {
 }
 
 const handleLogin = async (user) => {
-    const expires = new Date(Date.now() + (1 * 24 * 60 * 60 * 1000));
+    const expires = new Date(Date.now() + cookie.duration);
     const session = await encrypt({user, expires});
-    cookies().set('session', session, {
-        expires,
-        httpOnly: true
-    });
+    cookies().set(cookie.name, session, { ...cookie.options, expires });
+    redirect('/');
 }
 
 const handleLogout = async () => {
-    cookies().set('session', '', { expires: new Date(0) });
+    cookies().delete(cookie.name, { path: "/" });
+    redirect('/');
 }
 
 const getSession = async () => {
-    const session = cookies().get('session')?.value;
-    if(!session) return null;
-    return await decrypt(session);
+    const cookie_ = cookies().get(cookie.name)?.value;
+    if(!cookie_) {
+        return null;
+    }
+    const session = await decrypt(cookie_);
+    return { userId: session.user.userId,
+             email: session.user.email,
+             username: session.user.username,
+            };
 }
 
-export { handleLogin, handleLogout, getSession }
+export { decrypt, encrypt, handleLogin, handleLogout, getSession }

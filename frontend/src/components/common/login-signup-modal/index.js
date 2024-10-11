@@ -1,7 +1,7 @@
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
-const LoginSignupModal = ({handleSessionChange}) => {
+const LoginSignupModal = () => {
   return (
     <div className="modal-content">
       <div className="modal-header">
@@ -57,7 +57,7 @@ const LoginSignupModal = ({handleSessionChange}) => {
                 role="tabpanel"
                 aria-labelledby="nav-home-tab"
               >
-                <SignIn handleSessionChange={handleSessionChange}/>
+                <SignIn />
               </div>
               {/* End signin content */}
 
@@ -67,7 +67,7 @@ const LoginSignupModal = ({handleSessionChange}) => {
                 role="tabpanel"
                 aria-labelledby="nav-profile-tab"
               >
-                <SignUp handleSessionChange={handleSessionChange} />
+                <SignUp />
               </div>
               {/* End signup content */}
             </div>

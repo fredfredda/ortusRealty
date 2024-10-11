@@ -6,12 +6,14 @@ import LoginSignupModal from "@/components/common/login-signup-modal";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { getSession, handleLogout } from "@/utilis/auth";
+import { handleLogout } from "@/utilis/auth";
 import { usePathname } from "next/navigation";
+import { sessionStore } from "@/store/session";
 
 const Header = () => {
   const [navbar, setNavbar] = useState(false);
-  const [session, setSession] = useState({});
+  const session = sessionStore((state) => state.session);
+  const deleteSession = sessionStore((state) => state.deleteSession);
 
   const pathname = usePathname();
   const menuItems = [
@@ -88,13 +90,9 @@ const Header = () => {
     };
   }, []);
 
-  const handleSessionChange = async () => {
-    setSession(await getSession());
-  };
-
   const handleLogout_ = async () => {
     handleLogout();
-    setSession(await getSession());
+    deleteSession();
   };
 
   return (
@@ -134,31 +132,7 @@ const Header = () => {
                 </div>
               </div>
               {/* End .col-auto */}
-              {!session.user ? (
-                <div className="col-auto">
-                  <div className="d-flex align-items-center">
-                    <a
-                      href="#"
-                      className="login-info d-flex align-items-cente"
-                      data-bs-toggle="modal"
-                      data-bs-target="#loginSignupModal"
-                      role="button"
-                    >
-                      <i className="far fa-user-circle fz16 me-2" />{" "}
-                      <span className="d-none d-xl-block">
-                        Login / Register
-                      </span>
-                    </a>
-                    <Link
-                      className="ud-btn btn-white add-property bdrs60 ms-4"
-                      href="/contact"
-                    >
-                      Contact us
-                      <i className="fal fa-arrow-right-long" />
-                    </Link>
-                  </div>
-                </div>
-              ) : (
+              {session?.userId ? (
                 <div className="col-6 col-lg-auto">
                   <div className="text-center text-lg-end header_right_widgets">
                     <ul className="mb0 d-flex justify-content-center justify-content-sm-end p-0">
@@ -227,8 +201,32 @@ const Header = () => {
                     </ul>
                   </div>
                 </div>
+              ) : (
+                <div className="col-auto">
+                  <div className="d-flex align-items-center">
+                    <a
+                      href="#"
+                      className="login-info d-flex align-items-cente"
+                      data-bs-toggle="modal"
+                      data-bs-target="#loginSignupModal"
+                      role="button"
+                    >
+                      <i className="far fa-user-circle fz16 me-2" />{" "}
+                      <span className="d-none d-xl-block">
+                        Login / Register
+                      </span>
+                    </a>
+                    <Link
+                      className="ud-btn btn-white add-property bdrs60 ms-4"
+                      href="/contact"
+                    >
+                      Contact us
+                      <i className="fal fa-arrow-right-long" />
+                    </Link>
+                  </div>
+                </div>
               )}
-              
+
               <div className="signup-modal">
                 <div
                   className="modal fade"
@@ -238,9 +236,7 @@ const Header = () => {
                   aria-hidden="true"
                 >
                   <div className="modal-dialog  modal-dialog-scrollable modal-dialog-centered">
-                    <LoginSignupModal
-                      handleSessionChange={handleSessionChange}
-                    />
+                    <LoginSignupModal />
                   </div>
                 </div>
               </div>

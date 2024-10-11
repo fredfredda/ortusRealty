@@ -22,7 +22,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const override = {
   display: "block",
   margin: "0 auto",
-  borderColor: "red",
+  borderColor: "#eb6753",
 };
 
 const SingleV8 = ({ params }) => {
@@ -41,7 +41,6 @@ const SingleV8 = ({ params }) => {
         if (data.error) {
           console.log(data.error);
         } else {
-          console.log(data);
           setPropertyInfo((propertyInfo) => ({ ...propertyInfo, ...data }));
           setIsLoading(false);
         }
@@ -51,10 +50,6 @@ const SingleV8 = ({ params }) => {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log(propertyInfo);
-  }, [propertyInfo]);
 
   return (
     <>

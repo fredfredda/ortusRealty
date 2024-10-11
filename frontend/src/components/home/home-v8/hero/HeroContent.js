@@ -17,51 +17,24 @@ const HeroContent = () => {
     { id: "investing", label: "Invest" },
   ];
 
-  const [propertyTypes, setPropertyTypes] = useState('');
-  const [priceRange, setPriceRange] = useState('');
-  const [location, setLocation] = useState("All Provinces");
-  const [squirefeet, setSquirefeet] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const resetFilter = () => {
-    setListingStatus("");
-    setPropertyTypes("");
-    setPriceRange("");
-    setLocation("All Provinces");
-    setSquirefeet("");
-    setSearchQuery("");
-    setCurrentSortingOption("Default");
-    document.querySelectorAll(".filterInput").forEach(function (element) {
-      element.value = null;
-    });
-  };
+  const [propertyTypes, setPropertyTypes] = useState('home');
+  const [location, setLocation] = useState("Bujumbura Mairie");
 
   const handlepropertyTypes = (elm) => {
     setPropertyTypes(elm);
   };
-  const handlepriceRange = (elm) => {
-    setPriceRange(elm);
-  };
   const handlelocation = (elm) => {
     setLocation(elm);
   };
-  const handlesquirefeet = (elm) => {
-    setSquirefeet(elm);
-  };
+
   const filterFunctions = {
     activeTab,
     handlepropertyTypes,
-    handlepriceRange,
     handlelocation,
-    handlesquirefeet,
-    priceRange,
     propertyTypes,
-    resetFilter,
 
     location,
-    squirefeet,
     setPropertyTypes,
-    setSearchQuery,
   };
 
   return (
@@ -94,7 +67,7 @@ const HeroContent = () => {
                     <button
                       className="ud-btn btn-dark"
                       type="button"
-                      onClick={() => router.push(`/explore?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${activeTab}&province=${location}&priceRange=${priceRange}&sizeRange=${squirefeet}`)}
+                      onClick={() => router.push(`/explore?propertyType=${propertyTypes}&saleType=${activeTab}&province=${location}`)}
                     >
                       <span className="flaticon-search" />
                     </button>
