@@ -18,6 +18,7 @@ const FeaturedListings = () => {
   const savedProperties = savedPropertiesStore((state) => state.savedProperties);
   const appendProperty = savedPropertiesStore((state) => state.appendProperty);
   const removeProperty = savedPropertiesStore((state) => state.removeProperty);
+  const resetProperties = savedPropertiesStore((state) => state.resetProperties);
 
   var [listings, setListings] = useState([]);
 
@@ -45,11 +46,9 @@ const FeaturedListings = () => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
-          if (data.error === "Unauthorized") {
-            toast.error("Please login to save properties");
-          }
         } else {
           for (let i = 0; i < data.properties.length; i++) {
+            resetProperties();
             appendProperty(data.properties[i].property_id);
           }
         }
@@ -62,7 +61,7 @@ const FeaturedListings = () => {
   }, []);
 
   const handleSaveUnsave = async (propertyId) => {
-    try {
+    try {      
       if (savedProperties.includes(propertyId)) {
         const response = await fetch(
           `http://localhost:3001/api/properties/unsaveproperty/${propertyId}`,
@@ -91,6 +90,9 @@ const FeaturedListings = () => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          if (data.error === "Unauthorized") {
+            toast.error("Please login to save properties");
+          }
         } else {
           appendProperty(propertyId);
         }

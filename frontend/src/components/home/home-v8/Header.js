@@ -221,7 +221,7 @@ const Header = () => {
                 <div className="col-auto">
                   <div className="d-flex align-items-center">
                     <a
-                      href="/login"
+                      href={`/login?redirect=${pathname}`}
                       className="login-info d-flex align-items-cente"
                       // data-bs-toggle="modal"
                       // data-bs-target="#loginSignupModal"

@@ -1,8 +1,8 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
-import { redirect } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const override = {
   display: "block",
@@ -11,6 +11,11 @@ const override = {
 };
 
 const SignUp = () => {
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
 
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -46,8 +51,13 @@ const SignUp = () => {
     } else {
       console.log(data);
       localStorage.setItem("session", JSON.stringify(data));
-      document.getElementById("signupForm").reset();
-      redirect("/");
+      setSession(data);
+      document.getElementById("signupform").reset();
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push("/");
+      }
     }
     setIsLoading(false);
   };
@@ -103,8 +113,8 @@ const SignUp = () => {
       {/* End Password */}
 
       <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
-        <a className="fz14 ff-heading" href="/login">
-        Already have an account? Sign In
+        <a className="fz14 ff-heading" href={`/login?redirect=${redirect}`}>
+          Already have an account? Sign In
         </a>
       </div>
       {/* End  Already have an account? */}

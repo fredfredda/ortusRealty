@@ -163,8 +163,8 @@ const saveProperty = async (req,res) => {
 }
 
 const unsaveProperty = async (req,res) => {
-    const {userId} = req.user
-    const {propertyId} = req.params
+    const {userId} = req.user;
+    const {propertyId} = req.params;
     try {
         const savedProperty = await getSavedProperty(userId, propertyId);
         if(savedProperty.length === 0 ) return res.status(400).json({error: 'Saved property not found'});

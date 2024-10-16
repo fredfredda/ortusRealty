@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useRouter } from "next/navigation";
+import { sessionStore } from "@/store/session";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const override = {
   display: "block",
@@ -13,6 +14,11 @@ const override = {
 const SignIn = () => {
 
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
+
+  const setSession = sessionStore((state) => state.setSession);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,8 +49,13 @@ const SignIn = () => {
         toast.error(data.error);
       } else {
         localStorage.setItem("session", JSON.stringify(data));
-        document.getElementById('loginForm').reset();
-        router.push('/');
+        setSession(data);
+        document.getElementById("loginForm").reset();
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push("/");
+        }
       }
     } catch (error) {
       console.error(error);
@@ -92,14 +103,19 @@ const SignIn = () => {
       {/* End  Lost your password? */}
 
       <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
-        <a className="fz14 ff-heading" href="/register">
-        Don't have an account? Sign Up
+        <a className="fz14 ff-heading" href={`/register?redirect=${redirect}`}>
+          Don't have an account? Sign Up
         </a>
       </div>
       {/* End  Lost your password? */}
 
       <div className="d-grid mb20">
-        <button className="ud-btn btn-thm" type="submit" data-bs-dismiss="" disabled={isLoading}>
+        <button
+          className="ud-btn btn-thm"
+          type="submit"
+          data-bs-dismiss=""
+          disabled={isLoading}
+        >
           {isLoading ? (
             <ClipLoader
               color={color}
