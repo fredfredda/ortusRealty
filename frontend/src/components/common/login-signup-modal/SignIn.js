@@ -1,9 +1,8 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { getSession, handleLogin } from "@/utilis/auth";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
-import { sessionStore } from "@/store/session";
+import { useRouter } from "next/navigation";
 
 const override = {
   display: "block",
@@ -12,8 +11,8 @@ const override = {
 };
 
 const SignIn = () => {
-  const session = sessionStore((state) => state.session);
-  const setSession = sessionStore((state) => state.setSession);
+
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,6 +32,7 @@ const SignIn = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           email: email,
           password: password,
@@ -42,13 +42,9 @@ const SignIn = () => {
       if (data.error) {
         toast.error(data.error);
       } else {
-        await handleLogin({
-          userId: data.userId,
-          email: data.email,
-          username: data.username,
-        });
-        setSession(await getSession());
+        localStorage.setItem("session", JSON.stringify(data));
         document.getElementById('loginForm').reset();
+        router.push('/');
       }
     } catch (error) {
       console.error(error);
@@ -91,6 +87,13 @@ const SignIn = () => {
         </label>
         <a className="fz14 ff-heading" href="#">
           Lost your password?
+        </a>
+      </div>
+      {/* End  Lost your password? */}
+
+      <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
+        <a className="fz14 ff-heading" href="/register">
+        Don't have an account? Sign Up
         </a>
       </div>
       {/* End  Lost your password? */}

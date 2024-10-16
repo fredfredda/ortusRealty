@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata = {
-  title: "Register  || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty",
 };
 
 const Register = () => {
@@ -31,14 +31,11 @@ const Register = () => {
                       width={138}
                       height={44}
                       className="mb25"
-                      src="/images/header-logo2.svg"
+                      src="/images/ortus_realty_logo.svg"
                       alt="logo"
                     />
                   </Link>
                   <h2>Create account</h2>
-                  <p className="text">
-                    Sign in with this account across the following sites.
-                  </p>
                 </div>
                 <SignUp />
               </div>

@@ -1,10 +1,8 @@
 "use client";
 import { useState, useRef } from "react";
-import { handleLogin } from "@/utilis/auth";
 import { toast } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
-import { getSession } from "@/utilis/auth";
-import { sessionStore } from "@/store/session";
+import { redirect } from "next/navigation";
 
 const override = {
   display: "block",
@@ -13,7 +11,6 @@ const override = {
 };
 
 const SignUp = () => {
-  const setSession = sessionStore((state) => state.setSession);
 
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -34,6 +31,7 @@ const SignUp = () => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         firstName: firstName,
         lastName: lastName,
@@ -47,13 +45,9 @@ const SignUp = () => {
       toast.error(data.error);
     } else {
       console.log(data);
-      await handleLogin({
-        userId: data.userId,
-        email: data.email,
-        username: data.username,
-      });
-      setSession(await getSession());
+      localStorage.setItem("session", JSON.stringify(data));
       document.getElementById("signupForm").reset();
+      redirect("/");
     }
     setIsLoading(false);
   };
@@ -107,6 +101,13 @@ const SignUp = () => {
         />
       </div>
       {/* End Password */}
+
+      <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
+        <a className="fz14 ff-heading" href="/login">
+        Already have an account? Sign In
+        </a>
+      </div>
+      {/* End  Already have an account? */}
 
       <div className="d-grid mb20">
         <button className="ud-btn btn-thm" type="submit" disabled={isLoading}>

@@ -9,7 +9,7 @@ const services = [
   {
     icon: "flaticon-keywording",
     title: "Investment Opportunitites",
-    text: "We connect you with lucrative investment opportunities, offering market data to guide your investment decisions",
+    text: "We connect you with lucrative investment opportunities, offering market data to guide your decisions",
   },
   {
     icon: "flaticon-investment",

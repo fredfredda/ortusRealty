@@ -2,15 +2,16 @@
 
 import MainMenu from "@/components/common/MainMenu";
 import SidebarPanel from "@/components/common/sidebar-panel";
-import LoginSignupModal from "@/components/common/login-signup-modal";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { handleLogout } from "@/utilis/auth";
 import { usePathname } from "next/navigation";
 import { sessionStore } from "@/store/session";
+import { isLoadingStore } from "@/store/isLoading";
 
 const Header = () => {
+
+  const isLoading = isLoadingStore((state) => state.isLoading);
   const [navbar, setNavbar] = useState(false);
   const session = sessionStore((state) => state.session);
   const deleteSession = sessionStore((state) => state.deleteSession);
@@ -90,12 +91,26 @@ const Header = () => {
     };
   }, []);
 
-  const handleLogout_ = async () => {
-    handleLogout();
-    deleteSession();
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/users/logout", { 
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (data.error) {
+        console.log(data.error);
+      }
+      else {
+        localStorage.removeItem("session");
+        deleteSession();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  return (
+  if (isLoading === false) return (
     <>
       <header
         className={`header-nav nav-homepage-style light-header menu-home4 main-menu ${
@@ -132,12 +147,13 @@ const Header = () => {
                 </div>
               </div>
               {/* End .col-auto */}
+
               {session?.userId ? (
                 <div className="col-6 col-lg-auto">
                   <div className="text-center text-lg-end header_right_widgets">
                     <ul className="mb0 d-flex justify-content-center justify-content-sm-end p-0">
                       <li className="d-none d-sm-block">
-                        <Link className="text-center mr15" href="/login">
+                        <Link className="text-center mr15" href="#">
                           <span className="flaticon-email" />
                         </Link>
                       </li>
@@ -188,7 +204,7 @@ const Header = () => {
                               <div>
                                 <button
                                   className="dropdown-item"
-                                  onClick={handleLogout_}
+                                  onClick={handleLogout}
                                 >
                                   <i className={`"flaticon-exit mr10`} />
                                   Logout
@@ -205,10 +221,10 @@ const Header = () => {
                 <div className="col-auto">
                   <div className="d-flex align-items-center">
                     <a
-                      href="#"
+                      href="/login"
                       className="login-info d-flex align-items-cente"
-                      data-bs-toggle="modal"
-                      data-bs-target="#loginSignupModal"
+                      // data-bs-toggle="modal"
+                      // data-bs-target="#loginSignupModal"
                       role="button"
                     >
                       <i className="far fa-user-circle fz16 me-2" />{" "}
@@ -225,21 +241,7 @@ const Header = () => {
                     </Link>
                   </div>
                 </div>
-              )}
-
-              <div className="signup-modal">
-                <div
-                  className="modal fade"
-                  id="loginSignupModal"
-                  tabIndex={-1}
-                  aria-labelledby="loginSignupModalLabel"
-                  aria-hidden="true"
-                >
-                  <div className="modal-dialog  modal-dialog-scrollable modal-dialog-centered">
-                    <LoginSignupModal />
-                  </div>
-                </div>
-              </div>
+                )}
 
               {/* DesktopSidebarMenu */}
               <div

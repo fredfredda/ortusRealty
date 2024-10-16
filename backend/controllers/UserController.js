@@ -23,10 +23,10 @@ const userSignUp = async (req,res) => {
             let  createdAt = getTimeWithTimeZone();
             let insertUser = await createUser(firstName, lastName, email, username, hashed_password, createdAt);
             if(insertUser.error) return res.status(500).json(insertUser);
-            generateTokenAndSetCookie(email, res);
-
+            
             const user = await getUserByEmail(email);
-            console.log('user registered')
+            generateTokenAndSetCookie(user[0].id, user[0].email, user[0].username, res);
+            console.log('user registered');
             return res.status(201).json({
                 userId: user[0].id,
                 email: user[0].email,
@@ -50,7 +50,9 @@ const userLogin = async (req,res) => {
         const isPasswordCorrect = await bcrypt.compare(password, hashed_password);
         if (isPasswordCorrect === false) return res.status(400).json({error: "Incorrect password"});
 
-        generateTokenAndSetCookie(email,res);
+        generateTokenAndSetCookie(user[0].id, user[0].email, user[0].username, res);
+
+        console.log('user logged in');
 
         return res.status(201).json({
             userId: user[0].id,
@@ -66,6 +68,7 @@ const userLogin = async (req,res) => {
 const userLogout =  (req,res) => {
     try {
         res.cookie("jwt","",{maxAge:1});
+        console.log('user logged out');
         return res.status(200).json({ success: "Log out successful"});
     } catch (error) {
         return res.status(500).json({error: error});

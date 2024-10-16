@@ -53,9 +53,6 @@ const PropertyHeader = ({ property }) => {
                 <span className="flaticon-like" />
               </a>
               <a className="icon mr10" href="#">
-                <span className="flaticon-new-tab" />
-              </a>
-              <a className="icon mr10" href="#">
                 <span className="flaticon-share-1" />
               </a>
               <a className="icon" href="#">

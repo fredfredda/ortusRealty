@@ -14,7 +14,8 @@ const PORT = process.env.SERVER_PORT || 3001;
 app.use(
     cors({
         origin: "http://localhost:3000",
-        optionsSuccessStatus: 200, 
+        optionsSuccessStatus: 200,
+        credentials: true,
         // Some legacy browsers choke on 204
     })
 );

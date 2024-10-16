@@ -5,8 +5,8 @@ const FindHomeBlock = () => {
     {
       icon: "flaticon-search-1",
       number: "01",
-      subtitle: "Explore The Property Listings",
-      text: "Use our advanced search tools to browse through properties",
+      subtitle: "Explore Listings",
+      text: "Use our search tools to browse through properties",
     },
     {
       icon: "flaticon-chat",
@@ -17,7 +17,7 @@ const FindHomeBlock = () => {
     {
       icon: "flaticon-bird-house",
       number: "03",
-      subtitle: "Enquire About Your Property",
+      subtitle: "Inquire",
       text: "Contact us to ask questions or arrange property viewings",
     },
     {

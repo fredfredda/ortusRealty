@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata = {
-  title: "Login  || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty",
 };
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
           data-aos-delay="300"
         />
         <div className="container">
-          <div className="row" data-aos="fade-left" data-aos-delay="300">
+          <div className="row">
             <div className="col-lg-6">
               <div className="log-reg-form signup-modal form-style1 bgc-white p50 p30-sm default-box-shadow2 bdrs12">
                 <div className="text-center mb40">
@@ -31,14 +31,11 @@ const Login = () => {
                       width={138}
                       height={44}
                       className="mb25"
-                      src="/images/header-logo2.svg"
+                      src="/images/ortus_realty_logo.svg"
                       alt="logo"
                     />
                   </Link>
                   <h2>Sign in</h2>
-                  <p className="text">
-                    Sign in with this account across the following sites.
-                  </p>
                 </div>
                 <SignIn />
               </div>

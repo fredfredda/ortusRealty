@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-const sessionStore = create((set) => ({
+const sessionStore = create( (set) => ({
     session: {},
-    setSession: (session_) => set({ session: session_}),
+    setSession: (newSession) => set({ session: newSession }),
     deleteSession: () => set({ session: {} }),
 }));
 

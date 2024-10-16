@@ -23,4 +23,30 @@ const config = {
     matcher: ['/((?!api|_next/static|_next/image).*)'],
 }
 
+
+
+useEffect(() => {
+    const checkSession = async () => {
+      const session_ = await getSession();
+      if (session_ !== null) {
+        setSession(session_);
+      } else {
+        deleteSession();
+      }
+    };
+    checkSession();
+  }, []);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session_ = await getSession();
+      if (session_ !== null) {
+        setSession(session_);
+      } else {
+        deleteSession();
+      }
+    };
+    checkSession();
+  }, []);
+
 export { middleware, config };

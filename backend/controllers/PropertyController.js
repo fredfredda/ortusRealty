@@ -136,8 +136,8 @@ const cancelPropertyInquiry = async (req,res) => {
 const getSavedProperties = async (req,res) => {
     const {userId} = req.user;
     try {
-        const data = await getSavedPropertiesFromdb(userId);
-        return res.status(200).json({data});
+        const properties = await getSavedPropertiesFromdb(userId);
+        return res.status(200).json({properties});
     } catch (error) {
         console.log(error);
         return res.status(500).json(error);
