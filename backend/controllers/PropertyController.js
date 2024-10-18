@@ -1,4 +1,19 @@
-import { getPropertyInquiry, createPropertyInquiry, updatePropertyInquiryStatus, getSavedProperty, createSavedProperty, deleteSavedProperty, getPropertyInquiriesFromDb, getSavedPropertiesFromdb, getAllPropertiesFromDb, getPropertyFromDb, getImportantInfrestrucutreFromDb, getFeaturedPropertiesFromDb, getNearbyPropertiesFromDb } from "../models/PropertyModel.js";
+import { 
+    getPropertyInquiry,
+    createPropertyInquiry,
+    updatePropertyInquiryStatus,
+    getSavedProperty,
+    createSavedProperty,
+    deleteSavedProperty,
+    getPropertyInquiriesFromDb,
+    getSavedPropertiesFromdb,
+    getAllPropertiesFromDb,
+    getPropertyFromDb,
+    getImportantInfrestrucutreFromDb,
+    getFeaturedPropertiesFromDb,
+    getNearbyPropertiesFromDb,
+    getSavedPropertiesDetailsFromDb,
+ } from "../models/PropertyModel.js";
 
 var allProperties = [];
 
@@ -133,6 +148,18 @@ const cancelPropertyInquiry = async (req,res) => {
     }
 }
 
+const getSavedPropertiesDetails = async (req,res) => {
+    const { userId } = req.user;
+    try {
+        const savedProperties = await getSavedPropertiesDetailsFromDb(userId);
+        return res.status(200).json(savedProperties);
+    }
+    catch {
+        console.log(error);
+        return res.status(500).json(error);
+    }
+}
+
 const getSavedProperties = async (req,res) => {
     const {userId} = req.user;
     try {
@@ -179,4 +206,17 @@ const unsaveProperty = async (req,res) => {
     }
 }
 
-export { inquireProperty, cancelPropertyInquiry, saveProperty, unsaveProperty, getPropertyInquiries, getSavedProperties, getAllProperties, getProperty, getImportantInfrestrucutre, getFeaturedProperties, getNearbyProperties }
+export { 
+    inquireProperty,
+    cancelPropertyInquiry,
+    saveProperty,
+    unsaveProperty,
+    getPropertyInquiries,
+    getSavedProperties,
+    getAllProperties,
+    getProperty,
+    getImportantInfrestrucutre,
+    getFeaturedProperties,
+    getNearbyProperties,
+    getSavedPropertiesDetails,
+}

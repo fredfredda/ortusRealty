@@ -1,5 +1,18 @@
 import express from 'express';
-import { inquireProperty, cancelPropertyInquiry, saveProperty, unsaveProperty, getPropertyInquiries, getSavedProperties, getAllProperties, getProperty, getImportantInfrestrucutre, getFeaturedProperties, getNearbyProperties } from '../controllers/PropertyController.js';
+import { 
+    inquireProperty,
+    cancelPropertyInquiry,
+    saveProperty,
+    unsaveProperty,
+    getPropertyInquiries,
+    getSavedProperties,
+    getAllProperties,
+    getProperty,
+    getImportantInfrestrucutre,
+    getFeaturedProperties,
+    getNearbyProperties,
+    getSavedPropertiesDetails,
+} from '../controllers/PropertyController.js';
 import protectRoute from '../middlewares/ProtectRoute.js';
 
 const router = express.Router();
@@ -14,6 +27,12 @@ router.get('/featuredproperties', getFeaturedProperties);
 router.get('/nearbyproperties/:neighborhoodId/:propertyId', getNearbyProperties);
 // get important infrastructures
 router.get('/importantinfrastructure/:neighborhoodId', getImportantInfrestrucutre);
+// get property inquiries
+router.get('/propertyinqruiries', protectRoute, getPropertyInquiries);
+// get saved properties
+router.get('/savedproperties', protectRoute, getSavedProperties);
+// get details about saved properties
+router.get('/savedpropertiesdetails', protectRoute, getSavedPropertiesDetails);
 // inquire property
 router.post('/inquireproperty/:propertyId', protectRoute, inquireProperty);
 // cancel property inquiry
@@ -22,9 +41,5 @@ router.put('/cancelpropertyinquiry/:propertyId', protectRoute, cancelPropertyInq
 router.post('/saveproperty/:propertyId', protectRoute, saveProperty);
 // unsave property
 router.delete('/unsaveproperty/:propertyId', protectRoute, unsaveProperty);
-// get property inquiries
-router.get('/propertyinqruiries', protectRoute, getPropertyInquiries);
-// get saved properties
-router.get('/savedproperties', protectRoute, getSavedProperties);
 
 export default router;

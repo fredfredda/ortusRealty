@@ -6,6 +6,20 @@ import assignId from '../utils/helpers/assignId.js';
 
 const saltRounds = 2;
 
+const isLoggedin = (req,res) => {
+    try {
+        const {userId} = req.user;
+        if (userId === undefined) {
+            return res.status(400).json({isLoggedin: false});
+        } else {
+            return res.status(200).json({isLoggedin: true});
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error);
+    }
+}
+
 const userSignUp = async (req,res) => {
     const {firstName, lastName, email, password} = req.body;
     const username = assignId();
@@ -114,4 +128,10 @@ const deleteAccount = async(req,res) => {
     }
 }
 
-export { userSignUp, userLogin, userLogout, editProfile, deleteAccount};
+export { userSignUp,
+    userLogin,
+    userLogout,
+    editProfile,
+    deleteAccount,
+    isLoggedin,
+};

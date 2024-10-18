@@ -47,8 +47,8 @@ const FeaturedListings = () => {
         if (data.error) {
           console.log(data.error);
         } else {
+          resetProperties();
           for (let i = 0; i < data.properties.length; i++) {
-            resetProperties();
             appendProperty(data.properties[i].property_id);
           }
         }
