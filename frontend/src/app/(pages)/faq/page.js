@@ -1,19 +1,19 @@
-import CallToActions from "@/components/common/CallToActions";
-import DefaultHeader from "@/components/common/DefaultHeader";
-import Footer from "@/components/common/default-footer";
+import Cta from "@/components/home/home-v9/Cta";
+import Footer from "@/components/home/home-v8/footer";
+import Header from "@/components/home/home-v8/Header";
 import MobileMenu from "@/components/common/mobile-menu";
 import Faq1 from "@/components/pages/faq/Faq1";
 import Faq2 from "@/components/pages/faq/Faq2";
 
 export const metadata = {
-  title: "Faq  || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty - FAQ",
 };
 
 const Faq = () => {
   return (
     <>
       {/* Main Header Nav */}
-      <DefaultHeader />
+      <Header />
       {/* End Main Header Nav */}
 
       {/* Mobile Nav  */}
@@ -27,10 +27,6 @@ const Faq = () => {
             <div className="col-lg-12">
               <div className="breadcumb-style1">
                 <h2 className="title">Frequently Asked Questions</h2>
-                <div className="breadcumb-list">
-                  <a href="#">Home</a>
-                  <a href="#">For Rent</a>
-                </div>
               </div>
             </div>
           </div>
@@ -66,7 +62,7 @@ const Faq = () => {
       {/* End FAQ Section Area */}
 
       {/* Our CTA */}
-      <CallToActions />
+      <Cta />
       {/* Our CTA */}
 
       {/* Start Our Footer */}

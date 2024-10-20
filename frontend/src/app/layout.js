@@ -30,7 +30,6 @@ const poppins = Poppins({
 });
 
 export default function RootLayout({ children }) {
-
   const session = sessionStore((state) => state.session);
 
   const setSession = sessionStore((state) => state.setSession);
@@ -42,13 +41,31 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const checkSession = async () => {
       setIsLoading(true);
-      const session_ = JSON.parse(localStorage.getItem("session"));
-      if (session_ !== null) {
-        setSession(session_);
-      } else {
-        deleteSession();
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/auth/checksession",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          if (data.isLoggedIn === "true") {
+            const session_ = JSON.parse(localStorage.getItem("session"));
+            setSession(session_);
+          } else {
+            localStorage.removeItem("session");
+            deleteSession();
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
     checkSession();
   }, []);

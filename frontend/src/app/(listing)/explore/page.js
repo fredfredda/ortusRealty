@@ -1,12 +1,11 @@
 import Header from "@/components/home/home-v8/Header";
 import Footer from "@/components/home/home-v8/footer/index";
 import MobileMenu from "@/components/common/mobile-menu";
-
 import React from "react";
 import PropertyFiltering from "@/components/listing/grid-view/grid-default/PropertyFiltering";
 
 export const metadata = {
-  title: "Explore",
+  title: "Ortus Realty - Explore",
 };
 
 const GridDefault = () => {
@@ -21,21 +20,12 @@ const GridDefault = () => {
       {/* End Mobile Nav  */}
 
       {/* Breadcumb Sections */}
-      <section className="breadcumb-section bgc-f7">
+      <section className="breadcumb-section">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
               <div className="breadcumb-style1">
                 <h2 className="title">Explore</h2>
-                <a
-                  className="filter-btn-left mobile-filter-btn d-block d-lg-none"
-                  data-bs-toggle="offcanvas"
-                  href="#listingSidebarFilter"
-                  role="button"
-                  aria-controls="listingSidebarFilter"
-                >
-                  <span className="flaticon-settings" /> Filter
-                </a>
               </div>
             </div>
           </div>

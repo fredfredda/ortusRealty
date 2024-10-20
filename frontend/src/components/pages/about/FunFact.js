@@ -10,7 +10,7 @@ const FunFact = () => {
     {
       number: "4",
       unit: "M",
-      text: "Awward Winning",
+      text: "Award Winning",
     },
     {
       number: "12",

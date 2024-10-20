@@ -1,7 +1,7 @@
-import CallToActions from "@/components/common/CallToActions";
-import DefaultHeader from "@/components/common/DefaultHeader";
+import Header from "@/components/home/home-v8/Header";
+import Footer from "@/components/home/home-v8/footer/index";
+import Cta from "@/components/home/home-v9/Cta";
 import Partner from "@/components/common/Partner";
-import Footer from "@/components/common/default-footer";
 import MobileMenu from "@/components/common/mobile-menu";
 import Agents from "@/components/pages/about/Agents";
 import Features from "@/components/pages/about/Features";
@@ -11,14 +11,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
-  title: "About  || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty - About",
 };
 
 const About = () => {
   return (
     <>
       {/* Main Header Nav */}
-      <DefaultHeader />
+      <Header />
       {/* End Main Header Nav */}
 
       {/* Mobile Nav  */}
@@ -32,10 +32,6 @@ const About = () => {
             <div className="col-lg-12">
               <div className="breadcumb-style1">
                 <h2 className="title">About Us</h2>
-                <div className="breadcumb-list">
-                  <a href="#">Home</a>
-                  <a href="#">About</a>
-                </div>
               </div>
             </div>
           </div>
@@ -46,7 +42,7 @@ const About = () => {
       {/* Our About Area */}
       <section className="our-about pb90">
         <div className="container">
-          <div className="row" data-aos="fade-up" data-aos-delay="300">
+          <div className="row" >
             <div className="col-lg-6">
               <h2>
                 We&apos;re on a Mission to Change{" "}
@@ -78,7 +74,7 @@ const About = () => {
       {/* About Banner */}
       <section className="our-about pt-0">
         <div className="container">
-          <div className="row" data-aos="fade-up" data-aos-delay="300">
+          <div className="row" >
             <div className="col-lg-12">
               <div className="about-page-img">
                 <Image
@@ -101,8 +97,6 @@ const About = () => {
         <div className="container">
           <div
             className="row justify-content-center"
-            data-aos="fade-up"
-            data-aos-delay="300"
           >
             <FunFact />
           </div>
@@ -117,13 +111,8 @@ const About = () => {
             <div className="col-auto">
               <div
                 className="main-title"
-                data-aos="fade-up"
-                data-aos-delay="100"
               >
-                <h2 className="title">Our Exclusive Agetns</h2>
-                <p className="paragraph">
-                  Aliquam lacinia diam quis lacus euismod
-                </p>
+                <h2 className="title">Our Exclusive Agents</h2>
               </div>
             </div>
             {/* End header */}
@@ -131,7 +120,7 @@ const About = () => {
           {/* End .row */}
 
           <div className="row">
-            <div className="col-lg-12" data-aos="fade-up" data-aos-delay="300">
+            <div className="col-lg-12">
               <div className="property-city-slider">
                 <Agents />
               </div>
@@ -143,13 +132,11 @@ const About = () => {
 
       {/* Abut intro */}
       <section className="pt30 pb-0">
-        <div className="cta-banner3 bgc-thm-light mx-auto maxw1600 pt100 pt60-lg pb90 pb60-lg bdrs24 position-relative overflow-hidden mx20-lg">
+        <div className="cta-banner3 bgc-f7 mx-auto maxw1600 pt100 pt60-lg pb90 pb60-lg bdrs24 position-relative overflow-hidden mx20-lg">
           <div className="container">
             <div className="row">
               <div
                 className="col-md-6 col-lg-5 pl30-md pl15-xs"
-                data-aos="fade-left"
-                data-aos-delay="300"
               >
                 <div className="mb30">
                   <h2 className="title text-capitalize">
@@ -175,7 +162,7 @@ const About = () => {
       <section className="our-partners">
         <div className="container">
           <div className="row">
-            <div className="col-lg-12" data-aos="fade-up">
+            <div className="col-lg-12">
               <div className="main-title text-center">
                 <h6>Trusted by the world’s best</h6>
               </div>
@@ -183,8 +170,6 @@ const About = () => {
             <div className="col-lg-12 text-center">
               <div
                 className="dots_none nav_none"
-                data-aos="fade-up"
-                data-aos-delay="300"
               >
                 <Partner />
               </div>
@@ -195,8 +180,8 @@ const About = () => {
       {/* End Our Partners */}
 
       {/* Our CTA */}
-      <CallToActions />
-      {/* Our CTA */}
+      <Cta />
+      {/* Our End CTA */}
 
       {/* Start Our Footer */}
       <section className="footer-style1 pt60 pb-0">

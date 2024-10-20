@@ -43,10 +43,20 @@ const createUser = async(firstName, lastName, email, username, hashed_password, 
     }
 }
 
-const updateUser = async (userId, firstName, lastName, username, email, password) => {
+const updateUser = async (userId, firstName, lastName) => {
     try {
-        await db.query(`update users set first_name = '${firstName}', last_name = '${lastName}', username = '${username}', email = '${email}', password = '${password}' where user_id = ${userId};`);
+        await db.query(`update users set first_name = '${firstName}', last_name = '${lastName}' where id = ${userId};`);
         return {success: "User updated successfully"};
+    } catch (error) {
+        console.log(error);
+        return {error};
+    }
+}
+
+const updatePassword = async ( userId, hashedPassword ) => {
+    try {
+        await db.query(`update users set pswrd = '${hashedPassword}' where id = ${userId};`);
+        return {success: "Password updated successfully"};
     } catch (error) {
         console.log(error);
         return {error};
@@ -63,4 +73,11 @@ const deleteUser = async (userId) => {
     }
 }
 
-export {getUserByUsername, getUserByEmail, getUserById, createUser, updateUser, deleteUser};
+export {getUserByUsername,
+    getUserByEmail,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser,
+    updatePassword,
+};

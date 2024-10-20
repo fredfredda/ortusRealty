@@ -56,7 +56,7 @@ export default function ProperteyFiltering() {
   }, [savedProperties]);
 
   return (
-    <section className="pt0 pb90 bgc-f7">
+    <section className="pt0 pb90">
       <div className="container">
         {isLoading ? (
           <div className="mt20 mb20">

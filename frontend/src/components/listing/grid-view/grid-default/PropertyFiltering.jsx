@@ -8,14 +8,20 @@ import PaginationTwo from "../../PaginationTwo";
 import { useSearchParams } from "next/navigation";
 
 export default function PropertyFiltering() {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+  const saletype = searchParams.get("saleType");
+  const propertyType = searchParams.get("propertyType");
+  const price = searchParams.get("priceRange");
+  const province = searchParams.get("province");
+  const sizeRange = searchParams.get("sizeRange");
 
-  const searchParams = useSearchParams(); 
-  const search = searchParams.get('search');
-  const saletype = searchParams.get('saleType');
-  const propertyType = searchParams.get('propertyType');
-  const price = searchParams.get('priceRange');
-  const province = searchParams.get('province');
-  const sizeRange = searchParams.get('sizeRange');
+  const [listingStatus, setListingStatus] = useState(saletype || "");
+  const [propertyTypes, setPropertyTypes] = useState(propertyType || "");
+  const [priceRange, setPriceRange] = useState(price || "");
+  const [location, setLocation] = useState(province || "All Provinces");
+  const [squirefeet, setSquirefeet] = useState(sizeRange || "");
+  const [searchQuery, setSearchQuery] = useState(search || "");
 
   const [filteredData, setFilteredData] = useState([]);
 
@@ -28,24 +34,6 @@ export default function PropertyFiltering() {
   const [pageItems, setPageItems] = useState([]);
 
   const [pageContentTrac, setPageContentTrac] = useState([]);
-
-  useEffect(() => {
-    setPageItems(
-      filteredData.slice((pageNumber - 1) * 8, pageNumber * 8)
-    );
-    setPageContentTrac([
-      (pageNumber - 1) * 8 + 1,
-      pageNumber * 8,
-      filteredData.length,
-    ]);
-  }, [pageNumber, filteredData]);
-
-  const [listingStatus, setListingStatus] = useState(saletype || '');
-  const [propertyTypes, setPropertyTypes] = useState(propertyType || '');
-  const [priceRange, setPriceRange] = useState(price || '');
-  const [location, setLocation] = useState(province || "All Provinces");
-  const [squirefeet, setSquirefeet] = useState(sizeRange || '');
-  const [searchQuery, setSearchQuery] = useState(search || '');
 
   const resetFilter = () => {
     setListingStatus("");
@@ -96,7 +84,13 @@ export default function PropertyFiltering() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/properties?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${listingStatus}&province=${location === "All Provinces" ? "" : location}&priceRange=${priceRange === "" ? "50000-1000000000" : priceRange}&sizeRange=${squirefeet === "" ? "100-10000" : squirefeet}`);
+        const response = await fetch(
+          `http://localhost:3001/api/properties?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${listingStatus}&province=${
+            location === "All Provinces" ? "" : location
+          }&priceRange=${
+            priceRange === "" ? "50000-1000000000" : priceRange
+          }&sizeRange=${squirefeet === "" ? "100-10000" : squirefeet}`
+        );
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
@@ -108,29 +102,65 @@ export default function PropertyFiltering() {
       }
     };
     fetchData();
-  }, [listingStatus, propertyTypes, location, priceRange, squirefeet, searchQuery, searchParams]);
+  }, [
+    listingStatus,
+    propertyTypes,
+    location,
+    priceRange,
+    squirefeet,
+    searchQuery,
+    searchParams,
+  ]);
+
+  
+  useEffect(() => {
+    setPageItems(
+      sortedFilteredData.slice((pageNumber - 1) * 8, pageNumber * 8)
+    );
+    setPageContentTrac([
+      (pageNumber - 1) * 8 + 1,
+      pageNumber * 8,
+      sortedFilteredData.length,
+    ]);
+  }, [pageNumber, sortedFilteredData]);
+
+  const sortListings = (listings) => {
+    let i = 0;
+    while (i < listings.length - 1) {
+      for (let j = 0; j < listings.length - 1; j++) {
+        let temp = listings[j];
+        if (
+          Number(listings[j].prpty_price) > Number(listings[j + 1].prpty_price)
+        ) {
+          listings[j] = listings[j + 1];
+          listings[j + 1] = temp;
+        }
+      }
+      i++;
+    }
+    return listings;
+  };
 
   useEffect(() => {
-    const sortListings = (listings) => {
-      let i = 0;
-      while (i < listings.length - 1) {
-        for (let j = 0; j < listings.length - 1; j++){
-          let temp = listings[j];
-          console.log(`${listings[j].prpty_price} ${listings[j+1].prpty_price}`)
-          if (Number(listings[j].prpty_price) > Number(listings[j+1].prpty_price)) {
-            listings[j] = listings[j+1];
-            listings[j+1] = temp;
-          } 
-        }
-        i ++;
-      }
-      setFilteredData(listings);
+    if (currentSortingOption === "Price Low to High") {
+      let listings = sortListings(filteredData);
+      setSortedFilteredData(listings);
     }
-    sortListings(filteredData);
-  }, [])
+    else if (currentSortingOption === "Price High to Low") {
+      let listings = sortListings(filteredData);
+      setSortedFilteredData(listings.reverse());
+    }
+    else {
+      setSortedFilteredData(filteredData);
+    }
+  }, [currentSortingOption, filteredData]);
+
+  useEffect(() => {
+    console.log("sortedFilteredData", sortedFilteredData);
+  }, [sortedFilteredData]);
 
   return (
-    <section className="pt0 pb90 bgc-f7">
+    <section className="pt0 pb90">
       <div className="container">
         <div className="row gx-xl-5">
           <div className="col-lg-4 d-none d-lg-block">

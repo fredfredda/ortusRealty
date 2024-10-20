@@ -80,11 +80,11 @@ const FeaturedListings = ({ data, colstyle }) => {
                 <ReactTooltip
                   id={`delete-${listing.property_id}`}
                   place="left"
-                  content="Delete"
+                  content="Remove"
                 />
 
                 <div className="list-price">
-                  {formatMoney(listing.prpty_price)}
+                  Bif {formatMoney(listing.prpty_price)}
                   {listing.saletype_name === "renting" && <span>/mo</span>}
                 </div>
               </div>

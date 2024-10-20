@@ -7,7 +7,7 @@ const MenuWidget = () => {
       links: [
         { label: "Homes to rent", href: "/explore?propertyType=home&saleType=renting" },
         { label: "Lands for sale", href: "/explore?propertyType=land&saleType=for%20sale" },
-        { label: "Investing opportunities", href: "/explore?propertyType=development%20project" },
+        { label: "Investment opportunities", href: "/explore?propertyType=development%20project" },
         { label: "Resource center", href: "#" },
       ],
     },
@@ -20,7 +20,7 @@ const MenuWidget = () => {
         { label: "Our Services", href: "#" },
         { label: "Contact Support", href: "/contact" },
         { label: "About", href: "#" },
-        { label: "FAQs", href: "#" },
+        { label: "FAQs", href: "faq" },
       ],
     },
     {

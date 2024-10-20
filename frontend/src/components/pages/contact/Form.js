@@ -1,6 +1,11 @@
+"use client";
 import React from "react";
+import { sessionStore } from "@/store/session";
 
 const Form = () => {
+
+  const user = sessionStore((state) => state.session);
+
   return (
     <form className="form-style1">
       <div className="row">
@@ -13,6 +18,7 @@ const Form = () => {
               type="text"
               className="form-control"
               placeholder="Full Name"
+              value={user?.firstName + " " + user?.lastName}
               required
             />
           </div>
@@ -41,6 +47,7 @@ const Form = () => {
               type="email"
               className="form-control"
               placeholder="Email"
+              value={user?.email}
               required
             />
           </div>

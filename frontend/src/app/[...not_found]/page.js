@@ -1,19 +1,19 @@
-import DefaultHeader from "@/components/common/DefaultHeader";
-import Footer from "@/components/common/default-footer";
+import Footer from "@/components/home/home-v8/footer";
+import Header from "@/components/home/home-v8/Header";
 import MobileMenu from "@/components/common/mobile-menu";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 export const metadata = {
-  title: "Not-Found  || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty - Not Found",
 };
 
 const NotFound = () => {
   return (
     <>
       {/* Main Header Nav */}
-      <DefaultHeader />
+      <Header />
       {/* End Main Header Nav */}
 
       {/* Mobile Nav  */}

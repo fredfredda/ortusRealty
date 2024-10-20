@@ -74,7 +74,7 @@ const SingleV8 = ({ params }) => {
         </div>
       ) : (
         <>
-          <section className="pt60 pb60 bgc-f7">
+          <section className="pt60 pb60">
             <div className="container">
               <div className="row">
                 <PropertyHeader property={propertyInfo} />

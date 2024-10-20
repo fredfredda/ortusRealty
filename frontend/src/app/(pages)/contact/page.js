@@ -6,7 +6,7 @@ import Office from "@/components/pages/contact/Office";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Contact  || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty - Contact",
 };
 
 const Contact = () => {
@@ -70,8 +70,6 @@ const Contact = () => {
           <div className="row">
             <div
               className="col-lg-6 m-auto"
-              data-aos="fade-up"
-              data-aos-delay="300"
             >
               <div className="main-title text-center">
                 <h2 className="title">Visit Our Office</h2>
@@ -84,7 +82,7 @@ const Contact = () => {
           </div>
           {/* End .row */}
 
-          <div className="row" data-aos="fade-up" data-aos-delay="100">
+          <div className="row" >
             <Office />
           </div>
           {/* End .row */}

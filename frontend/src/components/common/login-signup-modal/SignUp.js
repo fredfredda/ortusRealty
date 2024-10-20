@@ -2,7 +2,9 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
+import { sessionStore } from "@/store/session";
 import { useSearchParams, useRouter } from "next/navigation";
+import getGooleOAuthUrl from "@/utilis/getGoogleUrl";
 
 const override = {
   display: "block",
@@ -12,10 +14,12 @@ const override = {
 
 const SignUp = () => {
 
+  const setSession = sessionStore((state) => state.setSession);
+  
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
+  const redirect = searchParams.get("redirect");
 
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -144,7 +148,9 @@ const SignUp = () => {
 
       <div className="d-grid mb10">
         <button className="ud-btn btn-white" type="button">
-          <i className="fab fa-google" /> Continue With Google
+          <a href={getGooleOAuthUrl(redirect || "")}>
+            <i className="fab fa-google" /> Continue With Google
+          </a>
         </button>
       </div>
     </form>

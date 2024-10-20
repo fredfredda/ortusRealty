@@ -19,9 +19,9 @@ const TopFilterBar = ({setCurrentSortingOption,setColstyle,colstyle,pageContentT
           <div className="pcs_dropdown pr10 d-flex align-items-center">
             <span style={{ minWidth: "60px" }}>Sort by</span>
             <select className="form-select"  onChange={(e)=>setCurrentSortingOption && setCurrentSortingOption(e.target.value)} >
-              <option>Default</option>
-              <option>Price Low</option>
-              <option>Price High</option>
+              <option value="Default" >Default</option>
+              <option value="Price Low to High" >Price Low to High</option>
+              <option value="Price High to Low" >Price High to Low</option>
             </select>
           </div>
         </div>

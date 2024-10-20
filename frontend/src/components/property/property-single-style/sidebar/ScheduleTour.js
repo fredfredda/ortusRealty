@@ -1,7 +1,11 @@
 'use client';
-import React, { useState } from "react";
+import React, { use, useState } from "react";
+import { sessionStore } from "@/store/session";
 
 const ScheduleTour = ({property}) => {
+
+  const user = sessionStore((state) => state.session);
+
   const tabs = [
     {
       id: "inperson",
@@ -20,7 +24,6 @@ const ScheduleTour = ({property}) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
   }
 
   return (
@@ -47,6 +50,7 @@ const ScheduleTour = ({property}) => {
                     <input
                       type="text"
                       className="form-control"
+                      value={user?.firstName + " " + user?.lastName}
                       placeholder="Full Name"
                       required
                     />
@@ -72,6 +76,7 @@ const ScheduleTour = ({property}) => {
                       type="email"
                       className="form-control"
                       placeholder="Email"
+                      value={user?.email}
                       required
                     />
                   </div>

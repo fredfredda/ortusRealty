@@ -13,7 +13,7 @@ import Cta from "@/components/home/home-v9/Cta";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Ortus Realty",
+  title: "Ortus Realty - Home",
 };
 
 const Home_V8 = () => {
