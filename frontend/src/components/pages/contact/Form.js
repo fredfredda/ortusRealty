@@ -18,7 +18,7 @@ const Form = () => {
               type="text"
               className="form-control"
               placeholder="Full Name"
-              value={user?.firstName + " " + user?.lastName}
+              value={user?.firstName && user?.firstName + " " + user?.lastName}
               required
             />
           </div>

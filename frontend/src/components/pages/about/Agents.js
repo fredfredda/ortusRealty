@@ -38,7 +38,7 @@ const Agents = () => {
         }}
         autoplay={{ delay: 3000 }} // Set the desired delay for autoplay
       >
-        {agents.slice(0, 7).map((agent, index) => (
+        {agents.map((agent, index) => (
           <SwiperSlide key={index}>
             <div className="item" key={index}>
               <Link  href={`/agent-single/${agent.id}`}>

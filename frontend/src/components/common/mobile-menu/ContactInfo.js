@@ -2,18 +2,18 @@ import React from "react";
 
 const ContactInfo = () => {
   const contactInfo = [
-    {
-      id: 1,
-      title: "Total Free Customer Care",
-      phone: "+(0) 123 050 945 02",
-      phoneHref: "tel:+012305094502", // Updated phoneHref to use "tel" URI
-    },
-    {
-      id: 2,
-      title: "Need Live Support?",
-      email: "hi@homez.com",
-      emailHref: "mailto:hi@homez.com", // Updated emailHref to use "mailto" URI
-    },
+      {
+        id: 1,
+        title: "Free Customer Care",
+        phone: "+257 79 87 65 43",
+        phoneHref: "tel:+25779876543", // Change this to use "tel" URI scheme
+      },
+      {
+        id: 2,
+        title: "Need Live Support?",
+        email: "ortusrealty@ortus.com",
+        emailHref: "mailto:ibthemes21@gmail.com",
+      },
   ];
 
   return (

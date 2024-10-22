@@ -1,9 +1,0 @@
-navigation bar: 
-- Explore:
-. categories
-. Provinces
-. All Properties
-
-
-- About
-- Contact

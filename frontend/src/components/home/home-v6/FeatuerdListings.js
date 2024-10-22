@@ -101,6 +101,17 @@ const FeaturedListings = () => {
       console.error(error);
     }
   };
+
+  const HandleCopyToClipboard = async (propertyId) => {
+    try {
+      const link = `http://localhost:3000/property-details/${propertyId}`;
+      await navigator.clipboard.writeText(link);
+      toast.success("Link copied to clipboard");      
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy link");
+    }
+  };
   
   return (
       <>
@@ -194,7 +205,7 @@ const FeaturedListings = () => {
                     <div className="list-meta2 d-flex justify-content-between align-items-center">
                       <span className="for-what">{listing.saletype_name}</span>
                       <div className="icons d-flex align-items-center">
-                        <button className="property-card-btn">
+                        <button className="property-card-btn" onClick={() => HandleCopyToClipboard(listing.id)}>
                           <FontAwesomeIcon
                             icon={faShareNodes}
                             style={{ color: "#eb6753" }}

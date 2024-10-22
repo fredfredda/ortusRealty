@@ -7,7 +7,6 @@ const MainMenu = () => {
   const pathname = usePathname();
   const [topMenu, setTopMenu] = useState("");
   const [submenu, setSubmenu] = useState("");
-  const [activeLink, setActiveLink] = useState("");
 
   useEffect(() => {
     if (pathname.split("/")[1] === "contact") {

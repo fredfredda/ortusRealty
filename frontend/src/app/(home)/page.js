@@ -8,7 +8,6 @@ import Testimonial from "@/components/home/home-v6/Testimonial";
 import ExploreCities from "@/components/home/home-v8/ExploreCities";
 import Service from "@/components/home/home-v8/Service";
 import FeaturedListings from "@/components/home/home-v6/FeatuerdListings";
-import SidebarStickyBar from "@/components/home/home-v8/SidebarStickyBar";
 import Cta from "@/components/home/home-v9/Cta";
 import Link from "next/link";
 
@@ -26,10 +25,6 @@ const Home_V8 = () => {
       {/* Mobile Nav  */}
       <MobileMenu />
       {/* End Mobile Nav  */}
-
-      {/* Home sidebar sticky v bar */}
-      <SidebarStickyBar />
-      {/* Edn Home sidebar sticky v bar */}
 
       {/* Home Banner Style V1 */}
       <section className="home-banner-style8 p0">

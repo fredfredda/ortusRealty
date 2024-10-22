@@ -1,7 +1,6 @@
 "use client";
 
 import MainMenu from "@/components/common/MainMenu";
-import SidebarPanel from "@/components/common/sidebar-panel";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

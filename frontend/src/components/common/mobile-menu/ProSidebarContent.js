@@ -9,8 +9,6 @@ import { useEffect, useState } from "react";
 const ProSidebarContent = () => {
   const path = usePathname();
 
-
-
   return (
     <Sidebar width="100%" backgroundColor="#fff" className="my-custom-class">
       <Menu>
@@ -59,6 +57,14 @@ const ProSidebarContent = () => {
             )}
           </SubMenu>
         ))}
+        <MenuItem 
+        component={<Link className={path === "/about" ? 'active' : ''}  href="/about" />} >
+          About
+        </MenuItem>
+        <MenuItem 
+        component={<Link className={path === "/contact" ? 'active' : ''}  href="/contact" />} >
+          Contact
+        </MenuItem>
       </Menu>
     </Sidebar>
   );

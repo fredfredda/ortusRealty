@@ -142,17 +142,13 @@ export default function PropertyFiltering() {
   };
 
   useEffect(() => {
+    let listings = [...filteredData];
     if (currentSortingOption === "Price Low to High") {
-      let listings = sortListings(filteredData);
-      setSortedFilteredData(listings);
+      listings = sortListings(listings);
+    } else if (currentSortingOption === "Price High to Low") {
+      listings = sortListings(listings).reverse();
     }
-    else if (currentSortingOption === "Price High to Low") {
-      let listings = sortListings(filteredData);
-      setSortedFilteredData(listings.reverse());
-    }
-    else {
-      setSortedFilteredData(filteredData);
-    }
+    setSortedFilteredData(listings);
   }, [currentSortingOption, filteredData]);
 
   useEffect(() => {
@@ -211,7 +207,7 @@ export default function PropertyFiltering() {
             <div className="row">
               <PaginationTwo
                 pageCapacity={8}
-                data={filteredData}
+                data={sortedFilteredData}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
               />

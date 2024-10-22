@@ -1,13 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
+import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import formatMoney from "@/utilis/FormatMoney";
+import { savedPropertiesStore } from "@/store/savedProperties";
+import { toast } from "react-hot-toast";
 import "swiper/swiper-bundle.min.css";
 
 const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
+
+  const savedProperties = savedPropertiesStore((state) => state.savedProperties);
+  const appendProperty = savedPropertiesStore((state) => state.appendProperty);
+  const removeProperty = savedPropertiesStore((state) => state.removeProperty);
+
   var [listings, setListings] = useState([]);
 
   useEffect(() => {
@@ -27,6 +38,60 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
 
     fetchData();
   }, []);
+
+  const handleSaveUnsave = async (propertyId) => {
+    try {      
+      if (savedProperties.includes(propertyId)) {
+        const response = await fetch(
+          `http://localhost:3001/api/properties/unsaveproperty/${propertyId}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          removeProperty(propertyId);
+        }
+      } else {
+        const response = await fetch(
+          `http://localhost:3001/api/properties/saveproperty/${propertyId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (data.error) {
+          console.log(data.error);
+          if (data.error === "Unauthorized") {
+            toast.error("Please login to save properties");
+          }
+        } else {
+          appendProperty(propertyId);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const HandleCopyToClipboard = async (propertyId) => {
+    try {
+      const link = `http://localhost:3000/property-details/${propertyId}`;
+      await navigator.clipboard.writeText(link);
+      toast.success("Link copied to clipboard");      
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy link");
+    }
+  };
+
   return (
     <>
       <Swiper
@@ -122,15 +187,27 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
                   <div className="list-meta2 d-flex justify-content-between align-items-center">
                     <span className="for-what">{listing.saletype_name}</span>
                     <div className="icons d-flex align-items-center">
-                      <a href="#">
-                        <span className="flaticon-fullscreen" />
-                      </a>
-                      <a href="#">
-                        <span className="flaticon-new-tab" />
-                      </a>
-                      <a href="#">
-                        <span className="flaticon-like" />
-                      </a>
+                    <button className="property-card-btn" onClick={() => HandleCopyToClipboard(listing.id)}>
+                          <FontAwesomeIcon
+                            icon={faShareNodes}
+                            style={{ color: "#eb6753" }}
+                            size="lg"
+                          />
+                        </button>
+                        <button
+                          className="property-card-btn"
+                          onClick={() => handleSaveUnsave(listing.id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={
+                              savedProperties.includes(listing.id)
+                                ? faSolidHeart
+                                : faRegularHeart
+                            }
+                            style={{ color: "#eb6753" }}
+                            size="lg"
+                          />
+                        </button>
                     </div>
                   </div>
                 </div>

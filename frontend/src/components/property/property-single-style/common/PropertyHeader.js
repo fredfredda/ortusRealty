@@ -57,6 +57,17 @@ const PropertyHeader = ({ property }) => {
     }
   };
 
+  const HandleCopyToClipboard = async (propertyId) => {
+    try {
+      const link = `http://localhost:3000/property-details/${propertyId}`;
+      await navigator.clipboard.writeText(link);
+      toast.success("Link copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy link");
+    }
+  };
+
   return (
     <>
       <div className="col-lg-8">
@@ -108,7 +119,10 @@ const PropertyHeader = ({ property }) => {
         <div className="single-property-content">
           <div className="property-action text-lg-end">
             <div className="d-flex mb20 mb10-md align-items-center justify-content-lg-end">
-              <button className="property-card-btn">
+              <button
+                className="property-card-btn"
+                onClick={() => HandleCopyToClipboard(property.id)}
+              >
                 <FontAwesomeIcon
                   icon={faShareNodes}
                   style={{ color: "#eb6753" }}

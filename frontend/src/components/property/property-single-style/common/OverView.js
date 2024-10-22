@@ -1,6 +1,4 @@
-import listings from "@/data/listings";
 import formatMoney from "@/utilis/FormatMoney";
-import PropTypes from "prop-types";
 import React from "react";
 
 

@@ -1,0 +1,34 @@
+{
+    "editor.fontFamily": "'Fira Code', 'JetBrains Mono', monospace",
+    "editor.fontLigatures": true,  // Enable ligatures
+    "editor.fontSize": 15,  // Customize the font size if needed
+    "editor.tokenColorCustomizations": {
+      "textMateRules": [
+        {
+          "scope": "keyword",
+          "settings": {
+            "fontStyle": "bold"  // Bold for keywords
+          }
+        },
+        {
+          "scope": "comment",
+          "settings": {
+            "fontStyle": "italic"  // Italic for comments
+          }
+        },
+        {
+          "scope": "variable",
+          "settings": {
+            "fontStyle": "italic"  // Italic for variables
+          }
+        },
+        {
+          "scope": "storage.type",
+          "settings": {
+            "fontStyle": "italic"  // Bold and italic for types (e.g., const, let)
+          }
+        }
+      ]
+    }
+  }
+  

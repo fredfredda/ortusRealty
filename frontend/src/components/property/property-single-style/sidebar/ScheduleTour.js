@@ -50,7 +50,7 @@ const ScheduleTour = ({property}) => {
                     <input
                       type="text"
                       className="form-control"
-                      value={user?.firstName + " " + user?.lastName}
+                      value={user?.firstName && user?.firstName + " " + user?.lastName}
                       placeholder="Full Name"
                       required
                     />

@@ -117,7 +117,6 @@ const MortgageCalculator = () => {
             <div className="col-md-12">
               <button type="submit" onSubmit={(e) => e.preventDefault} className="ud-btn btn-white2">
                 Calculate
-                <i className="fal fa-arrow-right-long" />
               </button>
             </div>
             {/* End .col */}
