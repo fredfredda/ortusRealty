@@ -3,6 +3,6 @@ import { isLoggedin } from '../controllers/AuthController.js';
 
 const router = express.Router();
 // getting the token on refresh
-router.get('/checksession', isLoggedin);
+router.get('/isloggedin', isLoggedin);
 
 export default router;

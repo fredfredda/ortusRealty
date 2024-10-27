@@ -107,13 +107,6 @@ const SingleV8 = ({ params }) => {
                     </div>
                   </div>
 
-                  {/* <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-                    <h4 className="title fz17 mb30 mt30">Map</h4>
-                    <div className="row">
-                      <PropertyAddress address={propertyInfo.prpty_location} />
-                    </div>
-                  </div> */}
-
                   {propertyInfo.property_type === "home" && (
                     <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
                       <h4 className="title fz17 mb30">

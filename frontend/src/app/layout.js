@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
+import { savedPropertiesStore } from "@/store/savedProperties";
 
 if (typeof window !== "undefined") {
   import("bootstrap");
@@ -38,12 +39,15 @@ export default function RootLayout({ children }) {
   const isLoading = isLoadingStore((state) => state.isLoading);
   const setIsLoading = isLoadingStore((state) => state.setIsLoading);
 
+  const appendProperty = savedPropertiesStore((state) => state.appendProperty);
+  const resetProperties = savedPropertiesStore((state) => state.resetProperties);
+
   useEffect(() => {
-    const checkSession = async () => {
+    const getSavedProperties = async () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:3001/api/auth/checksession",
+          "http://localhost:3001/api/properties/savedproperties",
           {
             method: "GET",
             credentials: "include",
@@ -53,7 +57,39 @@ export default function RootLayout({ children }) {
         if (data.error) {
           console.log(data.error);
         } else {
-          if (data.isLoggedIn === "true") {
+          resetProperties();
+          for (let i = 0; i < data.properties.length; i++) {
+            appendProperty(data.properties[i].property_id);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (session?.userId) {
+      getSavedProperties();
+    }
+  }, [session]);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/auth/isloggedin",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          console.log(data);
+          if (data.isLoggedIn === true) {
             const session_ = JSON.parse(localStorage.getItem("session"));
             setSession(session_);
           } else {
@@ -69,10 +105,6 @@ export default function RootLayout({ children }) {
     };
     checkSession();
   }, []);
-
-  // useEffect(() => {
-  //   console.log(session);
-  // }, [session]);
 
   useEffect(() => {
     Aos.init({

@@ -13,36 +13,14 @@ import { toast } from "react-hot-toast";
 
 const FeaturedListings = ({ data, colstyle }) => {
 
-  const savedProperties = savedPropertiesStore((state) => state.savedProperties);
+  const savedProperties = savedPropertiesStore(
+    (state) => state.savedProperties
+  );
   const appendProperty = savedPropertiesStore((state) => state.appendProperty);
   const removeProperty = savedPropertiesStore((state) => state.removeProperty);
-  const resetProperties = savedPropertiesStore((state) => state.resetProperties);
-
-  useEffect(() => {
-    const getSavedProperties = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/properties/savedproperties", {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          resetProperties();
-          for (let i = 0; i < data.properties.length; i++) {
-            appendProperty(data.properties[i].property_id);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getSavedProperties();
-  }, []);
 
   const handleSaveUnsave = async (propertyId) => {
-    try {      
+    try {
       if (savedProperties.includes(propertyId)) {
         const response = await fetch(
           `http://localhost:3001/api/properties/unsaveproperty/${propertyId}`,
@@ -87,7 +65,7 @@ const FeaturedListings = ({ data, colstyle }) => {
     try {
       const link = `http://localhost:3000/property-details/${propertyId}`;
       await navigator.clipboard.writeText(link);
-      toast.success("Link copied to clipboard");      
+      toast.success("Link copied to clipboard");
     } catch (err) {
       console.error("Failed to copy: ", err);
       toast.error("Failed to copy link");
@@ -168,7 +146,10 @@ const FeaturedListings = ({ data, colstyle }) => {
               <div className="list-meta2 d-flex justify-content-between align-items-center">
                 <span className="for-what">{listing.saletype_name}</span>
                 <div className="icons d-flex align-items-center">
-                  <button className="property-card-btn" onClick={() => HandleCopyToClipboard(listing.id)}>
+                  <button
+                    className="property-card-btn"
+                    onClick={() => HandleCopyToClipboard(listing.id)}
+                  >
                     <FontAwesomeIcon
                       icon={faShareNodes}
                       style={{ color: "#eb6753" }}

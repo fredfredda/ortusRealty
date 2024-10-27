@@ -49,7 +49,7 @@ const PropertyGallery = ({ images }) => {
                 </Item>
 
                 <button className="all-tag popup-img border-0 pe-none">
-                  See All 74 Photos
+                  See All {images.split(',').length} photos
                 </button>
               </SwiperSlide>
             ))}

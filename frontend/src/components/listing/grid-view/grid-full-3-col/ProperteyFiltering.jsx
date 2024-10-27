@@ -39,7 +39,6 @@ export default function ProperteyFiltering() {
         if (data.error) {
           console.log(data.error);
         } else {
-          console.log(data);
           setSavedProperties(data);
         }
       } catch (error) {
@@ -50,10 +49,6 @@ export default function ProperteyFiltering() {
     };
     fetchData();
   }, [savedProperties_]);
-
-  useEffect(() => {
-    console.log(savedProperties);
-  }, [savedProperties]);
 
   return (
     <section className="pt0 pb90">

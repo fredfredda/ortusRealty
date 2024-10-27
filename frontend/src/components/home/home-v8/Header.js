@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const isLoading = isLoadingStore((state) => state.isLoading);
@@ -54,6 +55,9 @@ const Header = () => {
       const data = await response.json();
       if (data.error) {
         console.log(data.error);
+        if (data.error === "Unauthorized") {
+          toast.error("Unauthorized");
+        }
       } else {
         localStorage.removeItem("session");
         deleteSession();

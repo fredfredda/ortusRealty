@@ -151,10 +151,6 @@ export default function PropertyFiltering() {
     setSortedFilteredData(listings);
   }, [currentSortingOption, filteredData]);
 
-  useEffect(() => {
-    console.log("sortedFilteredData", sortedFilteredData);
-  }, [sortedFilteredData]);
-
   return (
     <section className="pt0 pb90">
       <div className="container">

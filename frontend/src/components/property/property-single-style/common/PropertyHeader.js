@@ -145,7 +145,7 @@ const PropertyHeader = ({ property }) => {
               </button>
             </div>
             <h3 className="price mb-0">
-              Bif {formatMoney(property.prpty_price)}
+              Bif {formatMoney(property.prpty_price)} {property.saletype_name === 'renting' && '/mo'}
             </h3>
           </div>
         </div>
