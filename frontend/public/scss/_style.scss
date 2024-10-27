@@ -232,11 +232,6 @@ li {
 .footer-style1.at-home4 {
     background-color: #ffffff;
 }
-.footer-style1.at-home6 {
-    background-color: transparent;
-    background-image: url(../images/home/footer-bg-6.jpg);
-    background-size: cover;
-}
 
 .footer-widget {
     position: relative;
@@ -459,7 +454,7 @@ li {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    background-image: url(../images/background/about-page-bg.jpg);
+    background-image: url(../images/background/about-page-bg.webp);
     background-size: cover;
     background-position: center;
     display: -webkit-box;
@@ -468,18 +463,6 @@ li {
     height: 450px;
 }
 
-.breadcumb-section3 {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    background-image: url(../images/background/compare-bg.jpg);
-    background-size: cover;
-    background-position: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    height: 450px;
-}
 @media (max-width: 991.98px) {
     .breadcumb-section3 {
         height: 250px;
@@ -3026,7 +3009,7 @@ li {
 }
 
 .property_video {
-    background-image: url(../images/listings/listing-single-6.jpg);
+    background-image: url(../images/listings/img5_5.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -3210,12 +3193,6 @@ li {
 }
 
 /* Hero Styles All Type Of */
-.home-banner-style1 {
-    background-image: url(../images/home/home-1.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    position: relative;
-}
 .home-banner-style1 .home-style1 {
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -3299,16 +3276,7 @@ li {
 }
 
 /*Home 2 Banner Content*/
-.home2-hero-banner {
-    background-image: url(../images/home/home-2.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    height: 650px;
-    max-width: 1600px;
-    position: absolute;
-    top: 200px;
-    width: 100%;
-}
+
 @media (max-width: 991.98px) {
     .home2-hero-banner {
         top: 100px;
@@ -3407,12 +3375,7 @@ li {
 }
 
 /*Home 3 Banner Content*/
-.home-banner-style3 {
-    background-image: url(../images/home/home-3.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    position: relative;
-}
+
 .home-banner-style3 .home-style3 {
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -3573,19 +3536,6 @@ li {
 }
 
 /*Home 4 Banner Content*/
-.home-style4 {
-    background-image: url(../images/home/home-4.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    position: relative;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    height: 660px;
-}
 @media (max-width: 991.98px) {
     .home-style4 {
         height: 620px;
@@ -3770,13 +3720,6 @@ li {
 }
 
 /*Home 6 Banner*/
-.home-banner-style6 {
-    background-image: url(../images/home/home-6.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    position: relative;
-    background-size: cover;
-}
 .home-banner-style6 .home-style1 {
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -3928,7 +3871,7 @@ li {
 
 /*Home 1 Banner Content*/
 .home-banner-style8 {
-    background-image: linear-gradient(rgb(24, 26, 32, 0.8),rgb(24, 26, 32, 0.5)),url(../images/home/img1.jpg);
+    background-image: linear-gradient(rgb(24, 26, 32, 0.2),rgb(24, 26, 32, 0.8)),url(../images/home/img1.webp);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -3994,13 +3937,6 @@ li {
     z-index: 99;
 }
 
-.property-banner-style1 {
-    background-image: url(../images/listings/listing-banner-1.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;
-}
 .property-banner-style1 .inner-style1 {
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -4011,12 +3947,6 @@ li {
     height: 600px;
 }
 
-.property-banner-style2 {
-    background-image: url(../images/listings/listing-banner-2.jpg);
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
 .property-banner-style2 .inner-style1 {
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -4045,7 +3975,7 @@ li {
 }
 
 .about-box2 {
-    background-image: linear-gradient(rgb(24, 26, 32, 0.6),rgb(24, 26, 32, 0.1)),url(../images/about/img4.jpg);
+    background-image: linear-gradient(rgb(24, 26, 32, 0.6),rgb(24, 26, 32, 0.1)),url(../images/about/img4.webp);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -4848,7 +4778,7 @@ section {
 }
 
 .cta-banner3:before {
-    background-image: url(../images/about/cta-side-bg-1.jpg);
+    background-image: url(../images/about/cta-side-bg-1.webp);
     background-size: cover;
     content: "";
     position: absolute;
@@ -4894,15 +4824,6 @@ section {
     color: #ffffff;
 }
 
-.cta-banner4 {
-    background-attachment: fixed;
-    background-image: url(../images/background/cta-bg-1.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 600px;
-}
-
 @media (max-width: 575.98px) {
     .cta-style4 .cta-title {
         font-size: 30px;
@@ -4919,7 +4840,7 @@ section {
 }
 
 .cta-banner5:before {
-    background-image: url(../images/about/img2.jpg);
+    background-image: url(../images/about/img2.webp);
     background-size: cover;
     content: "";
     position: absolute;
@@ -4957,17 +4878,6 @@ section {
     font-weight: 400;
 }
 
-.cta-banner6:before {
-    background-image: url(../images/about/cta-side-bg-3.jpg);
-    background-size: cover;
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    height: 100%;
-    width: 51%;
-}
 @media (max-width: 1199.98px) {
     .cta-banner6:before {
         display: none;
@@ -9448,26 +9358,6 @@ input:focus-visible {
     }
 }
 
-.ps-v6-slider.owl-theme .owl-dots .owl-dot:first-child {
-    background-image: url(../images/listings/listing-single-6-1.jpg);
-    background-position: center;
-    background-size: cover;
-}
-.ps-v6-slider.owl-theme .owl-dots .owl-dot:nth-child(2) {
-    background-image: url(../images/listings/listing-single-6-2.jpg);
-    background-position: center;
-    background-size: cover;
-}
-.ps-v6-slider.owl-theme .owl-dots .owl-dot:nth-child(3) {
-    background-image: url(../images/listings/listing-single-6-3.jpg);
-    background-position: center;
-    background-size: cover;
-}
-.ps-v6-slider.owl-theme .owl-dots .owl-dot:nth-child(4) {
-    background-image: url(../images/listings/listing-single-6-4.jpg);
-    background-position: center;
-    background-size: cover;
-}
 .ps-v6-slider button.owl-dot {
     background-color: aliceblue;
     border-radius: 12px;

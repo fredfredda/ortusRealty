@@ -26,7 +26,7 @@ const Contact = () => {
           className="home8-map contact-page"
           height={550}
           width={550}
-          src="/images/contact/img23.jpg"
+          src="/images/contact/img23.webp"
           title="contact"
           alt="contact"
         />

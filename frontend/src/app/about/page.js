@@ -31,7 +31,7 @@ const About = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="breadcumb-style1">
-                <h2 className="title">About Us</h2>
+                <h1 className="title">About Us</h1>
               </div>
             </div>
           </div>
@@ -70,27 +70,6 @@ const About = () => {
         </div>
       </section>
       {/* End Our About Area */}
-
-      {/* About Banner */}
-      <section className="our-about pt-0">
-        <div className="container">
-          <div className="row" >
-            <div className="col-lg-12">
-              <div className="about-page-img">
-                <Image
-                  width={1206}
-                  height={515}
-                  priority
-                  className="w-100 h-100 cover"
-                  src="/images/about/about-page-banner.jpg"
-                  alt="about banner"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* End About Banner */}
 
       {/* Funfact */}
       <section className="pt-0">
