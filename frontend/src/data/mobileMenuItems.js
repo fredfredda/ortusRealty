@@ -5,8 +5,8 @@ module.exports = [
       {
         label: "Categories",
         subMenu: [
-          { label: "Lands", path: "/explore?propertyType=home" },
-          { label: "Homes", path: "explore?propertyType=land" },
+          { label: "Lands", path: "/explore?propertyType=land" },
+          { label: "Homes", path: "explore?propertyType=home" },
           { label: "Construction Sites", path: "/explore?propertyType=construction%20site" },
           { label: "Development Projects", path: "/explore?propertyType=development%20project" },
         ],

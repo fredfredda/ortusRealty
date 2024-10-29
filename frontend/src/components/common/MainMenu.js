@@ -1,4 +1,4 @@
-import { listingItems, pageItems } from "@/data/navItems";
+import { listingItems } from "@/data/navItems";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";

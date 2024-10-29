@@ -15,7 +15,7 @@
 
     const qs = new URLSearchParams(options);
 
-    return `${rootUrl}?${qs.toString()}&redirect=${redirect}`;
+    return `${rootUrl}?${qs.toString()}`;
 }
 
 export default getGooleOAuthUrl;

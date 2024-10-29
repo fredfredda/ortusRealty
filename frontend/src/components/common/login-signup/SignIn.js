@@ -12,86 +12,61 @@ const override = {
   borderColor: "white",
 };
 
-const SignUp = () => {
+const SignIn = () => {
 
-  const setSession = sessionStore((state) => state.setSession);
-  
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
+  const redirect = searchParams.get('redirect');
+
+  const setSession = sessionStore((state) => state.setSession);
 
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   let [color, setColor] = useState("#ffffff");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    registerUser();
+    loginUser();
   };
 
-  const registerUser = async () => {
+  const loginUser = async () => {
     setIsLoading(true);
-    const response = await fetch("http://localhost:3001/api/users/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-      }),
-    });
-    const data = await response.json();
-    if (data.error) {
-      console.log(data.error);
-      toast.error(data.error);
-    } else {
-      console.log(data);
-      localStorage.setItem("session", JSON.stringify(data));
-      setSession(data);
-      document.getElementById("signupform").reset();
-      if (redirect) {
-        router.push(redirect);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+      const data = await response.json();
+      if (data.error) {
+        toast.error(data.error);
       } else {
-        router.push("/");
+        localStorage.setItem("session", JSON.stringify(data));
+        setSession(data);
+        document.getElementById("loginForm").reset();
+        if (redirect) {
+          router.replace(redirect);
+        } else {
+          router.replace("/");
+        }
       }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
-    <form id="signupform" className="form-style1" onSubmit={handleSubmit}>
-      <div className="mb25">
-        <label className="form-label fw600 dark-color">First Name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Enter First Name"
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-        />
-      </div>
-      {/* End Email */}
-
-      <div className="mb25">
-        <label className="form-label fw600 dark-color">Last Name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Enter Last Name"
-          onChange={(e) => setLastName(e.target.value)}
-          required
-        />
-      </div>
-      {/* End Email */}
-
+    <form id="loginForm" className="form-style1" onSubmit={handleSubmit}>
       <div className="mb25">
         <label className="form-label fw600 dark-color">Email</label>
         <input
@@ -117,14 +92,31 @@ const SignUp = () => {
       {/* End Password */}
 
       <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
-        <a className="fz14 ff-heading" href={`/login?redirect=${redirect}`}>
-          Already have an account? Sign In
+        <label className="custom_checkbox fz14 ff-heading">
+          Remember me
+          <input type="checkbox" defaultChecked="checked" />
+          <span className="checkmark" />
+        </label>
+        <a className="fz14 ff-heading" href="#">
+          Lost your password?
         </a>
       </div>
-      {/* End  Already have an account? */}
+      {/* End  Lost your password? */}
+
+      <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
+        <a className="fz14 ff-heading" href={`/register?redirect=${redirect}`}>
+          Don't have an account? Sign Up
+        </a>
+      </div>
+      {/* End  Lost your password? */}
 
       <div className="d-grid mb20">
-        <button className="ud-btn btn-thm" type="submit" disabled={isLoading}>
+        <button
+          className="ud-btn btn-thm"
+          type="submit"
+          data-bs-dismiss=""
+          disabled={isLoading}
+        >
           {isLoading ? (
             <ClipLoader
               color={color}
@@ -136,11 +128,13 @@ const SignUp = () => {
             />
           ) : (
             <>
-              Create account <i className="fal fa-arrow-right-long" />
+              Sign in <i className="fal fa-arrow-right-long" />
             </>
           )}
         </button>
       </div>
+      {/* End submit */}
+
       <div className="hr_content mb20">
         <hr />
         <span className="hr_top_text">OR</span>
@@ -148,7 +142,7 @@ const SignUp = () => {
 
       <div className="d-grid mb10">
         <button className="ud-btn btn-white" type="button">
-          <a href={getGooleOAuthUrl(redirect || "")}>
+          <a href={getGooleOAuthUrl(redirect || '')}>
             <i className="fab fa-google" /> Continue With Google
           </a>
         </button>
@@ -157,4 +151,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;

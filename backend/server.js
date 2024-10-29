@@ -12,14 +12,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
 
-app.use(
-    cors({
-        origin: "http://localhost:3000",
-        optionsSuccessStatus: 200,
-        credentials: true,
-        // Some legacy browsers choke on 204
-    })
-);
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Allow all origins - dynamically set the origin based on the incoming request
+        callback(null, origin || '*');
+      },
+    // origin: process.env.FRONTEND_ENDPOINT || 'http://localhost:3000',
+    optionsSuccessStatus: 200,
+    credentials: true,
+    // Some legacy browsers choke on 204
+}
+
+app.use(cors(corsOptions));
 
 export const db = new pg.Client({
     user: process.env.DB_USER,
@@ -41,4 +45,4 @@ app.use('/api/users', UserRoutes); // user routes
 app.use('/api/properties', PropertyRoutes); // property routes
 app.use('/api/tours', TourRoutes); // tour routes
 
-app.listen(PORT, () => console.log(`Server listening at port ${PORT}`) );
+app.listen(PORT, '0.0.0.0', () => console.log(`Server listening at port ${PORT}`) );

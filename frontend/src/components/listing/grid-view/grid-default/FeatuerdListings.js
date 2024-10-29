@@ -23,7 +23,7 @@ const FeaturedListings = ({ data, colstyle }) => {
     try {
       if (savedProperties.includes(propertyId)) {
         const response = await fetch(
-          `http://localhost:3001/api/properties/unsaveproperty/${propertyId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/unsaveproperty/${propertyId}`,
           {
             method: "DELETE",
             credentials: "include",
@@ -37,7 +37,7 @@ const FeaturedListings = ({ data, colstyle }) => {
         }
       } else {
         const response = await fetch(
-          `http://localhost:3001/api/properties/saveproperty/${propertyId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/saveproperty/${propertyId}`,
           {
             method: "POST",
             headers: {
@@ -63,7 +63,7 @@ const FeaturedListings = ({ data, colstyle }) => {
 
   const HandleCopyToClipboard = async (propertyId) => {
     try {
-      const link = `http://localhost:3000/property-details/${propertyId}`;
+      const link = `${process.env.NEXT_PUBLIC_FRONTEND_ENDPOINT}/property-details/${propertyId}`;
       await navigator.clipboard.writeText(link);
       toast.success("Link copied to clipboard");
     } catch (err) {

@@ -7,7 +7,7 @@ const PropertyNearby = ({ neighborhoodId }) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `http://localhost:3001/api/properties/importantinfrastructure/${neighborhoodId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/importantinfrastructure/${neighborhoodId}`
       );
       const data = await response.json();
       if (data.error) {

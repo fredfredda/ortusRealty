@@ -4,7 +4,7 @@ import MainMenu from "@/components/common/MainMenu";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
 import toast from "react-hot-toast";
@@ -15,7 +15,12 @@ const Header = () => {
   const session = sessionStore((state) => state.session);
   const deleteSession = sessionStore((state) => state.deleteSession);
 
+  const router = useRouter();
+
   const pathname = usePathname();
+
+  const protectRoutes  = ['/profile', '/saved-properties'];
+
   const menuItems = {
     items: [
       {
@@ -48,7 +53,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/users/logout", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -61,6 +66,11 @@ const Header = () => {
       } else {
         localStorage.removeItem("session");
         deleteSession();
+        if (protectRoutes.includes(pathname)) {
+          router.replace("/");
+        } else {
+          router.push("/");
+        }
       }
     } catch (error) {
       console.log(error);

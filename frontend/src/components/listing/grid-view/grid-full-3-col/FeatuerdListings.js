@@ -13,7 +13,7 @@ const FeaturedListings = ({ data, colstyle }) => {
   const handleDeleteListing = async (propertyId) => {
     try {
         const response = await fetch(
-          `http://localhost:3001/api/properties/unsaveproperty/${propertyId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/unsaveproperty/${propertyId}`,
           {
             method: "DELETE",
             credentials: "include",

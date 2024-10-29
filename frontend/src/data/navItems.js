@@ -2,8 +2,8 @@ export const listingItems = [
   {
     title: "Categories",
     submenu: [
-      { label: "Lands", href: "/explore?propertyType=home" },
-      { label: "Homes", href: "explore?propertyType=land" },
+      { label: "Lands", href: "/explore?propertyType=land" },
+      { label: "Homes", href: "explore?propertyType=home" },
       { label: "Construction Sites", href: "/explore?propertyType=construction%20site" },
       { label: "Development Projects", href: "/explore?propertyType=development%20project" },
     ],

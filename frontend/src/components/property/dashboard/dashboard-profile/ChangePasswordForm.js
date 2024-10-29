@@ -31,7 +31,7 @@ const ChangePasswordForm = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        "http://localhost:3001/api/users/editpassword",
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/editpassword`,
         {
           method: "PUT",
           credentials: "include",

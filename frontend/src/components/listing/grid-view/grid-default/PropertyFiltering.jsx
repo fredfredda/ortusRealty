@@ -85,7 +85,7 @@ export default function PropertyFiltering() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/properties?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${listingStatus}&province=${
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${listingStatus}&province=${
             location === "All Provinces" ? "" : location
           }&priceRange=${
             priceRange === "" ? "50000-1000000000" : priceRange

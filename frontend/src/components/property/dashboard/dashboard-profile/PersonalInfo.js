@@ -26,7 +26,7 @@ const PersonalInfo = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:3001/api/users/profile",
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/profile`,
           {
             method: "GET",
             credentials: "include",
@@ -56,7 +56,7 @@ const PersonalInfo = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        "http://localhost:3001/api/users/editprofile",
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/editprofile`,
         {
           method: "PUT",
           credentials: "include",
@@ -112,7 +112,7 @@ const PersonalInfo = () => {
                 <input
                   type="email"
                   className="form-control"
-                  placeholder="First Name"
+                  placeholder="email"
                   value={userInfo.email}
                   disabled={true}
                   required

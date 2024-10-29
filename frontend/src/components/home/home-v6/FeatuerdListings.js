@@ -30,7 +30,7 @@ const FeaturedListings = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/properties/featuredproperties"
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/featuredproperties`
         );
         const data = await response.json();
         if (data.error) {
@@ -49,7 +49,7 @@ const FeaturedListings = () => {
     try {
       if (savedProperties.includes(propertyId)) {
         const response = await fetch(
-          `http://localhost:3001/api/properties/unsaveproperty/${propertyId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/unsaveproperty/${propertyId}`,
           {
             method: "DELETE",
             credentials: "include",
@@ -63,7 +63,7 @@ const FeaturedListings = () => {
         }
       } else {
         const response = await fetch(
-          `http://localhost:3001/api/properties/saveproperty/${propertyId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/saveproperty/${propertyId}`,
           {
             method: "POST",
             headers: {
@@ -89,7 +89,7 @@ const FeaturedListings = () => {
 
   const HandleCopyToClipboard = async (propertyId) => {
     try {
-      const link = `http://localhost:3000/property-details/${propertyId}`;
+      const link = `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/property-details/${propertyId}`;
       await navigator.clipboard.writeText(link);
       toast.success("Link copied to clipboard");
     } catch (err) {
@@ -128,7 +128,7 @@ const FeaturedListings = () => {
           },
         }}
       >
-        {listings.slice(0, 5).map((listing) => (
+        {listings.map((listing) => (
           <SwiperSlide key={listing.id}>
             <div className="item">
               <div className="listing-style1">

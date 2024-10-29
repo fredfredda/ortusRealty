@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:3001/api/properties/savedproperties",
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/savedproperties`,
           {
             method: "GET",
             credentials: "include",
@@ -78,7 +78,7 @@ export default function RootLayout({ children }) {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:3001/api/auth/isloggedin",
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/auth/isloggedin`,
           {
             method: "GET",
             credentials: "include",
@@ -88,7 +88,6 @@ export default function RootLayout({ children }) {
         if (data.error) {
           console.log(data.error);
         } else {
-          console.log(data);
           if (data.isLoggedIn === true) {
             const session_ = JSON.parse(localStorage.getItem("session"));
             setSession(session_);

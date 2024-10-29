@@ -29,7 +29,7 @@ export default function ProperteyFiltering() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3001/api/properties/savedpropertiesdetails`,
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/savedpropertiesdetails`,
           {
             method: 'GET',
             credentials: 'include',

@@ -35,7 +35,7 @@ const SingleV8 = ({ params }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/properties/getproperty/${params.id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/getproperty/${params.id}`
         );
         const data = await response.json();
         if (data.error) {

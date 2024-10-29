@@ -1,4 +1,4 @@
-import SignIn from "@/components/common/login-signup-modal/SignIn";
+import SignIn from "@/components/common/login-signup/SignIn";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
