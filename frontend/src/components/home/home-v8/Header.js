@@ -142,8 +142,8 @@ const Header = () => {
                               <Image
                                 width={44}
                                 height={44}
-                                src="/images/resource/user.png"
-                                alt="user.png"
+                                src={`https://ui-avatars.com/api/?name=${session?.lastName+'+'+session?.firstName}&background=random&rounded=true&size=44`}
+                                alt="user"
                               />
                             </a>
                             <div className="dropdown-menu">
