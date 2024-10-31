@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import formatMoney from "@/utilis/FormatMoney";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import { toast } from "react-hot-toast";
+import ImageKit from "@/components/common/ImageKit";
 
 const FeaturedListings = ({ data, colstyle }) => {
 
@@ -87,12 +87,12 @@ const FeaturedListings = ({ data, colstyle }) => {
             }
           >
             <div className="list-thumb">
-              <Image
+              <ImageKit
                 width={382}
                 height={248}
                 style={{ height: "230px" }}
                 className="w-100  cover"
-                src={listing.images.split(",")[0]}
+                pathName={listing.images.split(",")[0].split('/images/')[1]}
                 alt="listings"
               />
               <div className="sale-sticker-wrap">

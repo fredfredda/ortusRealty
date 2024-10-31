@@ -7,6 +7,9 @@ import { FreeMode, Navigation, Thumbs } from "swiper";
 import Image from "next/image";
 import "photoswipe/dist/photoswipe.css";
 
+const imagekitURL = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
+const projectName = "OrtusRealty";
+
 const PropertyGallery = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
@@ -41,7 +44,7 @@ const PropertyGallery = ({ images }) => {
                       height={671}
                       ref={ref}
                       onClick={open}
-                      src={item}
+                      src={`${imagekitURL}/${projectName}/${item.split('/images/')[1]}`}
                       alt="gallery"
                       className="w-100 h-auto bdrs12 pointer"
                     />
@@ -73,7 +76,7 @@ const PropertyGallery = ({ images }) => {
                   <Image
                     height={90}
                     width={83}
-                    src={item}
+                    src={`${imagekitURL}/${projectName}/${item.split('/images/')[1]}`}
                     alt="image"
                     className="w-100 bdrs12 cover pointer"
                   />

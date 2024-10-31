@@ -19,7 +19,7 @@ const PropertyVideo = () => {
           <button
             className="video_popup_btn mx-auto popup-img"
             onClick={() => setOpen(true)}
-            style={{ border: "none", background: "transparent" }}
+            style={{ border: "none", background: "white" }}
           >
             <span className="flaticon-play" />
           </button>

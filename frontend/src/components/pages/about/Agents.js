@@ -1,4 +1,5 @@
 "use client";
+import ImageKit from "@/components/common/ImageKit";
 import agents from "@/data/agents";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,11 +45,11 @@ const Agents = () => {
               <Link  href={`/agent-single/${agent.id}`}>
                 <div className="team-style1">
                   <div className="team-img">
-                    <Image
+                    <ImageKit
+                      pathName={agent.image}
+                      className="w-100 h-100 cover"
                       width={217}
                       height={248}
-                      className="w-100 h-100 cover"
-                      src={agent.image}
                       alt="agent team"
                     />
                   </div>

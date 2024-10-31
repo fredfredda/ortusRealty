@@ -70,12 +70,6 @@ export default function ProperteyFiltering() {
           </div>
         )}
 
-        {/* {savedProperties.map((propertyId) => {
-          <div className="row">
-            <FeaturedListings colstyle={colstyle} propertyId={propertyId} />
-          </div>
-        })} */}
-
         <div className="row">
           <PaginationTwo
             pageCapacity={9}

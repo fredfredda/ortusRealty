@@ -18,6 +18,7 @@ import ScheduleTour from "@/components/property/property-single-style/sidebar/Sc
 import PropertyGallery from "@/components/property/property-single-style/single-v8/PropertyGallery";
 import MortgageCalculator from "@/components/property/property-single-style/common/MortgageCalculator";
 import ClipLoader from "react-spinners/ClipLoader";
+import Cta from "@/components/home/home-v9/Cta";
 
 const override = {
   display: "block",
@@ -222,6 +223,11 @@ const SingleV8 = ({ params }) => {
           </section>
         </>
       )}
+
+      {/* Cta Start */}
+      <Cta />
+      {/* Cta End */}
+
       <section className="footer-style1 pt60 pb-0">
         <Footer />
       </section>

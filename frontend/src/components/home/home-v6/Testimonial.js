@@ -1,38 +1,38 @@
-import Image from "next/image";
+import ImageKit from "@/components/common/ImageKit";
 import React from "react";
 
 const testimonials = [
   {
     id: "1st",
-    imageSrc: "/images/testimonials/img17.webp",
+    imageSrc: "testimonials/img17.jpg",
     text: "What a great experience! I have visited one of the workshops and attended a masterclass, and both were super useful for young designers.",
     name: "Ali Tufan",
     designation: "Product Manager, Apple Inc",
   },
   {
     id: "2nd",
-    imageSrc: "/images/testimonials/img18.webp",
+    imageSrc: "testimonials/img18.jpg",
     text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
     name: "Ella Johnson",
     designation: "UX Designer, Google",
   },
   {
     id: "third",
-    imageSrc: "/images/testimonials/img21.webp",
+    imageSrc: "testimonials/img21.jpg",
     text: "What a great experience! I have visited one of the workshops and attended a masterclass, and both were super useful for young designers.",
     name: "Ali Tufan",
     designation: "Product Manager, Apple Inc",
   },
   {
     id: "4th",
-    imageSrc: "/images/testimonials/img19.webp",
+    imageSrc: "testimonials/img19.jpg",
     text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
     name: "Ella Johnson",
     designation: "UX Designer, Google",
   },
   {
     id: "5th",
-    imageSrc: "/images/testimonials/img20.webp",
+    imageSrc: "testimonials/img20.jpg",
     text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
     name: "Ella Johnson",
     designation: "UX Designer, Google",
@@ -86,11 +86,11 @@ const Testimonial = () => {
                 aria-controls={`pills-${testimonial.id}`}
                 aria-selected={testimonial.id === "2nd" ? "true" : "false"}
               >
-                <Image
+                <ImageKit
+                  pathName={testimonial.imageSrc}
                   width={70}
                   height={71}
-                  src={testimonial.imageSrc}
-                  alt=""
+                  alt="testimonial image"
                 />
               </button>
             </li>

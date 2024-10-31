@@ -4,6 +4,8 @@ import MobileMenu from "@/components/common/mobile-menu";
 import Form from "@/components/pages/contact/Form";
 import Office from "@/components/pages/contact/Office";
 import Image from "next/image";
+import Cta from "@/components/home/home-v9/Cta";
+import ImageKit from "@/components/common/ImageKit";
 
 export const metadata = {
   title: "Ortus Realty - Contact",
@@ -22,11 +24,11 @@ const Contact = () => {
 
       {/* Our Contact With Map */}
       <section className="p-0">
-        <Image
+        <ImageKit
           className="home8-map contact-page"
-          height={550}
-          width={550}
-          src="/images/contact/img23.webp"
+          height={600}
+          width={1920}
+          pathName="contact/img23.jpg"
           title="contact"
           alt="contact"
         />
@@ -89,6 +91,10 @@ const Contact = () => {
         </div>
       </section>
       {/* End Visit our Office */}
+
+      {/* Cta start */}
+       <Cta />
+      {/* Cta end */}
 
       {/* Start Our Footer */}
       <section className="footer-style1 pt60 pb-0">

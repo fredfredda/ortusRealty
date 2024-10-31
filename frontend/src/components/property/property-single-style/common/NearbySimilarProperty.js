@@ -12,6 +12,7 @@ import formatMoney from "@/utilis/FormatMoney";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import { toast } from "react-hot-toast";
 import "swiper/swiper-bundle.min.css";
+import ImageKit from "@/components/common/ImageKit";
 
 const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
 
@@ -127,11 +128,11 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
             <div className="item">
               <div className="listing-style1">
                 <div className="list-thumb">
-                  <Image
+                  <ImageKit
                     width={382}
                     height={248}
                     className="w-100 h-100 cover"
-                    src={listing.images.split(",")[0]}
+                    pathName={listing.images.split(",")[0].split('/images/')[1]}
                     alt="listings"
                   />
                   {

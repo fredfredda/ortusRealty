@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import ImageKit from "@/components/common/ImageKit";
 
 const floorPlanData = [
   {
@@ -9,7 +9,7 @@ const floorPlanData = [
     bedrooms: "2",
     bathrooms: "2",
     price: "$920,99",
-    imageSrc: "/images/listings/listing-single-1.png",
+    imageSrc: "listings/listing-single-1.png",
   },
   {
     id: "second-floor",
@@ -18,7 +18,7 @@ const floorPlanData = [
     bedrooms: "2",
     bathrooms: "2",
     price: "$920,99",
-    imageSrc: "/images/listings/listing-single-1.png",
+    imageSrc: "listings/listing-single-1.png",
   },
   {
     id: "third-floor",
@@ -26,7 +26,7 @@ const floorPlanData = [
     size: "1267 Sqft",
     bedrooms: "2",
     bathrooms: "2",
-    imageSrc: "/images/listings/listing-single-1.png",
+    imageSrc: "listings/listing-single-1.png",
   },
 ];
 
@@ -75,11 +75,11 @@ const FloorPlans = () => {
             data-parent="#accordionExample"
           >
             <div className="accordion-body text-center">
-              <Image
+              <ImageKit
                 width={736}
                 height={544}
                 className="w-100 h-100 cover"
-                src={floorPlan.imageSrc}
+                pathName={floorPlan.imageSrc}
                 alt="listing figureout"
               />
             </div>

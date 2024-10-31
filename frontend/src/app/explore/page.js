@@ -3,6 +3,7 @@ import Footer from "@/components/home/home-v8/footer/index";
 import MobileMenu from "@/components/common/mobile-menu";
 import React from "react";
 import PropertyFiltering from "@/components/listing/grid-view/grid-default/PropertyFiltering";
+import Cta from "@/components/home/home-v9/Cta";
 
 export const metadata = {
   title: "Ortus Realty - Explore",
@@ -34,8 +35,12 @@ const GridDefault = () => {
       {/* End Breadcumb Sections */}
 
       {/* Property Filtering */}
-      <PropertyFiltering/>
+      <PropertyFiltering />
       {/* Property Filtering */}
+
+      {/* Start Cta */}
+      <Cta />
+      {/* End Cta */}
 
       {/* Start Our Footer */}
       <section className="footer-style1 pt60 pb-0">

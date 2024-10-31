@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import formatMoney from "@/utilis/FormatMoney";
 import { savedPropertiesStore } from "@/store/savedProperties";
+import ImageKit from "@/components/common/ImageKit";
 
 const FeaturedListings = ({ data, colstyle }) => {
 
@@ -50,12 +51,12 @@ const FeaturedListings = ({ data, colstyle }) => {
               }
             >
               <div className="list-thumb">
-                <Image
+                <ImageKit
                   width={382}
                   height={248}
                   className="w-100  cover"
                   style={{ height: "230px" }}
-                  src={listing.images.split(",")[0]}
+                  pathName={listing.images.split(",")[0].split('/images/')[1]}
                   alt="listings"
                 />
                 {listing.is_featured === "yes" && (

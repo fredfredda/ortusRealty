@@ -16,6 +16,14 @@ const ListingSidebar = ({filterFunctions}) => {
         <SearchBox filterFunctions={filterFunctions} />
       </div>
       {/* End .widget-wrapper */}
+      
+      <div className="widget-wrapper advance-feature-modal">
+        <h6 className="list-title">Location</h6>
+        <div className="form-style2 input-group">
+          <Location filterFunctions={filterFunctions} />
+        </div>
+      </div>
+      {/* End .widget-wrapper */}
 
       <div className="widget-wrapper">
         <h6 className="list-title">Listing Status</h6>
@@ -39,14 +47,6 @@ const ListingSidebar = ({filterFunctions}) => {
         {/* Range Slider Desktop Version */}
         <div className="radio-element">
           <PriceSlider filterFunctions={filterFunctions} />
-        </div>
-      </div>
-      {/* End .widget-wrapper */}
-
-      <div className="widget-wrapper advance-feature-modal">
-        <h6 className="list-title">Location</h6>
-        <div className="form-style2 input-group">
-          <Location filterFunctions={filterFunctions} />
         </div>
       </div>
       {/* End .widget-wrapper */}

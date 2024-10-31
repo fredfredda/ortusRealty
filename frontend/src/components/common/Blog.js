@@ -1,7 +1,6 @@
-
 import { blogs } from "@/data/blogs";
-import Image from "next/image";
 import Link from "next/link";
+import ImageKit from "./ImageKit";
 
 const Blog = () => {
   return (
@@ -10,12 +9,12 @@ const Blog = () => {
         <div className="col-sm-6 col-lg-4" key={blog.id}>
           <div className="blog-style1">
             <div className="blog-img">
-              <Image
+              <ImageKit
+                pathName={blog.image}
                 width={386}
                 height={271}
                 className="w-100 h-100 cover"
-                src={blog.image}
-                alt="blog"
+                alt={"blog"}
               />
             </div>
             <div className="blog-content">
@@ -27,7 +26,7 @@ const Blog = () => {
                 {blog.tag}
               </a>
               <h6 className="title mt-1">
-                <Link href='#'>{blog.title}</Link>
+                <Link href="#">{blog.title}</Link>
               </h6>
             </div>
           </div>
