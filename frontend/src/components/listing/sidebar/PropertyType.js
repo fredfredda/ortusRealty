@@ -24,7 +24,7 @@ const PropertyType = ({ filterFunctions }) => {
             checked={filterFunctions?.propertyTypes == option.label}
             onChange={() => filterFunctions.handlepropertyTypes(option.label)}
           />
-          <label className="form-check-label" htmlFor={option.id}>
+          <label className="form-check-label" htmlFor={option.id} style={{textTransform: "capitalize"}} >
             {option.label === "" ? "All" : option.label}
           </label>
         </div>

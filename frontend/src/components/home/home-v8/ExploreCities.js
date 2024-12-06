@@ -11,28 +11,28 @@ const ExploreCities = () => {
       id: 1,
       value: 'home',
       name: "Homes",
-      image: "listings/img10.jpg",
+      image: "OrtusRealty/listings/img10.webp",
       number: 12,
     },
     {
       id: 2,
       name: "Land",
       value: 'land',
-      image: "listings/img11.jpg",
+      image: "OrtusRealty/listings/img11.webp",
       number: 8,
     },
     {
       id: 3,
       name: "Construction Sites",
       value: "construction site",
-      image: "listings/img12.jpg",
+      image: "OrtusRealty/listings/img12.jpg",
       number: 15,
     },
     {
       id: 4,
       name: "Development Projects",
       value: "development project",
-      image: "listings/img13.jpg",
+      image: "OrtusRealty/listings/img13.jpg",
       number: 10,
     }
   ];
@@ -76,10 +76,12 @@ const ExploreCities = () => {
                 <div className="feature-style2 mb30">
                   <div className="feature-img">
                     <ImageKit 
-                    className="w-100 h-100 cover"
+                    className="w-100 cover"
                       pathName={city.image}
                       width={279}
                       height={279}
+                      loading="lazy"
+                      transform={[{ quality: 20 }]}
                       alt="city listings"
                     />
                   </div>

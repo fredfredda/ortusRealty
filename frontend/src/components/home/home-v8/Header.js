@@ -169,7 +169,7 @@ const Header = () => {
                                     className="dropdown-item"
                                     onClick={handleLogout}
                                   >
-                                    <i className={`"flaticon-exit mr10`} />
+                                    <i className="flaticon-exit mr10" />
                                     Logout
                                   </button>
                                 </div>

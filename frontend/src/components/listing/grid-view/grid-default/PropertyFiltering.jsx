@@ -88,8 +88,8 @@ export default function PropertyFiltering() {
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${listingStatus}&province=${
             location === "All Provinces" ? "" : location
           }&priceRange=${
-            priceRange === "" ? "50000-1000000000" : priceRange
-          }&sizeRange=${squirefeet === "" ? "100-10000" : squirefeet}`
+            priceRange === "" ? "0-1000000000" : priceRange
+          }&sizeRange=${squirefeet === "" ? "0-10000" : squirefeet}`
         );
         const data = await response.json();
         if (data.error) {
@@ -112,7 +112,6 @@ export default function PropertyFiltering() {
     searchParams,
   ]);
 
-  
   useEffect(() => {
     setPageItems(
       sortedFilteredData.slice((pageNumber - 1) * 8, pageNumber * 8)

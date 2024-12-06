@@ -122,33 +122,6 @@ const SingleV8 = ({ params }) => {
                     </div>
                   )}
 
-                  {propertyInfo.property_type === "home" && (
-                    <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-                      <h4 className="title fz17 mb30">Floor Plans</h4>
-                      <div className="row">
-                        <div className="col-md-12">
-                          <div className="accordion-style1 style2">
-                            <FloorPlans />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 ">
-                    <h4 className="title fz17 mb30">Video</h4>
-                    <div className="row">
-                      <PropertyVideo />
-                    </div>
-                  </div>
-
-                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-                    <h4 className="title fz17 mb30">360° Virtual Tour</h4>
-                    <div className="row">
-                      <VirtualTour360 />
-                    </div>
-                  </div>
-
                   <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
                     <h4 className="title fz17 mb30">What&apos;s Nearby?</h4>
                     <div className="row">
@@ -158,19 +131,6 @@ const SingleV8 = ({ params }) => {
                     </div>
                   </div>
 
-                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-                    <h4 className="title fz17 mb30">Mortgage Calculator</h4>
-                    <div className="row">
-                      <MortgageCalculator />
-                    </div>
-                  </div>
-
-                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-                    <h4 className="title fz17 mb30">Property Value</h4>
-                    <div className="row">
-                      <HomeValueChart />
-                    </div>
-                  </div>
                 </div>
 
                 <div className="col-lg-4">

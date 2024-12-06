@@ -37,10 +37,10 @@ const PropertyNearby = ({ neighborhoodId }) => {
                 className="nearby d-sm-flex align-items-center mb20"
               >
                 <div className="details">
-                  <p className="dark-color fw600 mb-0">
+                <p className="dark-color fw600 mb-0">{item.infrastructure_type}</p>
+                  <p className="text mb-0">
                     {item.infrastructure_name}
                   </p>
-                  <p className="text mb-0">{item.infrastructure_type}</p>
                 </div>
               </div>
             </div>

@@ -18,8 +18,6 @@ const Register = () => {
           src="/images/icon/login-page-icon.svg"
           alt="logo"
           className="login-bg-icon contain"
-          data-aos="fade-right"
-          data-aos-delay="300"
         />
         <div className="container">
           <div className="row" data-aos="fade-left" data-aos-delay="300">

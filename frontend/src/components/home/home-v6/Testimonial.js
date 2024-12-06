@@ -4,35 +4,35 @@ import React from "react";
 const testimonials = [
   {
     id: "1st",
-    imageSrc: "testimonials/img17.jpg",
+    imageSrc: "OrtusRealty/testimonials/img17.jpg",
     text: "What a great experience! I have visited one of the workshops and attended a masterclass, and both were super useful for young designers.",
     name: "Ali Tufan",
     designation: "Product Manager, Apple Inc",
   },
   {
     id: "2nd",
-    imageSrc: "testimonials/img18.jpg",
+    imageSrc: "OrtusRealty/testimonials/img18.jpg",
     text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
     name: "Ella Johnson",
     designation: "UX Designer, Google",
   },
   {
     id: "third",
-    imageSrc: "testimonials/img21.jpg",
+    imageSrc: "OrtusRealty/testimonials/img21.jpg",
     text: "What a great experience! I have visited one of the workshops and attended a masterclass, and both were super useful for young designers.",
     name: "Ali Tufan",
     designation: "Product Manager, Apple Inc",
   },
   {
     id: "4th",
-    imageSrc: "testimonials/img19.jpg",
+    imageSrc: "OrtusRealty/testimonials/img19.jpg",
     text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
     name: "Ella Johnson",
     designation: "UX Designer, Google",
   },
   {
     id: "5th",
-    imageSrc: "testimonials/img20.jpg",
+    imageSrc: "OrtusRealty/testimonials/img20.jpg",
     text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
     name: "Ella Johnson",
     designation: "UX Designer, Google",
@@ -90,6 +90,8 @@ const Testimonial = () => {
                   pathName={testimonial.imageSrc}
                   width={70}
                   height={71}
+                  transformation={[{ quality: 10 }]}
+                  loading="lazy"
                   alt="testimonial image"
                 />
               </button>

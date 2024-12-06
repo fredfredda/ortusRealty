@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
 import Link from "next/link";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -123,7 +122,7 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
           },
         }}
       >
-        {listings.slice(0, 5).map((listing) => (
+        {listings.map((listing) => (
           <SwiperSlide key={listing.id}>
             <div className="item">
               <div className="listing-style1">
@@ -132,7 +131,9 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
                     width={382}
                     height={248}
                     className="w-100 h-100 cover"
-                    pathName={listing.images.split(",")[0].split('/images/')[1]}
+                    transformation={[{ quality: 20 }]}
+                    loading="lazy"
+                    pathName={listing.images.split(",")[0]}
                     alt="listings"
                   />
                   {

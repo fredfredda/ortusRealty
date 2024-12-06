@@ -133,7 +133,14 @@ const FeaturedListings = () => {
               <div className="item">
                 <div className="listing-style1">
                   <div className="list-thumb">
-                    <ImageKit pathName={listing.images.split(',')[0].split('/images/')[1]} width={382} height={248} alt="Listing Image" />
+                    <ImageKit
+                    pathName={listing.images.split(',')[0]}
+                    width={382}
+                    height={248}
+                    loading="lazy"
+                    transformation={[{ quality: 40 }]}
+                    alt="Listing Image"
+                    />
                     <div className="sale-sticker-wrap">
                       <div className="list-tag rounded-0 fz12">
                         <span className="flaticon-electricity" />
@@ -182,7 +189,7 @@ const FeaturedListings = () => {
                     )}
                     <hr className="mt-2 mb-2" />
                     <div className="list-meta2 d-flex justify-content-between align-items-center">
-                      <span className="for-what">{listing.saletype_name}</span>
+                      <span className="for-what" style={{textTransform: "capitalize"}}>{listing.saletype_name}</span>
                       <div className="icons d-flex align-items-center">
                         <button
                           className="property-card-btn"

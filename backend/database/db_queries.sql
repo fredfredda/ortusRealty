@@ -65,13 +65,16 @@ create table properties(
 	prpty_type_id int,
 	category_id int,
 	home_details_id varchar(80),
+	status_id int,
+	agent_id int,
 	constraint fk_saletypeid_prpty foreign key (prpty_saletype_id) references property_saletypes(id),
 	constraint fk_nbhdid_prpty foreign key (prpty_nbhd_id) references neighborhoods(id),
 	constraint fk_prptytypeid_prpties foreign key (prpty_type_id) references property_types(id),
 	constraint fk_categoryid_prpties foreign key (category_id) references property_categories(id),
-	constraint fk_homedetailsid_prpties foreign key (home_details_id) references home_details(id)
+	constraint fk_homedetailsid_prpties foreign key (home_details_id) references home_details(id),
+	constraint fk_statusid_properties foreign key(status_id) references property_statuses(id)
+	constraint fk_agentid_properties foreign key(agent_id) references agents(id);
 )
-
 
 create table property_inquiry_statuses(
 	id serial primary key,
@@ -81,15 +84,14 @@ create table property_inquiry_statuses(
 
 create table property_inquiries(
 	id serial primary key,
+	user_id int,
 	prpty_id int,
 	inquiry_status_id int,
 	created_at timestamptz,
+	constraint fk_userid_prptyiqry foreign key (user_id) references users(id) on delete cascade,
 	constraint fk_prptyid_prptyiqry foreign key (prpty_id) references properties(id) on delete cascade,
 	constraint fk_iqrystatusid_prptyiqry foreign key (inquiry_status_id) references property_inquiry_statuses(id)
 )
-
-alter table property_inquiries add column user_id int;
-alter table property_inquiries add constraint fk_userid_prptyiqry foreign key (user_id) references users(id) on delete cascade
 
 create table tour_inquiry_statuses(
 	id serial primary key,
@@ -166,3 +168,48 @@ create table important_facilities(
 	constraint fk_infrastrucuturetypeid_iptfclties foreign key (infrastructure_type_id) references infrastructure_types(id),
 	constraint fk_nbhdid_iptfclties foreign key(nbhd_id) references neighborhoods(id) on delete cascade
 )
+
+create table agents (
+	id serial primary key,
+	first_name varchar(120),
+	last_name varchar(120),
+	email varchar(120),
+	username varchar(120),
+	pswrd varchar(120),
+	created_at timestamptz
+);
+
+create table property_statuses(
+	id serial primary key,
+	status varchar(120),
+	description varchar(500)
+);
+
+create table property_sales (
+	id serial primary key,
+	property_id int,
+	agent_id int,
+	user_id int,
+	created_at timestamptz,
+	constraint fk_propertyid_propertysales foreign key(property_id) references properties(id) on delete cascade,
+	constraint fk_agentid_propertysales foreign key(agent_id) references agents(id) on delete cascade,
+	constraint fk_userid_propertysales foreign key(user_id) references users(id) on delete cascade
+);
+
+create table property_requests(
+	id serial primary key,
+	request varchar(200),
+	description varchar(1500)
+);
+
+create table property_modification_requests(
+	id serial primary key,
+	request_id int,
+	agent_id int,
+	property_id int,
+	request_message varchar(1500),
+	created_at timestamptz,
+	constraint fk_requestid_propertymodificationrequests foreign key(request_id) references property_requests(id),
+	constraint fk_agentid_propertymodificationrequests foreign key(agent_id) references agents(id) on delete cascade,
+	constraint fk_propertyid_propertymodificationrequests foreign key(property_id) references properties(id) on delete cascade
+);

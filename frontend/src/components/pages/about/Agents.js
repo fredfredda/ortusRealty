@@ -1,9 +1,8 @@
 "use client";
 import ImageKit from "@/components/common/ImageKit";
 import agents from "@/data/agents";
-import Image from "next/image";
 import Link from "next/link";
-import SwiperCore, { Navigation, Pagination } from "swiper";
+import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";
 
@@ -50,6 +49,8 @@ const Agents = () => {
                       className="w-100 h-100 cover"
                       width={217}
                       height={248}
+                      transformation={[{ quality: 60 }]}
+                      loading="lazy"
                       alt="agent team"
                     />
                   </div>

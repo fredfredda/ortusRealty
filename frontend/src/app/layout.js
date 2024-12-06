@@ -94,6 +94,7 @@ export default function RootLayout({ children }) {
           } else {
             localStorage.removeItem("session");
             deleteSession();
+            resetProperties();
           }
         }
       } catch (error) {

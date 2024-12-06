@@ -6,7 +6,7 @@ const PropertyDetails = ({property}) => {
     [
       {
         label: "Price",
-        value: 'Bif ' + formatMoney(property.prpty_price),
+        value: `Bif ${formatMoney(property.prpty_price)} ${property.saletype_name === 'renting' ? '/mo' : ''}`,
       },
       {
         label: "Size",
@@ -33,11 +33,11 @@ const PropertyDetails = ({property}) => {
   [[
     {
       label: "Price",
-      value: 'Bif ' + formatMoney(property.prpty_price),
+      value: `Bif ${formatMoney(property.prpty_price)} ${property.saletype_name === 'renting' ? '/mo' : ''}`,
     },
     {
       label: "Size",
-      value: formatMoney(property.prpty_size),
+      value: formatMoney(property.prpty_size) + ' sqft',
     },
     {
       label: "Category",

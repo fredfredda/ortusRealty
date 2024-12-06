@@ -206,9 +206,6 @@ const Home_V8 = () => {
             <div className="col-lg-6 m-auto">
               <div className="main-title text-start text-md-center">
                 <h2 className="title">From Our Blog</h2>
-                <p className="paragraph">
-                  Aliquam lacinia diam quis lacus euismod
-                </p>
               </div>
             </div>
           </div>
@@ -232,7 +229,7 @@ const Home_V8 = () => {
               <div className="main-title text-center">
                 <h2>Testimonials</h2>
                 <p className="paragraph">
-                  10,000+ unique online course list designs
+                  10,000+ happy clients trust us with their real estate needs
                 </p>
               </div>
             </div>

@@ -28,7 +28,8 @@ const Contact = () => {
           className="home8-map contact-page"
           height={600}
           width={1920}
-          pathName="contact/img23.jpg"
+          pathName="OrtusRealty/contact/img23.jpg"
+          transformation={[{ quality: 60 }]}
           title="contact"
           alt="contact"
         />

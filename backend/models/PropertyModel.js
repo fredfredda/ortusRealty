@@ -5,14 +5,15 @@ const getAllPropertiesFromDb = async () => {
     const results = await db.query(
       `select properties.id, properties.prpty_name, properties.prpty_price, properties.prpty_size, 
             properties.prpty_location, property_saletypes.saletype_name, provinces.prvc_name, 
-            properties.images, properties.is_featured, property_types.property_type, property_categories.category_name, 
+            properties.images, properties.is_featured, properties.status_id, property_types.property_type, property_categories.category_name, 
             home_details.num_of_beds, home_details.num_of_bathrooms from properties 
             join property_saletypes on properties.prpty_saletype_id = property_saletypes.id 
             join property_types on properties.prpty_type_id = property_types.id 
             join property_categories on properties.category_id = property_categories.id 
             left outer join home_details on properties.home_details_id = home_details.home_details_id
             join neighborhoods on properties.prpty_nbhd_id = neighborhoods.id
-            join provinces on neighborhoods.nbhd_province_id = provinces.id`
+            join provinces on neighborhoods.nbhd_province_id = provinces.id
+            where properties.status_id = 3;`
     );
     const data = results.rows;
     return data;
@@ -26,13 +27,13 @@ const getFeaturedPropertiesFromDb = async () => {
   try {
     const results = await db.query(
       `select properties.id, properties.prpty_name, properties.prpty_price, properties.prpty_size, 
-            properties.prpty_location, property_saletypes.saletype_name, properties.images, properties.is_featured, property_types.property_type, property_categories.category_name, 
+            properties.prpty_location, properties.status_id, property_saletypes.saletype_name, properties.images, properties.is_featured, property_types.property_type, property_categories.category_name, 
             home_details.num_of_beds, home_details.num_of_bathrooms from properties 
             join property_saletypes on properties.prpty_saletype_id = property_saletypes.id 
             join property_types on properties.prpty_type_id = property_types.id 
             join property_categories on properties.category_id = property_categories.id 
             left outer join home_details on properties.home_details_id = home_details.home_details_id
-            where properties.is_featured = 'yes';`
+            where properties.is_featured = 'yes' and properties.status_id = 3;`
     );
     const data = results.rows;
     return data;
@@ -46,13 +47,13 @@ const getNearbyPropertiesFromDb = async (neighborhoodId, propertyId) => {
   try {
     const results = await db.query(
       `select properties.id, properties.prpty_name, properties.prpty_price, properties.prpty_size, 
-            properties.prpty_location, property_saletypes.saletype_name, properties.images, properties.is_featured, property_types.property_type, property_categories.category_name, 
+            properties.prpty_location, properties.status_id, property_saletypes.saletype_name, properties.images, properties.is_featured, property_types.property_type, property_categories.category_name, 
             home_details.num_of_beds, home_details.num_of_bathrooms from properties 
             join property_saletypes on properties.prpty_saletype_id = property_saletypes.id 
             join property_types on properties.prpty_type_id = property_types.id 
             join property_categories on properties.category_id = property_categories.id 
             left outer join home_details on properties.home_details_id = home_details.home_details_id
-            where properties.prpty_nbhd_id = ${neighborhoodId} and properties.id != ${propertyId};`
+            where properties.prpty_nbhd_id = ${neighborhoodId} and properties.id != ${propertyId} and properties.status_id = 3;`
     );
     const data = results.rows;
     return data;
@@ -77,7 +78,7 @@ const getPropertyFromDb = async (propertyId) => {
             left outer join home_details on properties.home_details_id = home_details.home_details_id
             join neighborhoods on properties.prpty_nbhd_id = neighborhoods.id
             join provinces on neighborhoods.nbhd_province_id = provinces.id
-            where properties.id = ${propertyId};`
+            where properties.id = ${propertyId} and properties.status_id = 3;`
     );
     const data = results.rows;
     return data;
@@ -194,7 +195,7 @@ const getSavedPropertiesDetailsFromDb = async (userId) => {
             join property_types on properties.prpty_type_id = property_types.id 
             join property_categories on properties.category_id = property_categories.id 
             left outer join home_details on properties.home_details_id = home_details.home_details_id
-            where saved_properties.user_id = ${userId};`);
+            where saved_properties.user_id = ${userId} and properties.status_id = 3;`);
     let data = result.rows;
     return data;
   } catch (error) {

@@ -29,7 +29,7 @@ const ListingStatus = ({filterFunctions}) => {
    
             
           />
-          <label className="form-check-label" htmlFor={option.id}>
+          <label className="form-check-label" htmlFor={option.id} style={{textTransform: "capitalize"}} >
             {option.label === "" ? "All" : option.label}
           </label>
         </div>

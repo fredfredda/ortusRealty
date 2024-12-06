@@ -102,11 +102,11 @@ const userSignUp = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   const username = assignId();
   try {
-    const newUser = await getUserByEmail(email); // REMEMBER TO CHANGE THE PARAMETER TO [emailn]
+    const newUser = await getUserByEmail(email);
     if (newUser.length > 0)
       return res
-        .status(200)
-        .json({ error: "There is a user with the same username" });
+        .status(400)
+        .json({ error: "Email already exists" });
 
     if (
       firstName === undefined ||

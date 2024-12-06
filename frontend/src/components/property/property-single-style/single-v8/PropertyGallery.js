@@ -8,7 +8,6 @@ import Image from "next/image";
 import "photoswipe/dist/photoswipe.css";
 
 const imagekitURL = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
-const projectName = "OrtusRealty";
 
 const PropertyGallery = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -33,8 +32,8 @@ const PropertyGallery = ({ images }) => {
             {images.split(',').map((item, i) => (
               <SwiperSlide key={i}>
                 <Item
-                  original={item}
-                  thumbnail={item}
+                  original={`${imagekitURL}/${item}?tr=w-1206,h-671,f-webp,q-80`}
+                  thumbnail={`${imagekitURL}/${item}?tr=w-1206,h-671,f-webp,q-60`}
                   width={1206}
                   height={671}
                 >
@@ -44,7 +43,7 @@ const PropertyGallery = ({ images }) => {
                       height={671}
                       ref={ref}
                       onClick={open}
-                      src={`${imagekitURL}/${projectName}/${item.split('/images/')[1]}`}
+                      src={`${imagekitURL}/${item}?tr=w-1206,h-671,f-webp,q-80`}
                       alt="gallery"
                       className="w-100 h-auto bdrs12 pointer"
                     />
@@ -76,7 +75,7 @@ const PropertyGallery = ({ images }) => {
                   <Image
                     height={90}
                     width={83}
-                    src={`${imagekitURL}/${projectName}/${item.split('/images/')[1]}`}
+                    src={`${imagekitURL}/${item}?tr=w-83,h-90,f-webp,q-40`}
                     alt="image"
                     className="w-100 bdrs12 cover pointer"
                   />

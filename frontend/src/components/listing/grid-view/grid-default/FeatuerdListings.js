@@ -4,12 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
+import ImageKit from "@/components/common/ImageKit";
 import Link from "next/link";
 import formatMoney from "@/utilis/FormatMoney";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import { toast } from "react-hot-toast";
-import ImageKit from "@/components/common/ImageKit";
 
 const FeaturedListings = ({ data, colstyle }) => {
 
@@ -90,9 +89,10 @@ const FeaturedListings = ({ data, colstyle }) => {
               <ImageKit
                 width={382}
                 height={248}
-                style={{ height: "230px" }}
                 className="w-100  cover"
-                pathName={listing.images.split(",")[0].split('/images/')[1]}
+                pathName={listing.images.split(",")[0]}
+                transformation={[{ quality: 20 }]}
+                loading="lazy"
                 alt="listings"
               />
               <div className="sale-sticker-wrap">
@@ -144,7 +144,7 @@ const FeaturedListings = ({ data, colstyle }) => {
               )}
               <hr className="mt-2 mb-2" />
               <div className="list-meta2 d-flex justify-content-between align-items-center">
-                <span className="for-what">{listing.saletype_name}</span>
+                <span className="for-what" style={{textTransform: "capitalize"}} >{listing.saletype_name}</span>
                 <div className="icons d-flex align-items-center">
                   <button
                     className="property-card-btn"
