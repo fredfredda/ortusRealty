@@ -92,18 +92,6 @@ const SignIn = () => {
       {/* End Password */}
 
       <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
-        <label className="custom_checkbox fz14 ff-heading">
-          Remember me
-          <input type="checkbox" defaultChecked="checked" />
-          <span className="checkmark" />
-        </label>
-        <a className="fz14 ff-heading" href="#">
-          Lost your password?
-        </a>
-      </div>
-      {/* End  Lost your password? */}
-
-      <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
         <a className="fz14 ff-heading" href={`/register?redirect=${redirect}`}>
           Don't have an account? Sign Up
         </a>

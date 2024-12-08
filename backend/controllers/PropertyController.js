@@ -1,11 +1,7 @@
 import {
-  getPropertyInquiry,
-  createPropertyInquiry,
-  updatePropertyInquiryStatus,
   getSavedProperty,
   createSavedProperty,
   deleteSavedProperty,
-  getPropertyInquiriesFromDb,
   getSavedPropertiesFromdb,
   getAllPropertiesFromDb,
   getPropertyFromDb,
@@ -38,8 +34,8 @@ const getAllProperties = async (req, res) => {
       property["prvc_name"].includes(province || "")
     );
     // price and size formatting
-    let priceRange_ = priceRange === "" || priceRange === undefined ? "0-1000000000" : priceRange;
-    let sizeRange_ = sizeRange === "" || sizeRange === undefined ? "0-10000" : sizeRange;
+    let priceRange_ = !priceRange ? "0-1000000000" : priceRange;
+    let sizeRange_ = !sizeRange ? "0-10000" : sizeRange;
     let minPrice = priceRange_.split("-")[0];
     let maxPrice = priceRange_.split("-")[1];
     let minSize = sizeRange_.split("-")[0];
@@ -117,77 +113,6 @@ const getImportantInfrestrucutre = async (req, res) => {
   }
 };
 
-const getPropertyInquiries = async (req, res) => {
-  const { userId } = req.user;
-  try {
-    const data = await getPropertyInquiriesFromDb(userId);
-    return res.status(200).json({ data });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(error);
-  }
-};
-
-const inquireProperty = async (req, res) => {
-  const { userId } = req.user;
-  const { propertyId } = req.params;
-  try {
-    const inquiry = await getPropertyInquiry(userId, propertyId);
-    if (inquiry.length > 0)
-      return res
-        .status(400)
-        .json({ error: "You have already inquired this property" });
-
-    if (
-      firstName === undefined ||
-      lastName === undefined ||
-      username === undefined ||
-      email === undefined
-    )
-      return res.status(400).json({ error: "Missing required fields" });
-
-    let createdAt = getTimeWithTimeZone();
-    let defaultStatus = 1;
-    let createInquiry = await createPropertyInquiry(
-      userId,
-      propertyId,
-      defaultStatus,
-      createdAt
-    );
-    if (createInquiry.error) return res.status(500).json({ createInquiry });
-
-    return res
-      .status(200)
-      .json({ success: "Property inquiry created successfully" });
-  } catch {
-    console.log(error);
-    return res.status(500).json(error);
-  }
-};
-
-const cancelPropertyInquiry = async (req, res) => {
-  const { userId } = req.user;
-  const { propertyId } = req.params;
-  try {
-    let inquiry = await getPropertyInquiry(userId, propertyId);
-    if (inquiry.length === 0)
-      return res.status(400).json({ error: "Property inquiry not found" });
-
-    let status = 2;
-    let cancelInquiry = await updatePropertyInquiryStatus(
-      userId,
-      propertyId,
-      status
-    );
-    if (cancelInquiry.error) return res.status().json(cancelInquiry);
-
-    return res.status(200).json({ success: "Property inquiry canceled" });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(error);
-  }
-};
-
 const getSavedPropertiesDetails = async (req, res) => {
   const { userId } = req.user;
   try {
@@ -249,11 +174,8 @@ const unsaveProperty = async (req, res) => {
 };
 
 export {
-  inquireProperty,
-  cancelPropertyInquiry,
   saveProperty,
   unsaveProperty,
-  getPropertyInquiries,
   getSavedProperties,
   getAllProperties,
   getProperty,

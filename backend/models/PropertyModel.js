@@ -101,61 +101,6 @@ const getImportantInfrestrucutreFromDb = async (neighborhoodId) => {
   }
 };
 
-const getPropertyInquiriesFromDb = async (userId) => {
-  try {
-    const results = await db.query(
-      `select * from property_inquiries where user_id = ${userId};`
-    );
-    const data = results.rows;
-    return data;
-  } catch (error) {
-    console.log(error);
-    return { error };
-  }
-};
-
-const getPropertyInquiry = async (userId, propertyId) => {
-  try {
-    const result = await db.query(
-      `select * from property_inquiries where user_id = ${userId} and property_id = ${propertyId};`
-    );
-    let data = result.rows;
-    return data;
-  } catch (error) {
-    console.log(error);
-    return { error };
-  }
-};
-
-const createPropertyInquiry = async (
-  userId,
-  propertyId,
-  defaultStatus,
-  createdAt
-) => {
-  try {
-    await db.query(
-      `insert into property_inquiries (prpty_id, inquiry_status_id, user_id, created_at) values (${propertyId}, ${defaultStatus}, ${userId}, '${createdAt}');`
-    );
-    return { success: "Property inquiry created" };
-  } catch (error) {
-    console.log(error);
-    return { error };
-  }
-};
-
-const updatePropertyInquiryStatus = async (userId, propertyId, status) => {
-  try {
-    await db.query(
-      `update property_inquiries set inquiry_status_id = ${status} where user_id = ${userId} and prpty_id = ${propertyId};`
-    );
-    return { success: "Property Inquiry status updated" };
-  } catch (error) {
-    console.log(error);
-    return { error };
-  }
-};
-
 const getSavedPropertiesFromdb = async (userId) => {
   try {
     const result = await db.query(
@@ -229,13 +174,9 @@ const deleteSavedProperty = async (userId, propertyId) => {
 };
 
 export {
-  getPropertyInquiry,
-  createPropertyInquiry,
-  updatePropertyInquiryStatus,
   getSavedProperty,
   createSavedProperty,
   deleteSavedProperty,
-  getPropertyInquiriesFromDb,
   getSavedPropertiesFromdb,
   getAllPropertiesFromDb,
   getPropertyFromDb,

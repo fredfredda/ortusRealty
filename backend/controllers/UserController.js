@@ -109,10 +109,10 @@ const userSignUp = async (req, res) => {
         .json({ error: "Email already exists" });
 
     if (
-      firstName === undefined ||
-      lastName === undefined ||
-      email === undefined ||
-      password === undefined
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password
     )
       return res.status(400).json({ error: "All fields are required" });
 

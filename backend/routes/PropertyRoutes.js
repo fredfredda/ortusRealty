@@ -1,10 +1,7 @@
 import express from 'express';
-import { 
-    inquireProperty,
-    cancelPropertyInquiry,
+import {
     saveProperty,
     unsaveProperty,
-    getPropertyInquiries,
     getSavedProperties,
     getAllProperties,
     getProperty,
@@ -27,16 +24,10 @@ router.get('/featuredproperties', getFeaturedProperties);
 router.get('/nearbyproperties/:neighborhoodId/:propertyId', getNearbyProperties);
 // get important infrastructures
 router.get('/importantinfrastructure/:neighborhoodId', getImportantInfrestrucutre);
-// get property inquiries
-router.get('/propertyinqruiries', protectRoute, getPropertyInquiries);
 // get saved properties
 router.get('/savedproperties', protectRoute, getSavedProperties);
 // get details about saved properties
 router.get('/savedpropertiesdetails', protectRoute, getSavedPropertiesDetails);
-// inquire property
-router.post('/inquireproperty/:propertyId', protectRoute, inquireProperty);
-// cancel property inquiry
-router.put('/cancelpropertyinquiry/:propertyId', protectRoute, cancelPropertyInquiry);
 // save property
 router.post('/saveproperty/:propertyId', protectRoute, saveProperty);
 // unsave property
