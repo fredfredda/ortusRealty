@@ -5,6 +5,7 @@ import {
   updateUser,
   deleteUser,
   updatePassword,
+  getAgentsFromDb,
 } from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
@@ -48,6 +49,7 @@ const googleOAuthHandler = async (req, res) => {
         });
         const data = await response.json();
         if (data.error) return { error: data.error_description };
+        
         return data;
       } catch (error) {
         console.log(error);
@@ -257,6 +259,17 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const getAgents = async (req, res) => {
+try {
+  const agents = await getAgentsFromDb();
+  if (agents.error) return res.status(500).json({ error: agents });
+  return res.status(200).json({agents});  
+} catch (error) {
+  console.log(error);
+  return res.status(500).json({ error });
+}
+}
+
 export {
   userSignUp,
   userLogin,
@@ -266,4 +279,5 @@ export {
   googleOAuthHandler,
   getProfile,
   editPassword,
+  getAgents,
 };

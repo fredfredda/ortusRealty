@@ -46,12 +46,12 @@ const MainMenu = () => {
               <ul className="sub-menu">
                 {item.submenu.map((submenuItem, subIndex) => (
                   <li key={subIndex}>
-                    <Link
+                    <a
                       className={`${handleActive(submenuItem.href)}`}
                       href={submenuItem.href}
                     >
                       {submenuItem.label}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>

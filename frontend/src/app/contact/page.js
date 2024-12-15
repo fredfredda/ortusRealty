@@ -51,7 +51,7 @@ const Contact = () => {
             {/* End .col */}
 
             <div className="col-lg-5 offset-lg-2">
-              <h2 className="mb30 text-capitalize">
+              <h2 className="mb10 text-capitalize">
                 We’d love to hear <br className="d-none d-lg-block" />
                 from you.
               </h2>

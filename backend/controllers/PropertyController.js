@@ -9,6 +9,7 @@ import {
   getFeaturedPropertiesFromDb,
   getNearbyPropertiesFromDb,
   getSavedPropertiesDetailsFromDb,
+  getHomeFeaturesFromDb,
 } from "../models/PropertyModel.js";
 
 const getAllProperties = async (req, res) => {
@@ -173,6 +174,17 @@ const unsaveProperty = async (req, res) => {
   }
 };
 
+const getHomeFeatures = async (req, res) => {
+  try {
+    const features = await getHomeFeaturesFromDb();
+    if (features.error) return res.status(500).json({ error: features });
+    return res.status(200).json( features );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
+  }
+};
+
 export {
   saveProperty,
   unsaveProperty,
@@ -183,4 +195,5 @@ export {
   getFeaturedProperties,
   getNearbyProperties,
   getSavedPropertiesDetails,
+  getHomeFeatures,
 };

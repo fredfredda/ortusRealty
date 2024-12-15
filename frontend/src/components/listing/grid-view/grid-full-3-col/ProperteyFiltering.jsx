@@ -13,16 +13,28 @@ const override = {
 };
 
 export default function ProperteyFiltering() {
+  const savedProperties_ = savedPropertiesStore(
+    (state) => state.savedProperties
+  );
 
-  const savedProperties_ = savedPropertiesStore((state) => state.savedProperties);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const [savedProperties, setSavedProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [colstyle, setColstyle] = useState(false);
+  const [pageItems, setPageItems] = useState([]);
+  const [pageContentTrac, setPageContentTrac] = useState([]);
+  const itemsPerPage = 6;
 
-  let [color, setColor] = useState("#eb6753");
+  const [color, setColor] = useState("#eb6753");
+
+    useEffect(() => {
+      setPageItems(
+        savedProperties.slice((pageNumber - 1) * itemsPerPage, pageNumber * itemsPerPage)
+      );
+    }, [pageNumber, savedProperties]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,8 +43,8 @@ export default function ProperteyFiltering() {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/savedpropertiesdetails`,
           {
-            method: 'GET',
-            credentials: 'include',
+            method: "GET",
+            credentials: "include",
           }
         );
         const data = await response.json();
@@ -66,13 +78,18 @@ export default function ProperteyFiltering() {
           </div>
         ) : (
           <div className="row">
-            <FeaturedListings colstyle={colstyle} data={savedProperties} />
+            <FeaturedListings
+              colstyle={colstyle}
+              data={pageItems}
+              selectedIds={selectedIds}
+              setSelectedIds={setSelectedIds}
+            />
           </div>
         )}
 
         <div className="row">
           <PaginationTwo
-            pageCapacity={9}
+            pageCapacity={itemsPerPage}
             data={savedProperties}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}

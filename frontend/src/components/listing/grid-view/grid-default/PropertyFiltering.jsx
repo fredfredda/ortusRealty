@@ -6,6 +6,7 @@ import TopFilterBar from "./TopFilterBar";
 import FeaturedListings from "./FeatuerdListings";
 import PaginationTwo from "../../PaginationTwo";
 import { useSearchParams } from "next/navigation";
+import sortListings from "@/utilis/SortListings";
 
 export default function PropertyFiltering() {
   const searchParams = useSearchParams();
@@ -15,6 +16,7 @@ export default function PropertyFiltering() {
   const price = searchParams.get("priceRange");
   const province = searchParams.get("province");
   const sizeRange = searchParams.get("sizeRange");
+  const showFilter = searchParams.get("showFilter") || "false";
 
   const [listingStatus, setListingStatus] = useState(saletype || "");
   const [propertyTypes, setPropertyTypes] = useState(propertyType || "");
@@ -23,6 +25,7 @@ export default function PropertyFiltering() {
   const [squirefeet, setSquirefeet] = useState(sizeRange || "");
   const [searchQuery, setSearchQuery] = useState(search || "");
 
+  const [properties, setProperties] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
   const [currentSortingOption, setCurrentSortingOption] = useState("Default");
@@ -34,6 +37,8 @@ export default function PropertyFiltering() {
   const [pageItems, setPageItems] = useState([]);
 
   const [pageContentTrac, setPageContentTrac] = useState([]);
+
+  const itemsPerPage = 6;
 
   const resetFilter = () => {
     setListingStatus("");
@@ -85,7 +90,9 @@ export default function PropertyFiltering() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${listingStatus}&province=${
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_ENDPOINT
+          }/api/properties?search=${searchQuery}&propertyType=${propertyTypes}&saleType=${listingStatus}&province=${
             location === "All Provinces" ? "" : location
           }&priceRange=${
             priceRange === "" ? "0-1000000000" : priceRange
@@ -95,57 +102,103 @@ export default function PropertyFiltering() {
         if (data.error) {
           console.log(data.error);
         } else {
-          setFilteredData(data.properties);
+          setProperties(data.properties);
         }
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
+  }, []);
+
+  const filterProperties = (
+    allProperties,
+    propertyType,
+    saleType,
+    province,
+    priceRange,
+    sizeRange,
+    search
+  ) => {
+    // filter by search input
+    let propertiesByName = allProperties.filter((property) =>
+      property["prpty_name"].toLowerCase().includes(search.toLowerCase() || "")
+    );
+    // filter by property type
+    let propertiesByType = propertiesByName.filter((property) =>
+      property["property_type"].includes(propertyType || "")
+    );
+    // filter by sale type
+    let propertiesBySaleType = propertiesByType.filter((property) =>
+      property["saletype_name"].includes(saleType || "")
+    );
+    // filter by province
+    let propertiesByProvince = propertiesBySaleType.filter((property) =>
+      property["prvc_name"].includes(
+        province === "All Provinces" ? "" : province || ""
+      )
+    );
+    // price and size formatting
+    let priceRange_ = !priceRange ? "0-1000000000" : priceRange;
+    let sizeRange_ = !sizeRange ? "0-10000" : sizeRange;
+    let minPrice = priceRange_.split("-")[0];
+    let maxPrice = priceRange_.split("-")[1];
+    let minSize = sizeRange_.split("-")[0];
+    let maxSize = sizeRange_.split("-")[1];
+    // filter by price
+    let propertiesByPrice = propertiesByProvince.filter(
+      (property) =>
+        Number(property["prpty_price"]) >= Number(minPrice) &&
+        Number(property["prpty_price"]) <= Number(maxPrice)
+    );
+    // filter by size
+    let propertiesBySize = propertiesByPrice.filter(
+      (property) =>
+        Number(property["prpty_size"]) >= Number(minSize) &&
+        Number(property["prpty_size"]) <= Number(maxSize)
+    );
+
+    return propertiesBySize;
+  };
+
+  useEffect(() => {
+    let data = filterProperties(
+      properties,
+      propertyTypes,
+      listingStatus,
+      location,
+      priceRange,
+      squirefeet,
+      searchQuery
+    );
+    setFilteredData(data);
   }, [
+    properties,
     listingStatus,
     propertyTypes,
-    location,
     priceRange,
+    location,
     squirefeet,
     searchQuery,
-    searchParams,
   ]);
 
   useEffect(() => {
     setPageItems(
-      sortedFilteredData.slice((pageNumber - 1) * 8, pageNumber * 8)
+      sortedFilteredData.slice((pageNumber - 1) * itemsPerPage, pageNumber * itemsPerPage)
     );
     setPageContentTrac([
-      (pageNumber - 1) * 8 + 1,
-      pageNumber * 8,
+      (pageNumber - 1) * itemsPerPage + 1,
+      pageNumber * itemsPerPage,
       sortedFilteredData.length,
     ]);
   }, [pageNumber, sortedFilteredData]);
 
-  const sortListings = (listings) => {
-    let i = 0;
-    while (i < listings.length - 1) {
-      for (let j = 0; j < listings.length - 1; j++) {
-        let temp = listings[j];
-        if (
-          Number(listings[j].prpty_price) > Number(listings[j + 1].prpty_price)
-        ) {
-          listings[j] = listings[j + 1];
-          listings[j + 1] = temp;
-        }
-      }
-      i++;
-    }
-    return listings;
-  };
-
   useEffect(() => {
     let listings = [...filteredData];
     if (currentSortingOption === "Price Low to High") {
-      listings = sortListings(listings);
+      listings = sortListings(listings, "prpty_price");
     } else if (currentSortingOption === "Price High to Low") {
-      listings = sortListings(listings).reverse();
+      listings = sortListings(listings, "prpty_price").reverse();
     }
     setSortedFilteredData(listings);
   }, [currentSortingOption, filteredData]);
@@ -154,36 +207,43 @@ export default function PropertyFiltering() {
     <section className="pt0 pb90">
       <div className="container">
         <div className="row gx-xl-5">
-          <div className="col-lg-4 d-none d-lg-block">
-            <ListingSidebar filterFunctions={filterFunctions} />
-          </div>
-          {/* End .col-lg-4 */}
+          {showFilter === "true" && (
+            <>
+              <div className="col-lg-4 d-none d-lg-block">
+                <ListingSidebar filterFunctions={filterFunctions} />
+              </div>
+              {/* End .col-lg-4 */}
 
-          {/* start mobile filter sidebar */}
-          <div
-            className="offcanvas offcanvas-start p-0"
-            tabIndex="-1"
-            id="listingSidebarFilter"
-            aria-labelledby="listingSidebarFilterLabel"
-          >
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="listingSidebarFilterLabel">
-                Listing Filter
-              </h5>
-              <button
-                type="button"
-                className="btn-close text-reset"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="offcanvas-body p-0">
-              <ListingSidebar filterFunctions={filterFunctions} />
-            </div>
-          </div>
-          {/* End mobile filter sidebar */}
+              {/* start mobile filter sidebar */}
+              <div
+                className="offcanvas offcanvas-start p-0"
+                tabIndex="-1"
+                id="listingSidebarFilter"
+                aria-labelledby="listingSidebarFilterLabel"
+              >
+                <div className="offcanvas-header">
+                  <h5
+                    className="offcanvas-title"
+                    id="listingSidebarFilterLabel"
+                  >
+                    Listing Filter
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close text-reset"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="offcanvas-body p-0">
+                  <ListingSidebar filterFunctions={filterFunctions} />
+                </div>
+              </div>
+              {/* End mobile filter sidebar */}
+            </>
+          )}
 
-          <div className="col-lg-8">
+          <div className={showFilter === "true" ? "col-lg-8" : "col-lg-12"}>
             <div className="row align-items-center mb20">
               <TopFilterBar
                 pageContentTrac={pageContentTrac}
@@ -195,13 +255,13 @@ export default function PropertyFiltering() {
             {/* End TopFilterBar */}
 
             <div className="row mt15">
-              <FeaturedListings colstyle={colstyle} data={pageItems} />
+              <FeaturedListings colstyle={colstyle} data={pageItems} showFilter={showFilter || "false" } />
             </div>
             {/* End .row */}
 
             <div className="row">
               <PaginationTwo
-                pageCapacity={8}
+                pageCapacity={itemsPerPage}
                 data={sortedFilteredData}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}

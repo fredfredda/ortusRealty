@@ -24,7 +24,7 @@ module.exports = [
       {
         label: "All",
         subMenu: [
-          { label: "All Properties", path: "/explore" },
+          { label: "All Properties", path: "/explore?showFilter=true" },
         ],
       },
     ],

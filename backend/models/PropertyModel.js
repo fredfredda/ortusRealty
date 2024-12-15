@@ -71,13 +71,15 @@ const getPropertyFromDb = async (propertyId) => {
             properties.prpty_location, property_saletypes.saletype_name, provinces.prvc_name,
 			properties.prpty_nbhd_id, properties.images, properties.is_featured, property_types.property_type, 
 			property_categories.category_name, home_details.num_of_beds, home_details.num_of_bathrooms,
-			home_details.internal_features, home_details.external_features, properties.prpty_nbhd_id from properties 
+			home_details.internal_features, home_details.external_features, properties.prpty_nbhd_id, neighborhoods.nbhd_name, home_categories.home_category
+      from properties 
             join property_saletypes on properties.prpty_saletype_id = property_saletypes.id 
             join property_types on properties.prpty_type_id = property_types.id 
             join property_categories on properties.category_id = property_categories.id 
             left outer join home_details on properties.home_details_id = home_details.home_details_id
             join neighborhoods on properties.prpty_nbhd_id = neighborhoods.id
             join provinces on neighborhoods.nbhd_province_id = provinces.id
+            left outer join home_categories on home_details.home_category_id = home_categories.id
             where properties.id = ${propertyId} and properties.status_id = 3;`
     );
     const data = results.rows;
@@ -173,6 +175,25 @@ const deleteSavedProperty = async (userId, propertyId) => {
   }
 };
 
+const getHomeFeaturesFromDb = async () => {
+  try {
+    const internalFeatures = await db.query(
+      `select id, internal_feature from internal_features;`
+    );
+    const externalFeatures = await db.query(
+      `select id, external_feature from external_features;`
+    );
+    const data = {
+      internalFeatures: internalFeatures.rows,
+      externalFeatures: externalFeatures.rows,
+    };
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
 export {
   getSavedProperty,
   createSavedProperty,
@@ -184,4 +205,5 @@ export {
   getFeaturedPropertiesFromDb,
   getNearbyPropertiesFromDb,
   getSavedPropertiesDetailsFromDb,
+  getHomeFeaturesFromDb,
 };

@@ -10,8 +10,7 @@ import formatMoney from "@/utilis/FormatMoney";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import { toast } from "react-hot-toast";
 
-const FeaturedListings = ({ data, colstyle }) => {
-
+const FeaturedListings = ({ data, colstyle, showFilter }) => {
   const savedProperties = savedPropertiesStore(
     (state) => state.savedProperties
   );
@@ -75,7 +74,11 @@ const FeaturedListings = ({ data, colstyle }) => {
     <>
       {data.map((listing) => (
         <div
-          className={` ${colstyle ? "col-sm-12" : "col-sm-6 col-lg-6"}  `}
+          className={` ${
+            colstyle
+              ? "col-sm-12"
+              : `col-sm-6 ${showFilter === "true" ? "col-lg-6" : "col-lg-4"}`
+          }`}
           key={listing.id}
         >
           <div
@@ -91,12 +94,12 @@ const FeaturedListings = ({ data, colstyle }) => {
                 height={248}
                 className="w-100  cover"
                 pathName={listing.images.split(",")[0]}
-                transformation={[{ quality: 20 }]}
+                transformation={[{ quality: 60 }]}
                 loading="lazy"
                 alt="listings"
               />
               <div className="sale-sticker-wrap">
-                {listing.is_featured === "yes" && (
+                {listing.is_featured === true && (
                   <div className="list-tag rounded-0 fz12">
                     <span className="flaticon-electricity" />
                     FEATURED
@@ -144,7 +147,12 @@ const FeaturedListings = ({ data, colstyle }) => {
               )}
               <hr className="mt-2 mb-2" />
               <div className="list-meta2 d-flex justify-content-between align-items-center">
-                <span className="for-what" style={{textTransform: "capitalize"}} >{listing.saletype_name}</span>
+                <span
+                  className="for-what"
+                  style={{ textTransform: "capitalize" }}
+                >
+                  {listing.saletype_name}
+                </span>
                 <div className="icons d-flex align-items-center">
                   <button
                     className="property-card-btn"

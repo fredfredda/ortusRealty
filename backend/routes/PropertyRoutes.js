@@ -9,6 +9,7 @@ import {
     getFeaturedProperties,
     getNearbyProperties,
     getSavedPropertiesDetails,
+    getHomeFeatures,
 } from '../controllers/PropertyController.js';
 import protectRoute from '../middlewares/ProtectRoute.js';
 
@@ -32,5 +33,7 @@ router.get('/savedpropertiesdetails', protectRoute, getSavedPropertiesDetails);
 router.post('/saveproperty/:propertyId', protectRoute, saveProperty);
 // unsave property
 router.delete('/unsaveproperty/:propertyId', protectRoute, unsaveProperty);
+// get home features
+router.get('/homefeatures', getHomeFeatures);
 
 export default router;

@@ -138,7 +138,7 @@ const FeaturedListings = () => {
                     width={382}
                     height={248}
                     loading="lazy"
-                    transformation={[{ quality: 40 }]}
+                    transformation={[{ quality: 60 }]}
                     alt="Listing Image"
                     />
                     <div className="sale-sticker-wrap">

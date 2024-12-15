@@ -131,7 +131,7 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
                     width={382}
                     height={248}
                     className="w-100 h-100 cover"
-                    transformation={[{ quality: 20 }]}
+                    transformation={[{ quality: 60 }]}
                     loading="lazy"
                     pathName={listing.images.split(",")[0]}
                     alt="listings"

@@ -73,6 +73,17 @@ const deleteUser = async (userId) => {
     }
 }
 
+const getAgentsFromDb = async () => {
+    try {
+        const results = await db.query(`select first_name, last_name, email, profile_pic from agents;`);
+        const data = results.rows;
+        return data;
+    } catch (error) {
+        console.log(error);
+        return { error };
+    }
+}
+
 export {getUserByUsername,
     getUserByEmail,
     getUserById,
@@ -80,4 +91,5 @@ export {getUserByUsername,
     updateUser,
     deleteUser,
     updatePassword,
+    getAgentsFromDb,
 };

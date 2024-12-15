@@ -52,7 +52,7 @@ const Home_V8 = () => {
                   Find and invest in homes, land, construsction sites, and development projects in 4 simple steps
                   <br className="d-none d-xl-block" /> 
                 </p>
-                <Link href="/explore" className="ud-btn btn-thm">
+                <Link href="/explore?showFilter=true" className="ud-btn btn-thm">
                   Get Started
                   <i className="fal fa-arrow-right-long" />
                 </Link>

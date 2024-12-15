@@ -1,17 +1,18 @@
-const sortListings = (listings) => {
-    let i = 0;
-    while (i < listings.length) {
-      for (let j = 0; j < listings.length; j++){
-        let temp = listings[j];
-        console.log(`${listings[j].prpty_price} ${listings[j+1].prpty_price}`)
-        if (Number(listings[j].prpty_price) > Number(listings[j+1].prpty_price)) {
-          listings[j] = listings[j+1];
-          listings[j+1] = temp;
-        } 
+const sortListings = (listings, fieldName) => {
+  let i = 0;
+  while (i < listings.length - 1) {
+    for (let j = 0; j < listings.length - 1; j++) {
+      let temp = listings[j];
+      if (
+        Number( listings[j][fieldName] || 0 ) > Number( listings[j + 1][fieldName] || 0 )
+      ) {
+        listings[j] = listings[j + 1];
+        listings[j + 1] = temp;
       }
-      i ++;
     }
-    return listings;
-}
+    i++;
+  }
+  return listings;
+};
 
 export default sortListings;

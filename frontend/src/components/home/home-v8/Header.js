@@ -69,7 +69,7 @@ const Header = () => {
         if (protectRoutes.includes(pathname)) {
           router.replace("/");
         } else {
-          router.push("/");
+          window.location.reload();
         }
       }
     } catch (error) {

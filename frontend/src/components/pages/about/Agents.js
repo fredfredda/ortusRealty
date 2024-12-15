@@ -1,12 +1,40 @@
 "use client";
+import { useEffect, useState } from "react";
 import ImageKit from "@/components/common/ImageKit";
-import agents from "@/data/agents";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";
 
 const Agents = () => {
+
+  const [agents, setAgents] = useState([]);
+
+  const fetchAgents = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/agents`, {
+        credentials: "include",
+      });
+      const data = await response.json();
+
+      if (data.error) {
+        console.error(data.error);
+        toast.error("Failed to fetch agents");
+      } else if(data.agents) {
+        setAgents([]);
+        setAgents(data.agents);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to fetch agents");
+    }
+  }
+
+  useEffect(() => {
+    fetchAgents();
+  }, []);
+
   return (
     <>
       <Swiper
@@ -45,18 +73,18 @@ const Agents = () => {
                 <div className="team-style1">
                   <div className="team-img">
                     <ImageKit
-                      pathName={agent.image}
+                      pathName={!agent.profile_pic ? "OrtusRealty/agents/agent_avatar.png" : agent.profile_pic}
                       className="w-100 h-100 cover"
                       width={217}
                       height={248}
-                      transformation={[{ quality: 60 }]}
+                      transformation={[{ quality: 80 }]}
                       loading="lazy"
                       alt="agent team"
                     />
                   </div>
                   <div className="team-content pt20">
-                    <h6 className="name mb-1">{agent.name}</h6>
-                    <p className="text fz15 mb-0">Broker</p>
+                    <h6 className="name mb-1">{agent.first_name} {agent.last_name}</h6>
+                    <p className="text fz15 mb-0">{agent.email}</p>
                   </div>
                 </div>
               </Link>

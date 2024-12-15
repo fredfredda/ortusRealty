@@ -8,6 +8,7 @@ import {
     googleOAuthHandler,
     getProfile,
     editPassword,
+    getAgents,
 } from '../controllers/UserController.js';
 import protectRoute from '../middlewares/ProtectRoute.js';
 
@@ -27,5 +28,7 @@ router.put('/editprofile', protectRoute, editProfile);
 router.put('/editpassword', protectRoute, editPassword);
 // delete account
 router.delete('/deleteaccount', protectRoute, deleteAccount);
+// get all agents
+router.get('/agents', protectRoute, getAgents);
 
 export default router;

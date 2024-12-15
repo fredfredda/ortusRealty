@@ -75,7 +75,7 @@ const PropertyGallery = ({ images }) => {
                   <Image
                     height={90}
                     width={83}
-                    src={`${imagekitURL}/${item}?tr=w-83,h-90,f-webp,q-40`}
+                    src={`${imagekitURL}/${item}?tr=w-83,h-90,f-webp,q-60`}
                     alt="image"
                     className="w-100 bdrs12 cover pointer"
                   />
