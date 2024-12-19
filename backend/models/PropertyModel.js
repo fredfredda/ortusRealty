@@ -23,6 +23,29 @@ const getAllPropertiesFromDb = async () => {
   }
 };
 
+const getAgentPropertiesFromDb = async (agentId) => {
+  try {
+    const results = await db.query(
+      `select properties.id, properties.prpty_name, properties.prpty_price, properties.prpty_size, 
+            properties.prpty_location, property_saletypes.saletype_name, provinces.prvc_name, 
+            properties.images, properties.is_featured, properties.status_id, property_types.property_type, property_categories.category_name, 
+            home_details.num_of_beds, home_details.num_of_bathrooms from properties 
+            join property_saletypes on properties.prpty_saletype_id = property_saletypes.id 
+            join property_types on properties.prpty_type_id = property_types.id 
+            join property_categories on properties.category_id = property_categories.id 
+            left outer join home_details on properties.home_details_id = home_details.home_details_id
+            join neighborhoods on properties.prpty_nbhd_id = neighborhoods.id
+            join provinces on neighborhoods.nbhd_province_id = provinces.id
+            where properties.agent_id = ${agentId} and properties.status_id = 3;`
+    );
+    const data = results.rows;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
 const getFeaturedPropertiesFromDb = async () => {
   try {
     const results = await db.query(
@@ -69,7 +92,7 @@ const getPropertyFromDb = async (propertyId) => {
       `select properties.id, properties.prpty_name, properties.prpty_price, properties.prpty_size,
 			properties.prpty_description, properties.prpty_latitude, properties.prpty_longitude,
             properties.prpty_location, property_saletypes.saletype_name, provinces.prvc_name,
-			properties.prpty_nbhd_id, properties.images, properties.is_featured, property_types.property_type, 
+			properties.prpty_nbhd_id, properties.images, properties.is_featured, properties.agent_id, property_types.property_type, 
 			property_categories.category_name, home_details.num_of_beds, home_details.num_of_bathrooms,
 			home_details.internal_features, home_details.external_features, properties.prpty_nbhd_id, neighborhoods.nbhd_name, home_categories.home_category
       from properties 
@@ -206,4 +229,5 @@ export {
   getNearbyPropertiesFromDb,
   getSavedPropertiesDetailsFromDb,
   getHomeFeaturesFromDb,
+  getAgentPropertiesFromDb,
 };

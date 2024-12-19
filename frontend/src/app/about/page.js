@@ -7,7 +7,6 @@ import Agents from "@/components/pages/about/Agents";
 import Features from "@/components/pages/about/Features";
 import FunFact from "@/components/pages/about/FunFact";
 import Mission from "@/components/pages/about/Mission";
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {

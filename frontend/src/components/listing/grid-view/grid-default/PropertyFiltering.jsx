@@ -17,6 +17,7 @@ export default function PropertyFiltering() {
   const province = searchParams.get("province");
   const sizeRange = searchParams.get("sizeRange");
   const showFilter = searchParams.get("showFilter") || "false";
+  const agentId = searchParams.get("agentId");
 
   const [listingStatus, setListingStatus] = useState(saletype || "");
   const [propertyTypes, setPropertyTypes] = useState(propertyType || "");
@@ -96,7 +97,7 @@ export default function PropertyFiltering() {
             location === "All Provinces" ? "" : location
           }&priceRange=${
             priceRange === "" ? "0-1000000000" : priceRange
-          }&sizeRange=${squirefeet === "" ? "0-10000" : squirefeet}`
+          }&sizeRange=${squirefeet === "" ? "0-10000" : squirefeet}${agentId === null || agentId === undefined || agentId === "" ? '' : `&agentId=${agentId}`}`
         );
         const data = await response.json();
         if (data.error) {

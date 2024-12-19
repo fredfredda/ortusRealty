@@ -75,7 +75,18 @@ const deleteUser = async (userId) => {
 
 const getAgentsFromDb = async () => {
     try {
-        const results = await db.query(`select first_name, last_name, email, profile_pic from agents;`);
+        const results = await db.query(`select id, first_name, last_name, email, phone_number, profile_pic from agents;`);
+        const data = results.rows;
+        return data;
+    } catch (error) {
+        console.log(error);
+        return { error };
+    }
+}
+
+const getSingleAgent = async (agentId) => {
+    try {
+        const results = await db.query(`select id, first_name, last_name, email, phone_number, profile_pic from agents where id = ${agentId};`);
         const data = results.rows;
         return data;
     } catch (error) {
@@ -92,4 +103,5 @@ export {getUserByUsername,
     deleteUser,
     updatePassword,
     getAgentsFromDb,
+    getSingleAgent,
 };

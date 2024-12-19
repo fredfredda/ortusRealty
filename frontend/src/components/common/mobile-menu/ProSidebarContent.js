@@ -31,7 +31,7 @@ const ProSidebarContent = () => {
                     <MenuItem
                       key={nestedIndex}
                       component={
-                        <Link
+                        <a
                           className={nestedItem.path == path ? "active" : ""}
                           href={nestedItem.path}
                         />
@@ -45,7 +45,7 @@ const ProSidebarContent = () => {
                 <MenuItem
                   key={subIndex}
                   component={
-                    <Link
+                    <a
                       className={subItem.path == path ? "active" : ""}
                       href={subItem.path}
                     />

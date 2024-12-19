@@ -9,6 +9,7 @@ import PropertyNearby from "@/components/property/property-single-style/common/P
 import ProperytyDescriptions from "@/components/property/property-single-style/common/ProperytyDescriptions";
 import ScheduleTour from "@/components/property/property-single-style/sidebar/ScheduleTour";
 import PropertyGallery from "@/components/property/property-single-style/single-v8/PropertyGallery";
+import ContactWithAgent from "@/components/property/property-single-style/sidebar/ContactWithAgent";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const override = {
@@ -113,6 +114,8 @@ const Property = ({ id }) => {
                       />
                     </div>
                   </div>
+
+                  {/* End .ps-widget */}
                 </div>
 
                 <div className="col-lg-4">
@@ -121,6 +124,15 @@ const Property = ({ id }) => {
                       <h4 className="form-title mb5">Inquire About Property</h4>
                       <p className="text"></p>
                       <ScheduleTour property={propertyInfo} />
+                    </div>
+
+                    <div className="agen-personal-info position-relative bgc-white default-box-shadow1 bdrs12 p30 mt30">
+                      <div className="widget-wrapper mb-0">
+                        <h6 className="title fz17 mb30">
+                          Agent Information
+                        </h6>
+                        <ContactWithAgent agentId={propertyInfo.agent_id} />
+                      </div>
                     </div>
                   </div>
                 </div>

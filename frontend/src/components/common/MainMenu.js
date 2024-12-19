@@ -1,12 +1,24 @@
 import { listingItems } from "@/data/navItems";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MainMenu = () => {
   const pathname = usePathname();
   const [topMenu, setTopMenu] = useState("");
   const [submenu, setSubmenu] = useState("");
+  const searchParams = useSearchParams();
+  const queryKeys = searchParams.keys();
+  const [queryParameters, setQueryParameters] = useState([]);
+
+  useEffect(() => {
+    for (let key of queryKeys) {
+      setQueryParameters((prev) => [...prev, key]);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(queryParameters);
+  }, [queryParameters]);
 
   useEffect(() => {
     if (pathname.split("/")[1] === "contact") {
@@ -15,21 +27,16 @@ const MainMenu = () => {
     if (pathname.split("/")[1] === "about") {
       setTopMenu("about");
     }
-    listingItems.forEach((item) =>
-      item.submenu.forEach((elm) => {
-        if (elm.href.split("/")[1] == pathname.split("/")[1]) {
-          setTopMenu("explore");
-          setSubmenu(item.title);
-        }
-      })
-    );
+    listingItems.forEach((item) => {
+      // item.submenu.forEach((elm) => {
+      //   if (elm.href.split("/")[1] == pathname.split("/")[1]) {
+      setTopMenu("explore");
+      setSubmenu(item.title);
+      // }
+      // })
+    });
   }, [pathname]);
 
-  const handleActive = (link) => {
-    if (link.split("/")[1] == pathname.split("/")[1]) {
-      return "menuActive";
-    }
-  };
   return (
     <ul className="ace-responsive-menu">
       <li className="megamenu_style dropitem">
@@ -46,10 +53,7 @@ const MainMenu = () => {
               <ul className="sub-menu">
                 {item.submenu.map((submenuItem, subIndex) => (
                   <li key={subIndex}>
-                    <a
-                      className={`${handleActive(submenuItem.href)}`}
-                      href={submenuItem.href}
-                    >
+                    <a className={``} href={submenuItem.href}>
                       {submenuItem.label}
                     </a>
                   </li>

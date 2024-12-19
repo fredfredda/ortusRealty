@@ -4,7 +4,6 @@ import Image from "next/image";
 import ContactInfo from "./ContactInfo";
 import Social from "./Social";
 import ProSidebarContent from "./ProSidebarContent";
-import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";

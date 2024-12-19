@@ -6,6 +6,7 @@ import {
   deleteUser,
   updatePassword,
   getAgentsFromDb,
+  getSingleAgent,
 } from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
@@ -270,6 +271,18 @@ try {
 }
 }
 
+const getAgent = async (req, res) => {
+try {
+  const { agentId } = req.params;
+  const agent = await getSingleAgent(agentId);
+  if (agent.error) return res.status(500).json({ error: agent });
+  return res.status(200).json({agent: agent[0]});  
+} catch (error) {
+  console.log(error);
+  return res.status(500).json({ error });
+}
+}
+
 export {
   userSignUp,
   userLogin,
@@ -280,4 +293,5 @@ export {
   getProfile,
   editPassword,
   getAgents,
+  getAgent,
 };

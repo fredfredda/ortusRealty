@@ -10,6 +10,7 @@ import {
   getNearbyPropertiesFromDb,
   getSavedPropertiesDetailsFromDb,
   getHomeFeaturesFromDb,
+  getAgentPropertiesFromDb,
 } from "../models/PropertyModel.js";
 
 const getAllProperties = async (req, res) => {
@@ -17,7 +18,12 @@ const getAllProperties = async (req, res) => {
     req.query;
   // const { propertyType, saleType, category, homeCategory, province, search, priceRange, sizeRange } = req.query;
   try {
-    const allProperties = await getAllPropertiesFromDb();
+    let allProperties = [];
+    if (req.query.agentId) {
+      allProperties = await getAgentPropertiesFromDb(req.query.agentId);
+    } else {
+      allProperties = await getAllPropertiesFromDb();
+    }
     // filter by search input
     let propertiesByName = allProperties.filter((property) =>
       property["prpty_name"].toLowerCase().includes(search.toLowerCase() || "")

@@ -9,6 +9,7 @@ import {
     getProfile,
     editPassword,
     getAgents,
+    getAgent,
 } from '../controllers/UserController.js';
 import protectRoute from '../middlewares/ProtectRoute.js';
 
@@ -29,6 +30,8 @@ router.put('/editpassword', protectRoute, editPassword);
 // delete account
 router.delete('/deleteaccount', protectRoute, deleteAccount);
 // get all agents
-router.get('/agents', protectRoute, getAgents);
+router.get('/agents', getAgents);
+// get one agent
+router.get('/agent/:agentId', getAgent);
 
 export default router;
