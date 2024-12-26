@@ -11,7 +11,7 @@ const override = {
   borderColor: "#eb6753",
 };
 
-const ContactWithAgent = ({ agentId }) => {
+const ContactWithAgent = ({ agentId, setAgentEmail }) => {
   const [agent, setAgent] = useState({});
   const [loading, setLoading] = useState(true);
   const [color, setColor] = useState("#eb6753");
@@ -28,6 +28,7 @@ const ContactWithAgent = ({ agentId }) => {
         toast.error("Failed to fetch agent details");
       } else if (data.agent) {
         setAgent(data.agent);
+        setAgentEmail(data.agent.email);
       }
     } catch (error) {
       console.error(error);

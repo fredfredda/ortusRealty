@@ -22,6 +22,7 @@ const Property = ({ id }) => {
   let [isLoading, setIsLoading] = useState(true);
   var [propertyInfo, setPropertyInfo] = useState({});
   let [color, setColor] = useState("#eb6753");
+  const [agentEmail, setAgentEmail] = useState("");
 
   useEffect(() => {
     setIsLoading(true);
@@ -123,15 +124,21 @@ const Property = ({ id }) => {
                     <div className="default-box-shadow1 bdrs12 bdr1 p30 mb30-md bgc-white position-relative">
                       <h4 className="form-title mb5">Inquire About Property</h4>
                       <p className="text"></p>
-                      <ScheduleTour property={propertyInfo} />
+                      {agentEmail && (
+                        <ScheduleTour
+                          property={propertyInfo}
+                          agentEmail={agentEmail}
+                        />
+                      )}
                     </div>
 
                     <div className="agen-personal-info position-relative bgc-white default-box-shadow1 bdrs12 p30 mt30">
                       <div className="widget-wrapper mb-0">
-                        <h6 className="title fz17 mb30">
-                          Agent Information
-                        </h6>
-                        <ContactWithAgent agentId={propertyInfo.agent_id} />
+                        <h6 className="title fz17 mb30">Agent Information</h6>
+                        <ContactWithAgent
+                          agentId={propertyInfo.agent_id}
+                          setAgentEmail={setAgentEmail}
+                        />
                       </div>
                     </div>
                   </div>
