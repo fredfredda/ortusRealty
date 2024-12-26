@@ -27,14 +27,17 @@ const MainMenu = () => {
     if (pathname.split("/")[1] === "about") {
       setTopMenu("about");
     }
-    listingItems.forEach((item) => {
-      // item.submenu.forEach((elm) => {
-      //   if (elm.href.split("/")[1] == pathname.split("/")[1]) {
+    if (pathname.split("/")[1] === "explore") {
       setTopMenu("explore");
-      setSubmenu(item.title);
-      // }
-      // })
-    });
+    }
+    // listingItems.forEach((item) => {
+    //   item.submenu.forEach((elm) => {
+    //     if (elm.href.split("/")[1] == pathname.split("/")[1]) {
+    //   setTopMenu("explore");
+    //   setSubmenu(item.title);
+    //   }
+    //   })
+    // });
   }, [pathname]);
 
   return (
@@ -44,7 +47,7 @@ const MainMenu = () => {
           <span className={topMenu == "explore" ? "title menuActive" : "title"}>
             Explore
           </span>
-          <span className="arrow"></span>
+          <span className={`arrow ${topMenu == "explore" ? "menuActive" : ""}`}></span>
         </a>
         <ul className="row dropdown-megamenu sub-menu">
           {listingItems.map((item, index) => (

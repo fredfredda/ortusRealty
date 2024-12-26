@@ -173,6 +173,7 @@ export default function PropertyFiltering() {
       searchQuery
     );
     setFilteredData(data);
+    setPageNumber(1);
   }, [
     properties,
     listingStatus,

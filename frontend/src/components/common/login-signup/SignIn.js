@@ -51,6 +51,7 @@ const SignIn = () => {
       } else {
         localStorage.setItem("session", JSON.stringify(data));
         setSession(data);
+        toast.success("logged in successfully");
         document.getElementById("loginForm").reset();
         if (redirect) {
           router.replace(redirect);

@@ -56,6 +56,7 @@ const SignUp = () => {
       console.log(data);
       localStorage.setItem("session", JSON.stringify(data));
       setSession(data);
+      toast.success("account created successfully");
       document.getElementById("signupform").reset();
       if (redirect) {
         router.replace(redirect);
