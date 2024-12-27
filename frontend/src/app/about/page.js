@@ -70,18 +70,6 @@ const About = () => {
       </section>
       {/* End Our About Area */}
 
-      {/* Funfact */}
-      <section className="pt-0">
-        <div className="container">
-          <div
-            className="row justify-content-center"
-          >
-            <FunFact />
-          </div>
-        </div>
-      </section>
-      {/* End Funfact */}
-
       {/* Exclusive Agents */}
       <section className="pb90">
         <div className="container">
@@ -127,7 +115,6 @@ const About = () => {
                 </div>
                 <Link href="#" className="ud-btn btn-dark">
                   Learn More
-                  <i className="fal fa-arrow-right-long" />
                 </Link>
               </div>
             </div>
@@ -137,7 +124,7 @@ const About = () => {
       {/* Abut intro */}
 
       {/* Our Partners */}
-      <section className="our-partners">
+      <section className="our-partners mt40 mb40">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">

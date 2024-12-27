@@ -54,7 +54,6 @@ const Home_V8 = () => {
                 </p>
                 <Link href="/explore?showFilter=true" className="ud-btn btn-thm">
                   Get Started
-                  <i className="fal fa-arrow-right-long" />
                 </Link>
               </div>
             </div>

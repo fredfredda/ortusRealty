@@ -5,20 +5,7 @@ import { useEffect, useState } from "react";
 const MainMenu = () => {
   const pathname = usePathname();
   const [topMenu, setTopMenu] = useState("");
-  const [submenu, setSubmenu] = useState("");
   const searchParams = useSearchParams();
-  const queryKeys = searchParams.keys();
-  const [queryParameters, setQueryParameters] = useState([]);
-
-  useEffect(() => {
-    for (let key of queryKeys) {
-      setQueryParameters((prev) => [...prev, key]);
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(queryParameters);
-  }, [queryParameters]);
 
   useEffect(() => {
     if (pathname.split("/")[1] === "contact") {
@@ -30,15 +17,16 @@ const MainMenu = () => {
     if (pathname.split("/")[1] === "explore") {
       setTopMenu("explore");
     }
-    // listingItems.forEach((item) => {
-    //   item.submenu.forEach((elm) => {
-    //     if (elm.href.split("/")[1] == pathname.split("/")[1]) {
-    //   setTopMenu("explore");
-    //   setSubmenu(item.title);
-    //   }
-    //   })
-    // });
   }, [pathname]);
+
+  const isMenuActive = (hrefValue) => {
+    const params = searchParams.values();
+    const pvalues = params.map((value) => value);
+    const valuesArray = [];
+    pvalues.forEach((item) => valuesArray.push(item));
+    if (valuesArray.includes(hrefValue)) return true;
+    return false;
+  };
 
   return (
     <ul className="ace-responsive-menu">
@@ -47,7 +35,9 @@ const MainMenu = () => {
           <span className={topMenu == "explore" ? "title menuActive" : "title"}>
             Explore
           </span>
-          <span className={`arrow ${topMenu == "explore" ? "menuActive" : ""}`}></span>
+          <span
+            className={`arrow ${topMenu == "explore" ? "menuActive" : ""}`}
+          ></span>
         </a>
         <ul className="row dropdown-megamenu sub-menu">
           {listingItems.map((item, index) => (
@@ -56,7 +46,14 @@ const MainMenu = () => {
               <ul className="sub-menu">
                 {item.submenu.map((submenuItem, subIndex) => (
                   <li key={subIndex}>
-                    <a className={``} href={submenuItem.href}>
+                    <a
+                      className={
+                        isMenuActive(submenuItem.href.split("=")[1])
+                          ? "menuActive"
+                          : ""
+                      }
+                      href={submenuItem.href}
+                    >
                       {submenuItem.label}
                     </a>
                   </li>

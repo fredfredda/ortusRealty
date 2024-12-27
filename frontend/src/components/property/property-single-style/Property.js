@@ -11,6 +11,7 @@ import ScheduleTour from "@/components/property/property-single-style/sidebar/Sc
 import PropertyGallery from "@/components/property/property-single-style/single-v8/PropertyGallery";
 import ContactWithAgent from "@/components/property/property-single-style/sidebar/ContactWithAgent";
 import ClipLoader from "react-spinners/ClipLoader";
+import PropertyAddress from "./common/PropertyAddress";
 
 const override = {
   display: "block",
@@ -106,6 +107,14 @@ const Property = ({ id }) => {
                       </div>
                     </div>
                   )}
+
+                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
+                    <h4 className="title fz17 mb10">View on map</h4>
+                    <div className="row">
+                      <PropertyAddress latitude={propertyInfo.prpty_latitude} longitude={propertyInfo.prpty_longitude} />
+                    </div>
+                  </div>
+                  {/* End .ps-widget */}
 
                   <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
                     <h4 className="title fz17 mb30">What&apos;s Nearby?</h4>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { sessionStore } from "@/store/session";
 import toast from "react-hot-toast";
 
@@ -40,15 +40,28 @@ const ScheduleTour = ({ property, agentEmail }) => {
       return;
     }
 
-    // formData.append("access_key", "54f5dd17-07a1-446e-bcd9-7530017a1a73");
+    const formData = new FormData(e.target);
+
+    if (user.firstName || user.lastName) {
+      formData.append("name", `${user?.firstName} ${user?.lastName}`);
+    }
+    if (user.email) {
+      formData.append("email", user?.email)
+    }
+    formData.append("access_key", "54f5dd17-07a1-446e-bcd9-7530017a1a73");
+    formData.append("agent", agentEmail);
+    formData.append("type", "Property inquiry");
+
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      body: JSON.stringify({
-        ...inquiry,
-        agent: agentEmail,
-        access_key: "54f5dd17-07a1-446e-bcd9-7530017a1a73"
-      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: json
     });
 
     const data = await response.json();
@@ -78,10 +91,10 @@ const ScheduleTour = ({ property, agentEmail }) => {
                   <input
                     type="text"
                     className="form-control"
-                    value={
+                    defaultValue={
                       user?.firstName && user?.firstName + " " + user?.lastName
                     }
-                    disabled={user?.firstName && user?.firstName ? true : false}
+                    disabled={user.firstName && user.lastName ? true : false}
                     onChange={(e) => setInquiry({ ...inquiry, name: e.target.value })}
                     placeholder="Full Name"
                     name="name"
@@ -111,7 +124,7 @@ const ScheduleTour = ({ property, agentEmail }) => {
                     type="email"
                     className="form-control"
                     placeholder="Email"
-                    value={user?.email}
+                    defaultValue={user?.email}
                     disabled={user?.email ? true : false}
                     onChange={(e) => setInquiry({ ...inquiry, email: e.target.value })}
                     name="email"
@@ -126,7 +139,7 @@ const ScheduleTour = ({ property, agentEmail }) => {
                   <textarea
                     cols={30}
                     rows={4}
-                    placeholder="Enter Your Messages"
+                    placeholder="Message"
                     defaultValue={defaultMessage}
                     onChange={(e) => setInquiry({ ...inquiry, message: e.target.value })}
                     name="message"

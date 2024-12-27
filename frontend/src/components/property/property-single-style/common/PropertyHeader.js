@@ -77,37 +77,37 @@ const PropertyHeader = ({ property }) => {
             <p className="text fz15 mb-0 bdrr1 pr10 bdrrn-sm">
               {property.prpty_location}
             </p>
-            <a
-              className="ff-heading text-thm fz15 bdrr1 pr10 ml0-sm ml10 bdrrn-sm"
+            <p
+              className="ff-heading text-thm fz15 bdrr1 pr10 ml0-sm ml10 bdrrn-sm mt10"
               href="#"
             >
               <i className="fas fa-circle fz10 pe-2" />
               {property.saletype_name}
-            </a>
+            </p>
           </div>
           {property.property_type === "home" ? (
             <div className="property-meta d-flex align-items-center">
-              <a href="#">
-                {"-"}<span className="flaticon-bed" /> {`${property.num_of_beds} bed - `}
-              </a>
-              <a href="#">
-                <span className="flaticon-shower" /> {`${property.num_of_bathrooms} bath - `}
-              </a>
-              <a href="#">
+              <p>
+                <span className="flaticon-bed" /> {`${property.num_of_beds} bedrooms`}
+              </p>
+              <p className="ml20">
+                <span className="flaticon-shower" /> {`${property.num_of_bathrooms} bathrooms`}
+              </p>
+              <p className="ml20">
                 <span className="flaticon-expand" />
                 {`${formatMoney(property.prpty_size)} sqft `}
-              </a>
+              </p>
             </div>
           ) : (
             <div className="property-meta d-flex align-items-center">
-              <a href="#">
-              {"-"}<span className="flaticon-bird-house" />
-                {property.category_name + " - "}
-              </a>
-              <a href="#">
+              <p>
+              <span className="flaticon-bird-house" />
+              {property.category_name}
+              </p>
+              <p className="ml20">
                 <span className="flaticon-expand" />{" "}
                 {formatMoney(property.prpty_size)} sqft
-              </a>
+              </p>
             </div>
           )}
         </div>

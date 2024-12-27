@@ -1,25 +1,17 @@
 import React from "react";
 
-const PropertyAddress = ({address}) => {
-  const addresses = [
-    {
-      address: address,
-    },
-  ];
+const PropertyAddress = ({latitude, longitude}) => {
 
   return (
-    <>
       <div className="col-md-12">
         <iframe
-          className="position-relative bdrs12 mt30 h250"
+          className="position-relative bdrs12 h250"
           loading="lazy"
-          src={`https://maps.google.com/maps?q=${addresses[0].address.split(',')[0]+' Burundi'}&t=m&z=14&output=embed&iwloc=near`}
-          title={addresses[0].address}
-          aria-label={addresses[0].address}
+          src={`https://maps.google.com/maps?q=${latitude},${longitude}&t=m&z=14&output=embed&iwloc=near`}
+          title={`${latitude}-${longitude}`}
+          aria-label={`${latitude}-${longitude}`}
         />
       </div>
-      {/* End col */}
-    </>
   );
 };
 

@@ -10,7 +10,7 @@ const ContactMeta = () => {
     {
       title: "Need Live Support?",
       mail: "ortusrealty@ortus.com",
-      mailLink: "mailto:ibthemes21@gmail.com",
+      mailLink: "mailto:ortusrealty@ortus.com",
     },
   ];
 
