@@ -95,7 +95,8 @@ const getSingleAgent = async (agentId) => {
     }
 }
 
-export {getUserByUsername,
+export {
+    getUserByUsername,
     getUserByEmail,
     getUserById,
     createUser,

@@ -53,7 +53,6 @@ const SignUp = () => {
       console.log(data.error);
       toast.error(data.error);
     } else {
-      console.log(data);
       localStorage.setItem("session", JSON.stringify(data));
       setSession(data);
       toast.success("account created successfully");
@@ -137,7 +136,7 @@ const SignUp = () => {
             />
           ) : (
             <>
-              Create account <i className="fal fa-arrow-right-long" />
+              Create account
             </>
           )}
         </button>

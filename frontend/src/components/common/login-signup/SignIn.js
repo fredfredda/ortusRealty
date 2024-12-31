@@ -12,17 +12,22 @@ const override = {
   borderColor: "white",
 };
 
-const SignIn = () => {
+const SignIn = ({ setPageTitle }) => {
+  const [showSignIn, setShowSignIn] = useState(true);
+  const [showSendEmail, setShowSendEmail] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
+  const redirect = searchParams.get("redirect");
 
   const setSession = sessionStore((state) => state.setSession);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [verificationEmail, setVerificationEmail] = useState("");
+  
   const [isLoading, setIsLoading] = useState(false);
   let [color, setColor] = useState("#ffffff");
 
@@ -34,17 +39,20 @@ const SignIn = () => {
   const loginUser = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
       const data = await response.json();
       if (data.error) {
         toast.error(data.error);
@@ -66,76 +74,165 @@ const SignIn = () => {
     }
   };
 
+  const handleSendEmail = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/auth/sendemail`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: verificationEmail,
+        }),
+      })
+
+      const data = await response.json();
+      if (data.error) {
+        toast.error(typeof data.error === "string" ? data.error : "An error occurred");
+      } else {
+        localStorage.setItem("resetPasswordToken", JSON.stringify(data.token));
+        setEmailSent(true);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred");
+    } finally{
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <form id="loginForm" className="form-style1" onSubmit={handleSubmit}>
-      <div className="mb25">
-        <label className="form-label fw600 dark-color">Email</label>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Enter Email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      {/* End Email */}
-
-      <div className="mb20">
-        <label className="form-label fw600 dark-color">Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter Password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      {/* End Password */}
-
-      <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
-        <a className="fz14 ff-heading" href={`/register?redirect=${redirect}`}>
-          Don't have an account? Sign Up
-        </a>
-      </div>
-      {/* End  Lost your password? */}
-
-      <div className="d-grid mb20">
-        <button
-          className="ud-btn btn-thm"
-          type="submit"
-          data-bs-dismiss=""
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <ClipLoader
-              color={color}
-              loading={isLoading}
-              cssOverride={override}
-              size={15}
-              aria-label="Loading Spinner"
-              data-testid="loader"
+    <form id="loginForm" className="form-style1">
+      {showSignIn && (
+        <>
+          <div className="mb25">
+            <label className="form-label fw600 dark-color">Email</label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Enter Email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
-          ) : (
-            <>
-              Sign in <i className="fal fa-arrow-right-long" />
-            </>
-          )}
-        </button>
-      </div>
-      {/* End submit */}
+          </div>
+          {/* End Email */}
 
-      <div className="hr_content mb20">
-        <hr />
-        <span className="hr_top_text">OR</span>
-      </div>
+          <div className="mb20">
+            <label className="form-label fw600 dark-color">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter Password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {/* End Password */}
 
-      <div className="d-grid mb10">
-        <button className="ud-btn btn-white" type="button">
-          <a href={getGooleOAuthUrl(redirect || '')}>
-            <i className="fab fa-google" /> Continue With Google
-          </a>
-        </button>
-      </div>
+          <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
+            <a
+              className="fz14 ff-heading"
+              href={`/register?redirect=${redirect}`}
+            >
+              Don't have an account? Sign Up
+            </a>
+            <p
+              className="fz14 ff-heading mt10 forgot_password"
+              onClick={() => {
+                setShowSendEmail(true);
+                setShowSignIn(false);
+                setPageTitle("Verification Link");
+              }}
+            >
+              Forgot password?
+            </p>
+          </div>
+          {/* End  Lost your password? */}
+
+          <div className="d-grid mb20">
+            <button
+              className="ud-btn btn-thm"
+              data-bs-dismiss=""
+              disabled={isLoading}
+              onClick={handleSubmit}
+            >
+              {isLoading ? (
+                <ClipLoader
+                  color={color}
+                  loading={isLoading}
+                  cssOverride={override}
+                  size={15}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                <>Sign in</>
+              )}
+            </button>
+          </div>
+          {/* End submit */}
+
+          <div className="hr_content mb20">
+            <hr />
+            <span className="hr_top_text">OR</span>
+          </div>
+
+          <div className="d-grid mb10">
+            <button className="ud-btn btn-white" type="button">
+              <a href={getGooleOAuthUrl(redirect || "")}>
+                <i className="fab fa-google" /> Continue With Google
+              </a>
+            </button>
+          </div>
+        </>
+      )}
+
+      {showSendEmail &&
+        (emailSent ? (
+          <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-center mb10">
+            <p>Check your email inbox for the link</p>
+          </div>
+        ) : (
+          <>
+            <div className="mb15">
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Enter Email"
+                onChange={(e) => setVerificationEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
+              <p className="fz14 ff-heading mt10">
+                A verification link will be sent to your email
+              </p>
+            </div>
+            <div className="d-grid mb20">
+              <button
+                className="ud-btn btn-thm"
+                data-bs-dismiss=""
+                disabled={isLoading}
+                onClick={handleSendEmail}
+              >
+                {isLoading ? (
+                  <ClipLoader
+                    color={color}
+                    loading={isLoading}
+                    cssOverride={override}
+                    size={15}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  <>Send Email</>
+                )}
+              </button>
+            </div>
+          </>
+        ))}
     </form>
   );
 };
