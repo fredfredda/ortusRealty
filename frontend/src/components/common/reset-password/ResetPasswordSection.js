@@ -43,7 +43,7 @@ const ResetPasswordSection = ({ tokenId }) => {
           credentials: "include",
           body: JSON.stringify({
             password: password,
-            token: localStorage.getItem("resetPasswordToken"),
+            token: JSON.parse(localStorage.getItem("resetPasswordToken")),
           }),
         }
       );

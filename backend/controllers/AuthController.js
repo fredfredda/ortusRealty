@@ -4,6 +4,7 @@ import {
   createToken,
   verifyToken,
 } from "../utils/helpers/PasswordResetTokens.js";
+import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
