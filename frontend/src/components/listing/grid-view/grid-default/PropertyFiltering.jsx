@@ -7,17 +7,18 @@ import FeaturedListings from "./FeatuerdListings";
 import PaginationTwo from "../../PaginationTwo";
 import { useSearchParams } from "next/navigation";
 import sortListings from "@/utilis/SortListings";
+import { ClipLoader } from "react-spinners";
 
 export default function PropertyFiltering() {
-  const searchParams = useSearchParams() || {};
-  const search = searchParams.get("search") || "";
-  const saletype = searchParams.get("saleType") || "";
-  const propertyType = searchParams.get("propertyType") || "";
-  const price = searchParams.get("priceRange") || "";
-  const province = searchParams.get("province") || "All Provinces";
-  const sizeRange = searchParams.get("sizeRange") || "";
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+  const saletype = searchParams.get("saleType");
+  const propertyType = searchParams.get("propertyType");
+  const price = searchParams.get("priceRange");
+  const province = searchParams.get("province");
+  const sizeRange = searchParams.get("sizeRange");
   const showFilter = searchParams.get("showFilter") || "false";
-  const agentId = searchParams.get("agentId") || "";
+  const agentId = searchParams.get("agentId");
 
   const [listingStatus, setListingStatus] = useState(saletype || "");
   const [propertyTypes, setPropertyTypes] = useState(propertyType || "");
@@ -97,17 +98,23 @@ export default function PropertyFiltering() {
             location === "All Provinces" ? "" : location
           }&priceRange=${
             priceRange === "" ? "0-1000000000" : priceRange
-          }&sizeRange=${squirefeet === "" ? "0-10000" : squirefeet}${agentId === null || agentId === undefined || agentId === "" ? '' : `&agentId=${agentId}`}`
+          }&sizeRange=${squirefeet === "" ? "0-10000" : squirefeet}${
+            agentId === null || agentId === undefined || agentId === ""
+              ? ""
+              : `&agentId=${agentId}`
+          }`
         );
         const data = await response.json();
         if (data.error) {
-          console.log(data.error);          
-          toast.error(typeof data.error === "string" ? data.error : "An error occured");
+          console.log(data.error);
+          toast.error(
+            typeof data.error === "string" ? data.error : "An error occured"
+          );
         } else {
           setProperties(data.properties);
         }
       } catch (error) {
-        console.error(error);        
+        console.error(error);
         toast.error("An error occured");
       }
     };
@@ -188,7 +195,10 @@ export default function PropertyFiltering() {
 
   useEffect(() => {
     setPageItems(
-      sortedFilteredData.slice((pageNumber - 1) * itemsPerPage, pageNumber * itemsPerPage)
+      sortedFilteredData.slice(
+        (pageNumber - 1) * itemsPerPage,
+        pageNumber * itemsPerPage
+      )
     );
     setPageContentTrac([
       (pageNumber - 1) * itemsPerPage + 1,
@@ -208,76 +218,80 @@ export default function PropertyFiltering() {
   }, [currentSortingOption, filteredData]);
 
   return (
-    <section className="pt0 pb90">
-      <div className="container">
-        <div className="row gx-xl-5">
-          {showFilter === "true" && (
-            <>
-              <div className="col-lg-4 d-none d-lg-block">
-                <ListingSidebar filterFunctions={filterFunctions} />
-              </div>
-              {/* End .col-lg-4 */}
-
-              {/* start mobile filter sidebar */}
-              <div
-                className="offcanvas offcanvas-start p-0"
-                tabIndex="-1"
-                id="listingSidebarFilter"
-                aria-labelledby="listingSidebarFilterLabel"
-              >
-                <div className="offcanvas-header">
-                  <h5
-                    className="offcanvas-title"
-                    id="listingSidebarFilterLabel"
-                  >
-                    Listing Filter
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close text-reset"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="offcanvas-body p-0">
+      <section className="pt0 pb90">
+        <div className="container">
+          <div className="row gx-xl-5">
+            {showFilter === "true" && (
+              <>
+                <div className="col-lg-4 d-none d-lg-block">
                   <ListingSidebar filterFunctions={filterFunctions} />
                 </div>
+                {/* End .col-lg-4 */}
+
+                {/* start mobile filter sidebar */}
+                <div
+                  className="offcanvas offcanvas-start p-0"
+                  tabIndex="-1"
+                  id="listingSidebarFilter"
+                  aria-labelledby="listingSidebarFilterLabel"
+                >
+                  <div className="offcanvas-header">
+                    <h5
+                      className="offcanvas-title"
+                      id="listingSidebarFilterLabel"
+                    >
+                      Listing Filter
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close text-reset"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="offcanvas-body p-0">
+                    <ListingSidebar filterFunctions={filterFunctions} />
+                  </div>
+                </div>
+                {/* End mobile filter sidebar */}
+              </>
+            )}
+
+            <div className={showFilter === "true" ? "col-lg-8" : "col-lg-12"}>
+              <div className="row align-items-center mb20">
+                <TopFilterBar
+                  pageContentTrac={pageContentTrac}
+                  colstyle={colstyle}
+                  setColstyle={setColstyle}
+                  setCurrentSortingOption={setCurrentSortingOption}
+                />
               </div>
-              {/* End mobile filter sidebar */}
-            </>
-          )}
+              {/* End TopFilterBar */}
 
-          <div className={showFilter === "true" ? "col-lg-8" : "col-lg-12"}>
-            <div className="row align-items-center mb20">
-              <TopFilterBar
-                pageContentTrac={pageContentTrac}
-                colstyle={colstyle}
-                setColstyle={setColstyle}
-                setCurrentSortingOption={setCurrentSortingOption}
-              />
-            </div>
-            {/* End TopFilterBar */}
+              <div className="row mt15">
+                <FeaturedListings
+                  colstyle={colstyle}
+                  data={pageItems}
+                  showFilter={showFilter || "false"}
+                />
+              </div>
+              {/* End .row */}
 
-            <div className="row mt15">
-              <FeaturedListings colstyle={colstyle} data={pageItems} showFilter={showFilter || "false" } />
+              <div className="row">
+                <PaginationTwo
+                  pageCapacity={itemsPerPage}
+                  data={sortedFilteredData}
+                  pageNumber={pageNumber}
+                  setPageNumber={setPageNumber}
+                />
+              </div>
+              {/* End .row */}
             </div>
-            {/* End .row */}
-
-            <div className="row">
-              <PaginationTwo
-                pageCapacity={itemsPerPage}
-                data={sortedFilteredData}
-                pageNumber={pageNumber}
-                setPageNumber={setPageNumber}
-              />
-            </div>
-            {/* End .row */}
+            {/* End .col-lg-8 */}
           </div>
-          {/* End .col-lg-8 */}
+          {/* End .row */}
         </div>
-        {/* End .row */}
-      </div>
-      {/* End .container */}
-    </section>
+        {/* End .container */}
+      </section>
   );
 }
