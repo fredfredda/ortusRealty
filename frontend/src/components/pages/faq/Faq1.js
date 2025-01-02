@@ -2,27 +2,51 @@ const Faq1 = () => {
   const faqItems = [
     {
       id: "headingOne",
-      question: "Can a home depreciate in value?",
+      question: "What is Ortus Realty?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house",
+        "Ortus Realty is a company that connects foreign investors and the Burundian diaspora with professional real estate developers and agents. We provide safe and transparent investment opportunities in properties like homes, lands, construction sites, and development projects.",
     },
     {
       id: "headingTwo",
-      question: "Is an older home as good a value as a new home?",
+      question: "How does Ortus Realty ensure transparency in investments?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house",
+        "We focus on providing investors with detailed property information, historical data, analytics, and professional advice. Additionally, all listed properties are verified for legal compliance, and we assist in navigating the sale and legal proceedings.",
     },
     {
       id: "headingThree",
-      question: "What is a broker?",
+      question: " How can I partner with Ortus Realty as an agent or developer?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house is a mess waiting to happen. Fortunately, getting kids on board with the idea of ditching their stuff is a lot easier than it sounds. <br /><br /> The trick is to make it an opportunity for them to define themselves and their interests. Encourage kids to make a pile of ”baby toys” to donate, and have them set aside any toys that no longer interest them, such as action figures from a forgotten TV show. Separating these toys will help them appreciate how much they’ve grown and rediscover the toys they love.",
+        "You can contact us through our website or visit our office nearest to you. We will guide you through the partnership process and provide you with the necessary tools and resources to list your properties on our platform.",
     },
     {
       id: "headingFour",
-      question: "Can I pay my own taxes and insurance?",
+      question: "What types of properties can agents or developers list on the platform?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house",
+        " You can list homes, land, construction sites, and development projects, provided they are legally owned, conflict-free, and have no ongoing court cases.",
+    },
+    {
+      id: "headingFive",
+      question: "Are agents and developers employees of Ortus Realty?",
+      answer:
+        "No, agents and developers operate independently and are not employees of the company.",
+    },
+    {
+      id: "headingFive",
+      question: "Can I list my property on the platform provided I am not a real estate professional?",
+      answer:
+        "In that case, you can contact us through our website or visit our office nearest to you to submit your property. We will handle the listing ourselves and provide you with the necessary tools and resources to navigate the sale and legal proceedings.",
+    },
+    {
+      id: "headingSix",
+      question: "What services does Ortus Realty offer to investors?",
+      answer:
+        "We provide access to verified property listings, market insights, property analytics, and professional guidance from negotiations to legal proceedings.",
+    },
+    {
+      id: "headingSeven",
+      question: "Do you interfere in negotiations between investors and agents?",
+      answer:
+        "No, negotiations occur directly between the investor and the agent. However, investors can request our professional advice and guidance during this process.",
     },
   ];
 

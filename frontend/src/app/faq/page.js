@@ -40,7 +40,7 @@ const Faq = () => {
           <div className="row wow fadeInUp" data-wow-delay="300ms">
             <div className="col-lg-12">
               <div className="ui-content">
-                <h4 className="title">Question About Selling</h4>
+                <h4 className="title">General Questions</h4>
                 <div className="accordion-style1 faq-page mb-4 mb-lg-5">
                   <Faq1 />
                 </div>
@@ -48,7 +48,7 @@ const Faq = () => {
               {/* End ui-content */}
 
               <div className="ui-content">
-                <h4 className="title">Question About Renting</h4>
+                <h4 className="title">Legal and sales processes</h4>
                 <div className="accordion-style1 faq-page mb-4 mb-lg-5">
                   <Faq2 />
                 </div>

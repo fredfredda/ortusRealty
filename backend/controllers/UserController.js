@@ -15,7 +15,7 @@ import assignId from "../utils/helpers/assignId.js";
 import qs from "qs";
 import jwt from "jsonwebtoken";
 
-const saltRounds = 2;
+const saltRounds = 10;
 
 const getProfile = async (req, res) => {
   const { userId } = req.user;

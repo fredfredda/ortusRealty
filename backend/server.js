@@ -9,7 +9,7 @@ import cors from 'cors';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.SERVER_PORT || 3001;
+const PORT = process.env.SERVER_PORT;
 
 const corsOptions = {
     origin: (origin, callback) => {
@@ -43,4 +43,4 @@ app.use('/api/auth', AuthRoutes); // auth routes
 app.use('/api/users', UserRoutes); // user routes
 app.use('/api/properties', PropertyRoutes); // property routes
 
-app.listen(PORT, '0.0.0.0', () => console.log(`Server listening at port ${PORT}`) );
+app.listen(PORT, () => console.log(`Server listening at port ${PORT}`) );

@@ -199,7 +199,7 @@ const Home_V8 = () => {
       {/* End CTA Banner */}
 
       {/* Explore Blog */}
-      <section className="pt0 mb0-md pb90 pb30-md">
+      <section className="pt0 mb0-md pb50 pb30-md mt50">
         <div className="container">
           <div className="row">
             <div className="col-lg-6 m-auto">

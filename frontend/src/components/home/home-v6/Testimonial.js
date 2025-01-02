@@ -1,44 +1,6 @@
 import ImageKit from "@/components/common/ImageKit";
 import React from "react";
-
-const testimonials = [
-  {
-    id: "1st",
-    imageSrc: "OrtusRealty/testimonials/img17.jpg",
-    text: "What a great experience! I have visited one of the workshops and attended a masterclass, and both were super useful for young designers.",
-    name: "Ali Tufan",
-    designation: "Product Manager, Apple Inc",
-  },
-  {
-    id: "2nd",
-    imageSrc: "OrtusRealty/testimonials/img18.jpg",
-    text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
-    name: "Ella Johnson",
-    designation: "UX Designer, Google",
-  },
-  {
-    id: "third",
-    imageSrc: "OrtusRealty/testimonials/img21.jpg",
-    text: "What a great experience! I have visited one of the workshops and attended a masterclass, and both were super useful for young designers.",
-    name: "Ali Tufan",
-    designation: "Product Manager, Apple Inc",
-  },
-  {
-    id: "4th",
-    imageSrc: "OrtusRealty/testimonials/img19.jpg",
-    text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
-    name: "Ella Johnson",
-    designation: "UX Designer, Google",
-  },
-  {
-    id: "5th",
-    imageSrc: "OrtusRealty/testimonials/img20.jpg",
-    text: "Another fantastic testimonial! This workshop has helped me improve my design skills significantly. I'm really grateful for the opportunity.",
-    name: "Ella Johnson",
-    designation: "UX Designer, Google",
-  },
-  // Add more testimonial objects if needed
-];
+import testimonials from "@/data/testimonials";
 
 const Testimonial = () => {
   return (
@@ -90,7 +52,6 @@ const Testimonial = () => {
                   pathName={testimonial.imageSrc}
                   width={70}
                   height={71}
-                  transformation={[{ quality: 60 }]}
                   loading="lazy"
                   alt="testimonial image"
                 />

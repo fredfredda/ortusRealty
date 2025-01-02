@@ -6,8 +6,8 @@ export const blogs = [
       month: "July",
       day: "19",
     },
-    tag: "Living Room",
-    title: "Private Contemporary Home Balancing Openness",
+    tag: "In development",
+    title: "Blog section coming soon",
   },
   {
     id: 2,
@@ -17,8 +17,8 @@ export const blogs = [
       month: "July",
       day: "19",
     },
-    tag: "Living Room",
-    title: "Contemporary Home Private Balancing Openness",
+    tag: "In development",
+    title: "Blog section coming soon",
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ export const blogs = [
       month: "July",
       day: "19",
     },
-    tag: "Living Room",
-    title: "Balancing Private Contemporary Home  Openness",
+    tag: "In development",
+    title: "Blog section coming soon",
   },
 ];

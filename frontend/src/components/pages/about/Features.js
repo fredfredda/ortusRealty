@@ -3,21 +3,21 @@ const Features = () => {
   const features = [
     {
       icon: "flaticon-security",
-      title: "Property Management",
+      title: "Verified Properties",
       description:
-        "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+        "All properties are thoroughly reviewed for legal compliance and ownership clarity.",
     },
     {
       icon: "flaticon-keywording",
-      title: "Mortgage Services",
+      title: "Expert Guidance",
       description:
-        "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+        "We provide investors with professional advice and assist them through every step of the legal process.",
     },
     {
       icon: "flaticon-investment",
-      title: "Currency Services",
+      title: "Global Reach",
       description:
-        "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+        "We help agents and developers access international investors, maximizing their profit potential.",
     },
   ];
 

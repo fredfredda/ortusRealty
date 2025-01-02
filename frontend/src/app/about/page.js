@@ -39,29 +39,42 @@ const About = () => {
       {/* Our About Area */}
       <section className="our-about pb90">
         <div className="container">
-          <div className="row" >
-            <div className="col-lg-6">
-              <h2>
-                We&apos;re on a Mission to Change{" "}
-                <br className="d-none d-lg-block" /> View of Real Estate Field.
-              </h2>
-            </div>
-            <div className="col-lg-6">
-              <p className="text mb25">
-                It doesn&apos;t matter how organized you are — a surplus of toys will
-                always ensure your house is a mess waiting to happen.
-                Fortunately, getting kids on board with the idea of ditching
-                their stuff is a lot easier than it sounds.
+          <div className="row">
+            <div className="col-lg-12">
+              <h2 className="mb5"> Who we are </h2>
+              <p className="text mb25 fz16">
+                <span>Ortus Realty</span> is a trusted bridge connecting foreign
+                investors and the Burundian diaspora with professional real
+                estate developers and agents. We aim to create a safe,
+                transparent, and efficient environment for real estate
+                investments in Burundi. We believe in empowering our clients
+                with data-driven insights, professional guidance, and unmatched
+                access to lucrative investment opportunities.
               </p>
-              <p className="text mb55">
-                Maecenas quis viverra metus, et efficitur ligula. Nam congue
-                augue et ex congue, sed luctus lectus congue. Integer convallis
-                condimentum sem. Duis elementum tortor eget condimentum tempor.
-                Praesent sollicitudin lectus ut pharetra pulvinar.
+              <h2 className="mb5"> Our Vision </h2>
+              <p className="text mb25 fz16">
+                To revolutionize the real estate market in Burundi by
+                facilitating international investments and fostering
+                partnerships that drive economic growth and development.
               </p>
-              <div className="row">
+              <h2 className="mb5"> Our Mission </h2>
+              <p className="text mb10 fz16">
+                <i className="far fa-arrow-right" /> To enable agents and
+                developers to expand their reach and increase profitability
+                through international exposure.
+              </p>
+              <p className="text mb10 fz16">
+                <i className="far fa-arrow-right" /> To provide investors with
+                secure and profitable real estate opportunities.
+              </p>
+              <p className="text mb25 fz16">
+                <i className="far fa-arrow-right" /> To ensure transparency and
+                trust by maintaining rigorous legal compliance for all property
+                listings.
+              </p>
+              {/* <div className="row">
                 <Mission />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -73,9 +86,7 @@ const About = () => {
         <div className="container">
           <div className="row  justify-content-center">
             <div className="col-auto">
-              <div
-                className="main-title"
-              >
+              <div className="main-title">
                 <h2 className="title">Our Exclusive Agents</h2>
               </div>
             </div>
@@ -99,13 +110,10 @@ const About = () => {
         <div className="cta-banner3 bgc-f7 mx-auto maxw1600 pt100 pt60-lg pb90 pb60-lg bdrs24 position-relative overflow-hidden mx20-lg">
           <div className="container">
             <div className="row">
-              <div
-                className="col-md-6 col-lg-5 pl30-md pl15-xs"
-              >
+              <div className="col-md-6 col-lg-5 pl30-md pl15-xs">
                 <div className="mb30">
                   <h2 className="title text-capitalize">
-                    Let&apos;s find the right <br className="d-none d-md-block" />{" "}
-                    selling option for you
+                    Why choose Ortus Realty?
                   </h2>
                 </div>
                 <div className="why-chose-list style2">
@@ -128,9 +136,7 @@ const About = () => {
               </div>
             </div>
             <div className="col-lg-12 text-center">
-              <div
-                className="dots_none nav_none"
-              >
+              <div className="dots_none nav_none">
                 <Partner />
               </div>
             </div>

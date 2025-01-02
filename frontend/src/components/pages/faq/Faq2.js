@@ -2,27 +2,33 @@ const Faq2 = () => {
   const faqItems = [
     {
       id: "headingOne",
-      question: "Can a home depreciate in value?",
+      question: "What happens after a sale agreement is reached?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house",
+        "The agent records the sale on our platform. We review it to ensure it adheres to our terms. Once approved, we guide the investor through the legal proceedings from start to finish.",
     },
     {
       id: "headingTwo",
-      question: "Is an older home as good a value as a new home?",
+      question: "Does Ortus Realty reject sales?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house",
+        "Yes, but only if a sale does not adhere to our terms or involves unresolved ownership or legal issues.",
     },
     {
       id: "headingThree",
-      question: "What is a broker?",
+      question: "What type of guidance does Ortus Realty offer during legal proceedings?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house is a mess waiting to happen. Fortunately, getting kids on board with the idea of ditching their stuff is a lot easier than it sounds. <br /><br /> The trick is to make it an opportunity for them to define themselves and their interests. Encourage kids to make a pile of ”baby toys” to donate, and have them set aside any toys that no longer interest them, such as action figures from a forgotten TV show. Separating these toys will help them appreciate how much they’ve grown and rediscover the toys they love.",
+        "We provide expert advice and ensure all necessary legal steps are completed to finalize the transaction and protect both parties.",
     },
     {
       id: "headingFour",
-      question: "Can I pay my own taxes and insurance?",
+      question: "How do I know the properties listed are legitimate?",
       answer:
-        "It doesn’t matter how organized you are — a surplus of toys will always ensure your house",
+        "All properties submitted by agents and developers undergo a rigorous review process. They must have valid legal documents and no ownership conflicts or court cases.",
+    },
+    {
+      id: "headingFive",
+      question: "Can Ortus Realty help me with legal proceedings after a purchase?",
+      answer:
+        "Yes. After a sale agreement is reached, we guide investors through all legal proceedings to ensure the transaction is completed without any issues.",
     },
   ];
 

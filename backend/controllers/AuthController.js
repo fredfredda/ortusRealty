@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
-const saltRounds = 2;
+const saltRounds = 10;
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

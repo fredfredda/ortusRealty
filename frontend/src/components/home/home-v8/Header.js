@@ -138,6 +138,7 @@ const Header = () => {
                                 }&background=random&rounded=true&size=44`}
                                 alt="user"
                               />
+                              <i className="far fa-chevron-down ml5" />
                             </a>
                             <div className="dropdown-menu">
                               <div className="user_setting_content">

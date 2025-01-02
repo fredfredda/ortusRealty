@@ -55,9 +55,7 @@ const Contact = () => {
                 from you.
               </h2>
               <p className="text">
-                We are here to answer any question you may have. As a partner of
-                corporates, Ortus Realty has more than 9,000 offices of all sizes and
-                all potential of session.
+                Ask us anything, tell us anything, or report to us any problems you may have. We are here to help you.
               </p>
             </div>
             {/* End .col */}

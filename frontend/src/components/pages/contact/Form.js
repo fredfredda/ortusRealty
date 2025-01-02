@@ -124,7 +124,7 @@ const Form = () => {
             <textarea
               cols={30}
               rows={4}
-              placeholder="Tell us anything from bugs reports to a simple 'hi'"
+              placeholder="Message"
               onChange={(e) =>
                 setInquiry({ ...inquiry, message: e.target.value })
               }
