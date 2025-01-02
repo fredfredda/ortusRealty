@@ -12,11 +12,11 @@ const app = express();
 const PORT = process.env.SERVER_PORT;
 
 const corsOptions = {
-    origin: (origin, callback) => {
-        // Allow all origins - dynamically set the origin based on the incoming request
-        callback(null, origin || '*');
-      },
-    // origin: process.env.FRONTEND_ENDPOINT || 'http://localhost:3000',
+    // origin: (origin, callback) => {
+    //     // Allow all origins - dynamically set the origin based on the incoming request
+    //     callback(null, origin || '*');
+    //   },
+    origin: process.env.FRONTEND_ENDPOINT,
     optionsSuccessStatus: 200,
     credentials: true,
     // Some legacy browsers choke on 204
