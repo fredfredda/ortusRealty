@@ -20,7 +20,7 @@ const SignIn = ({ setPageTitle }) => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
+  const redirect = searchParams.get("redirect") || '/';
 
   const setSession = sessionStore((state) => state.setSession);
 

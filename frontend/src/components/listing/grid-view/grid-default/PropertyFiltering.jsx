@@ -10,14 +10,14 @@ import sortListings from "@/utilis/SortListings";
 
 export default function PropertyFiltering() {
   const searchParams = useSearchParams();
-  const search = searchParams.get("search");
-  const saletype = searchParams.get("saleType");
-  const propertyType = searchParams.get("propertyType");
-  const price = searchParams.get("priceRange");
-  const province = searchParams.get("province");
-  const sizeRange = searchParams.get("sizeRange");
+  const search = searchParams.get("search") || "";
+  const saletype = searchParams.get("saleType") || "";
+  const propertyType = searchParams.get("propertyType") || "";
+  const price = searchParams.get("priceRange") || "";
+  const province = searchParams.get("province") || "All Provinces";
+  const sizeRange = searchParams.get("sizeRange") || "";
   const showFilter = searchParams.get("showFilter") || "false";
-  const agentId = searchParams.get("agentId");
+  const agentId = searchParams.get("agentId") || "";
 
   const [listingStatus, setListingStatus] = useState(saletype || "");
   const [propertyTypes, setPropertyTypes] = useState(propertyType || "");

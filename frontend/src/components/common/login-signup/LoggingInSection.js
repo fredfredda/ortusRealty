@@ -16,7 +16,7 @@ const LoggingInSection = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
-  const redirect = searchParams.get("redirect");
+  const redirect = searchParams.get("redirect") || '/';
   let [color, setColor] = useState("#eb6753");
 
   useEffect(() => {
