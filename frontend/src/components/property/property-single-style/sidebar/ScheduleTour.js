@@ -6,17 +6,6 @@ import toast from "react-hot-toast";
 const ScheduleTour = ({ property, agentEmail }) => {
   const user = sessionStore((state) => state.session);
 
-  const tabs = [
-    {
-      id: "inperson",
-      label: "In Person",
-    },
-    {
-      id: "videochat",
-      label: "Video Chat",
-    },
-  ];
-
   const defaultMessage = `I am interested in this ${property.property_type} at ${property.prpty_location}`;
 
   const [inquiry, setInquiry] = useState({

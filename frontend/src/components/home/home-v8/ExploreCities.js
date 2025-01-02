@@ -81,7 +81,7 @@ const ExploreCities = () => {
                       width={279}
                       height={279}
                       loading="lazy"
-                      transform={[{ quality: 20 }]}
+                      transform={[{ quality: 80 }]}
                       alt="city listings"
                     />
                   </div>

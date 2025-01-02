@@ -24,7 +24,7 @@ const NotFound = () => {
       <section className="our-error">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-xl-6" data-aos="fade-left">
+            <div className="col-xl-6">
               <div className="animate_content text-center text-xl-start">
                 <div className="animate_thumb">
                   <Image
@@ -41,7 +41,6 @@ const NotFound = () => {
 
             <div
               className="col-xl-5 offset-xl-1 wow fadeInLeft"
-              data-aos="fade-right"
             >
               <div className="error_page_content mt80 mt50-lg text-center text-xl-start">
                 <div className="erro_code">

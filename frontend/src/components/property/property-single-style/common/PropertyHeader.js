@@ -28,6 +28,7 @@ const PropertyHeader = ({ property }) => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(typeof data.error === 'string' ? data.error.toString() : "An error occurred");
         } else {
           removeProperty(propertyId);
         }
@@ -47,6 +48,8 @@ const PropertyHeader = ({ property }) => {
           console.log(data.error);
           if (data.error === "Unauthorized") {
             toast.error("Please login to save properties");
+          } else{
+            toast.error(typeof data.error === 'string' ? data.error.toString() : "An error occurred");
           }
         } else {
           appendProperty(propertyId);
@@ -54,6 +57,7 @@ const PropertyHeader = ({ property }) => {
       }
     } catch (error) {
       console.error(error);
+      toast.error("An error occurred");
     }
   };
 

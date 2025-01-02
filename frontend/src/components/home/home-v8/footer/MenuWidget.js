@@ -6,8 +6,8 @@ const MenuWidget = () => {
       title: "Popular Search",
       links: [
         { label: "Homes to rent", href: "/explore?propertyType=home&saleType=renting" },
-        { label: "Lands for sale", href: "/explore?propertyType=land&saleType=for%20sale" },
-        { label: "Investment opportunities", href: "/explore?propertyType=development%20project" },
+        { label: "Lands for sale", href: "/explore?propertyType=land&saleType=for sale" },
+        { label: "Investment opportunities", href: "/explore?propertyType=development project" },
         { label: "Resource center", href: "#" },
       ],
     },
@@ -20,13 +20,13 @@ const MenuWidget = () => {
         { label: "Our Services", href: "#" },
         { label: "Contact Support", href: "/contact" },
         { label: "About", href: "/about" },
-        { label: "FAQs", href: "faq" },
+        { label: "FAQs", href: "/faq" },
       ],
     },
     {
       title: "Discover",
       links: [
-        { label: "Bujumbura Mairie", href: "/explore?province=Bujumbura%20Mairie" },
+        { label: "Bujumbura Mairie", href: "/explore?province=Bujumbura Mairie" },
         { label: "Gitega", href: "/explore?province=Gitega" },
         { label: "Ngozi", href: "/explore?province=Ngozi" },
         { label: "Mwaro", href: "/explore?province=Mwaro" },

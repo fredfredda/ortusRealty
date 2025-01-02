@@ -5,9 +5,7 @@ import Partner from "@/components/common/Partner";
 import MobileMenu from "@/components/common/mobile-menu";
 import Agents from "@/components/pages/about/Agents";
 import Features from "@/components/pages/about/Features";
-import FunFact from "@/components/pages/about/FunFact";
 import Mission from "@/components/pages/about/Mission";
-import Link from "next/link";
 
 export const metadata = {
   title: "Ortus Realty - About",
@@ -50,7 +48,7 @@ const About = () => {
             </div>
             <div className="col-lg-6">
               <p className="text mb25">
-                It doesn’t matter how organized you are — a surplus of toys will
+                It doesn&apos;t matter how organized you are — a surplus of toys will
                 always ensure your house is a mess waiting to happen.
                 Fortunately, getting kids on board with the idea of ditching
                 their stuff is a lot easier than it sounds.
@@ -106,16 +104,13 @@ const About = () => {
               >
                 <div className="mb30">
                   <h2 className="title text-capitalize">
-                    Let’s find the right <br className="d-none d-md-block" />{" "}
+                    Let&apos;s find the right <br className="d-none d-md-block" />{" "}
                     selling option for you
                   </h2>
                 </div>
                 <div className="why-chose-list style2">
                   <Features />
                 </div>
-                <Link href="#" className="ud-btn btn-dark">
-                  Learn More
-                </Link>
               </div>
             </div>
           </div>
@@ -129,7 +124,7 @@ const About = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="main-title text-center">
-                <h6>Trusted by the world’s best</h6>
+                <h6>Trusted by the world&apos;s best</h6>
               </div>
             </div>
             <div className="col-lg-12 text-center">

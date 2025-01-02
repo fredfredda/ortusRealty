@@ -34,11 +34,15 @@ const FeaturedListings = () => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(
+            typeof data.error === "string" ? data.error : "An error occured"
+          );
         } else {
           setListings(data.properties);
         }
       } catch (error) {
         console.error(error);
+        toast.error("An error occured");
       }
     };
     fetchData();
@@ -57,6 +61,9 @@ const FeaturedListings = () => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(
+            typeof data.error === "string" ? data.error : "An error occured"
+          );
         } else {
           removeProperty(propertyId);
         }
@@ -76,6 +83,10 @@ const FeaturedListings = () => {
           console.log(data.error);
           if (data.error === "Unauthorized") {
             toast.error("Please login to save properties");
+          } else {
+            toast.error(
+              typeof data.error === "string" ? data.error : "An error occured"
+            );
           }
         } else {
           appendProperty(propertyId);
@@ -83,6 +94,7 @@ const FeaturedListings = () => {
       }
     } catch (error) {
       console.error(error);
+      toast.error("An error occured");
     }
   };
 
@@ -134,12 +146,12 @@ const FeaturedListings = () => {
                 <div className="listing-style1">
                   <div className="list-thumb">
                     <ImageKit
-                    pathName={listing.images.split(',')[0]}
-                    width={382}
-                    height={248}
-                    loading="lazy"
-                    transformation={[{ quality: 60 }]}
-                    alt="Listing Image"
+                      pathName={listing.images.split(",")[0]}
+                      width={382}
+                      height={248}
+                      loading="lazy"
+                      transformation={[{ quality: 80 }]}
+                      alt="Listing Image"
                     />
                     <div className="sale-sticker-wrap">
                       <div className="list-tag rounded-0 fz12">
@@ -189,7 +201,12 @@ const FeaturedListings = () => {
                     )}
                     <hr className="mt-2 mb-2" />
                     <div className="list-meta2 d-flex justify-content-between align-items-center">
-                      <span className="for-what" style={{textTransform: "capitalize"}}>{listing.saletype_name}</span>
+                      <span
+                        className="for-what"
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        {listing.saletype_name}
+                      </span>
                       <div className="icons d-flex align-items-center">
                         <button
                           className="property-card-btn"

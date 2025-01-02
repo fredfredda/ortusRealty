@@ -6,7 +6,7 @@ import ChangePasswordForm from "@/components/property/dashboard/dashboard-profil
 import PersonalInfo from "@/components/property/dashboard/dashboard-profile/PersonalInfo";
 
 export const metadata = {
-  title: "Ortus Realty",
+  title: "Ortus Realty - Profile",
 };
 
 const GridFull3Col = () => {

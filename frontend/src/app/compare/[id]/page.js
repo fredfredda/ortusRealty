@@ -7,7 +7,7 @@ export const metadata = {
   title: "Ortus Realty - Compare Properties",
 };
 
-const DashboardCompare = ({ params }) => {
+const CompareProperties = ({ params }) => {
   const selectedIds = params.id.split("-");
   return (
     <>
@@ -48,4 +48,4 @@ const DashboardCompare = ({ params }) => {
   );
 };
 
-export default DashboardCompare;
+export default CompareProperties;

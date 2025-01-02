@@ -3,18 +3,18 @@ import React from "react";
 const services = [
   {
     icon: "flaticon-security",
-    title: "Property Rentals And Sales",
-    text: "We provide detailed property listings to help you find the best properties in your preferred location",
+    title: "Property Listings",
+    text: "We provide detailed property listings to help you find the best properties",
   },
   {
     icon: "flaticon-keywording",
     title: "Investment Opportunitites",
-    text: "We connect you with lucrative investment opportunities, offering market data to guide your decisions",
+    text: "We connect you with lucrative investment opportunities in your prefered location",
   },
   {
     icon: "flaticon-investment",
     title: "Brokerage Services",
-    text: "We provide personalized advice and insights to buyers, helping you make strategic decisions",
+    text: "We provide personalized advice and insights to help you make strategic decisions",
   },
 ];
 

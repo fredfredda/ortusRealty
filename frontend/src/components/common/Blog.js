@@ -14,7 +14,7 @@ const Blog = () => {
                 width={386}
                 height={271}
                 className="w-100 h-100 cover"
-                transformation={[{ quality: 20 }]}
+                transformation={[{ quality: 80 }]}
                 loading="lazy"
                 alt="blog"
               />

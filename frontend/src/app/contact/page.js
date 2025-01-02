@@ -3,7 +3,6 @@ import Footer from "@/components/home/home-v8/footer";
 import MobileMenu from "@/components/common/mobile-menu";
 import Form from "@/components/pages/contact/Form";
 import Office from "@/components/pages/contact/Office";
-import Image from "next/image";
 import Cta from "@/components/home/home-v9/Cta";
 import ImageKit from "@/components/common/ImageKit";
 
@@ -52,12 +51,12 @@ const Contact = () => {
 
             <div className="col-lg-5 offset-lg-2">
               <h2 className="mb10 text-capitalize">
-                We’d love to hear <br className="d-none d-lg-block" />
+                We&apos;d love to hear <br className="d-none d-lg-block" />
                 from you.
               </h2>
               <p className="text">
                 We are here to answer any question you may have. As a partner of
-                corporates, realton has more than 9,000 offices of all sizes and
+                corporates, Ortus Realty has more than 9,000 offices of all sizes and
                 all potential of session.
               </p>
             </div>

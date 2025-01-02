@@ -5,7 +5,7 @@ export const metadata = {
   title: "Ortus Realty - Reset password",
 };
 
-const Login = ({params}) => {
+const ResetPassword = ({params}) => {
   return (
     <>
       {/* Our Compare Area */}
@@ -23,4 +23,4 @@ const Login = ({params}) => {
   );
 };
 
-export default Login;
+export default ResetPassword;

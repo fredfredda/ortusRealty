@@ -90,7 +90,7 @@ const Testimonial = () => {
                   pathName={testimonial.imageSrc}
                   width={70}
                   height={71}
-                  transformation={[{ quality: 10 }]}
+                  transformation={[{ quality: 60 }]}
                   loading="lazy"
                   alt="testimonial image"
                 />

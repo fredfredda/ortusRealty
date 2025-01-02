@@ -72,7 +72,7 @@ const Home_V8 = () => {
       {/* Featured Listings */}
       <section className="pt0 pb80 pb30-md">
         <div className="container">
-          <div className="row  justify-content-between align-items-center">
+          <div className="row justify-content-between align-items-center">
             <div className="col-auto">
               <div
                 className="main-title"
@@ -179,7 +179,7 @@ const Home_V8 = () => {
               <div className="col-md-11 wow">
                 <div className="main-title">
                   <h2 className="title text-capitalize">
-                    Let’s find the right selling{" "}
+                    Let&apos;s find the right selling{" "}
                     <br className="d-none d-md-block" /> option for you
                   </h2>
                   <p className="text">

@@ -4,7 +4,6 @@
 import React, { useState } from "react";
 
 const SearchBox = ({filterFunctions}) => {
-  const [inputValue, setInputValue] = useState('');
   return (
     <div className="search_area">
       <input

@@ -19,7 +19,7 @@ const Header = () => {
 
   const pathname = usePathname();
 
-  const protectRoutes  = ['/profile', '/saved-properties'];
+  const protectRoutes = ["/profile", "/saved-properties"];
 
   const menuItems = {
     items: [
@@ -53,10 +53,13 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
       const data = await response.json();
       if (data.error) {
         console.log(data.error);
@@ -120,18 +123,6 @@ const Header = () => {
                   <div className="col-6 col-lg-auto">
                     <div className="text-center text-lg-end header_right_widgets">
                       <ul className="mb0 d-flex justify-content-center justify-content-sm-end p-0">
-                        <li className="d-none d-sm-block">
-                          <Link className="text-center mr15" href="#">
-                            <span className="flaticon-email" />
-                          </Link>
-                        </li>
-
-                        <li className="d-none d-sm-block">
-                          <a className="text-center mr20 notif" href="#">
-                            <span className="flaticon-bell" />
-                          </a>
-                        </li>
-
                         <li className=" user_setting">
                           <div className="dropdown">
                             <a
@@ -142,7 +133,9 @@ const Header = () => {
                               <Image
                                 width={44}
                                 height={44}
-                                src={`https://ui-avatars.com/api/?name=${session?.lastName+'+'+session?.firstName}&background=random&rounded=true&size=44`}
+                                src={`https://ui-avatars.com/api/?name=${
+                                  session?.lastName + "+" + session?.firstName
+                                }&background=random&rounded=true&size=44`}
                                 alt="user"
                               />
                             </a>
@@ -185,9 +178,7 @@ const Header = () => {
                     <div className="d-flex align-items-center">
                       <a
                         href={`/login?redirect=${pathname}`}
-                        className="login-info d-flex align-items-cente"
-                        // data-bs-toggle="modal"
-                        // data-bs-target="#loginSignupModal"
+                        className="login-info d-flex align-items-center"
                         role="button"
                       >
                         <i className="far fa-user-circle fz16 me-2" />{" "}

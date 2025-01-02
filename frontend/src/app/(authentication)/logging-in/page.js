@@ -11,6 +11,10 @@ const override = {
   borderColor: "#eb6753",
 };
 
+const metadata = {
+  title: "Ortus Realty - Logging you in"
+}
+
 const LoggingIn = () => {
   const setSession = sessionStore((state) => state.setSession);
   const router = useRouter();
@@ -40,7 +44,7 @@ const LoggingIn = () => {
         } else {
           localStorage.setItem("session", JSON.stringify(data));
           setSession(data);
-          if (redirect) {
+          if (redirect && redirect !== null) {
             router.push(redirect);
           } else {
             router.push("/");

@@ -30,6 +30,7 @@ const FeaturedListings = ({ data, colstyle, showFilter }) => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(typeof data.error === "string" ? data.error : "An error occured");
         } else {
           removeProperty(propertyId);
         }
@@ -49,13 +50,16 @@ const FeaturedListings = ({ data, colstyle, showFilter }) => {
           console.log(data.error);
           if (data.error === "Unauthorized") {
             toast.error("Please login to save properties");
+          } else {
+            toast.error(typeof data.error === "string" ? data.error : "An error occured");            
           }
         } else {
           appendProperty(propertyId);
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error(error);      
+      toast.error("An error occured");
     }
   };
 
@@ -94,7 +98,7 @@ const FeaturedListings = ({ data, colstyle, showFilter }) => {
                 height={248}
                 className="w-100  cover"
                 pathName={listing.images.split(",")[0]}
-                transformation={[{ quality: 60 }]}
+                transformation={[{ quality: 80 }]}
                 loading="lazy"
                 alt="listings"
               />

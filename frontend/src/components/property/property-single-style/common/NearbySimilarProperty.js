@@ -28,11 +28,13 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(typeof data.error === 'string' ? data.error.toString() : "An error occurred");
         } else {
           setListings(data.properties);
         }
       } catch (error) {
         console.error(error);
+        toast.error("An error occurred");
       }
     };
 
@@ -52,6 +54,7 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(typeof data.error === 'string' ? data.error : "An error occurred");
         } else {
           removeProperty(propertyId);
         }
@@ -71,13 +74,16 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
           console.log(data.error);
           if (data.error === "Unauthorized") {
             toast.error("Please login to save properties");
+          } else {
+            toast.error(typeof data.error === 'string' ? data.error : "An error occurred");
           }
         } else {
           appendProperty(propertyId);
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error(error);      
+      toast.error("An error occurred");
     }
   };
 
@@ -131,7 +137,7 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
                     width={382}
                     height={248}
                     className="w-100 h-100 cover"
-                    transformation={[{ quality: 60 }]}
+                    transformation={[{ quality: 80 }]}
                     loading="lazy"
                     pathName={listing.images.split(",")[0]}
                     alt="listings"
@@ -160,29 +166,29 @@ const NearbySimilarProperty = ({neighborhoodId, propertyId}) => {
                   <p className="list-text">{listing.prpty_location}</p>
                   {listing.property_type === "home" ? (
                     <div className="list-meta d-flex align-items-center">
-                      <a href="#">
+                      <p>
                         <span className="flaticon-bed" /> {listing.num_of_beds}{" "}
                         bed
-                      </a>
-                      <a href="#">
+                      </p>
+                      <p className="ml20">
                         <span className="flaticon-shower" />{" "}
                         {listing.num_of_bathrooms} bath
-                      </a>
-                      <a href="#">
+                      </p>
+                      <p className="ml20">
                         <span className="flaticon-expand" />{" "}
                         {listing.prpty_size} sqft
-                      </a>
+                      </p>
                     </div>
                   ) : (
                     <div className="list-meta d-flex align-items-center">
-                      <a href="#">
+                      <p>
                         <span className="flaticon-bird-house" />{" "}
                         {listing.category_name}
-                      </a>
-                      <a href="#">
+                      </p>
+                      <p className="ml20">
                         <span className="flaticon-expand" />{" "}
                         {listing.prpty_size} sqft
-                      </a>
+                      </p>
                     </div>
                   )}
                   <hr className="mt-2 mb-2" />

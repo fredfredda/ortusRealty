@@ -12,7 +12,7 @@ const ContactInfo = () => {
         id: 2,
         title: "Need Live Support?",
         email: "ortusrealty@ortus.com",
-        emailHref: "mailto:ibthemes21@gmail.com",
+        emailHref: "mailto:ortusrealty@ortus.com",
       },
   ];
 

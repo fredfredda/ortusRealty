@@ -2,8 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
-import { useInView } from "react-intersection-observer";
-import Link from "next/link";
 
 const FunFact = () => {
   const funFacts = [

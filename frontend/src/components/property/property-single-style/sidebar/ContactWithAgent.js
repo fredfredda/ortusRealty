@@ -1,5 +1,4 @@
 import ImageKit from "@/components/common/ImageKit";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -61,7 +60,7 @@ const ContactWithAgent = ({ agentId, setAgentEmail }) => {
               <ImageKit
                 width={90}
                 height={90}
-                transformation={[{ quality: 60 }]}
+                transformation={[{ quality: 80 }]}
                 className="w90"
                 pathName={!agent.profile_pic ? "OrtusRealty/agents/agent_avatar.png" : agent.profile_pic}
                 style={{ borderRadius: "20%" }}

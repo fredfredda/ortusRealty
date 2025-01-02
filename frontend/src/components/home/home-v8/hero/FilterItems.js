@@ -1,7 +1,6 @@
 "use client";
 import Select from "react-select";
-import Slider, { Range } from "rc-slider";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const FilterItems = ({filterFunctions}) => {
 

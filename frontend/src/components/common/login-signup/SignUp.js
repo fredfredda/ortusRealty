@@ -13,9 +13,8 @@ const override = {
 };
 
 const SignUp = () => {
-
   const setSession = sessionStore((state) => state.setSession);
-  
+
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -25,6 +24,7 @@ const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   let [color, setColor] = useState("#ffffff");
 
@@ -34,36 +34,57 @@ const SignUp = () => {
   };
 
   const registerUser = async () => {
-    setIsLoading(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-      }),
-    });
-    const data = await response.json();
-    if (data.error) {
-      console.log(data.error);
-      toast.error(data.error);
-    } else {
-      localStorage.setItem("session", JSON.stringify(data));
-      setSession(data);
-      toast.success("account created successfully");
-      document.getElementById("signupform").reset();
-      if (redirect) {
-        router.replace(redirect);
-      } else {
-        router.replace("/");
-      }
+    if (confirmedPassword !== password) {
+      toast.error("passwords do not match");
+      return;
     }
-    setIsLoading(false);
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (data.error) {
+        console.log(data.error);
+        toast.error(
+          typeof data.error === "string" ? data.error : "An error occured"
+        );
+      } else {
+        localStorage.setItem("session", JSON.stringify(data));
+        setSession(data);
+        toast.success("account created successfully");
+        document.getElementById("signupform").reset();
+        if (redirect && redirect !== null) {
+          if (redirect === "/explore") {
+            router.replace("/explore?showFilter=true");
+          } else {
+            router.replace(redirect);
+          }
+        } else {
+          router.replace("/");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occured");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -116,6 +137,18 @@ const SignUp = () => {
       </div>
       {/* End Password */}
 
+      <div className="mb20">
+        <label className="form-label fw600 dark-color">Confirm password</label>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="Confirm your password"
+          onChange={(e) => setConfirmedPassword(e.target.value)}
+          required
+        />
+      </div>
+      {/* End Password */}
+
       <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
         <a className="fz14 ff-heading" href={`/login?redirect=${redirect}`}>
           Already have an account? Sign In
@@ -135,9 +168,7 @@ const SignUp = () => {
               data-testid="loader"
             />
           ) : (
-            <>
-              Create account
-            </>
+            <>Create account</>
           )}
         </button>
       </div>

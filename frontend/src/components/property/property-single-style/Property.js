@@ -12,6 +12,7 @@ import PropertyGallery from "@/components/property/property-single-style/single-
 import ContactWithAgent from "@/components/property/property-single-style/sidebar/ContactWithAgent";
 import ClipLoader from "react-spinners/ClipLoader";
 import PropertyAddress from "./common/PropertyAddress";
+import toast from "react-hot-toast";
 
 const override = {
   display: "block",
@@ -21,7 +22,7 @@ const override = {
 
 const Property = ({ id }) => {
   let [isLoading, setIsLoading] = useState(true);
-  var [propertyInfo, setPropertyInfo] = useState({});
+  const [propertyInfo, setPropertyInfo] = useState({});
   let [color, setColor] = useState("#eb6753");
   const [agentEmail, setAgentEmail] = useState("");
 
@@ -35,12 +36,14 @@ const Property = ({ id }) => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(typeof data.error === 'string' ? data.error.toString() : "An error occurred");
         } else {
-          setPropertyInfo((propertyInfo) => ({ ...propertyInfo, ...data }));
+          setPropertyInfo((prev) => ({ ...prev, ...data }));
           setIsLoading(false);
         }
       } catch (error) {
         console.error(error);
+        toast.error("An error occurred");
       }
     };
     fetchData();

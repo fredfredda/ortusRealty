@@ -53,6 +53,7 @@ const ChangePasswordForm = () => {
       }
     } catch (error) {
       console.error(error);
+      toast.error("An error occured");
     } finally {
       setIsLoading(false);
     }

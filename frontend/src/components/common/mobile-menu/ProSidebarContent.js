@@ -39,6 +39,14 @@ const ProSidebarContent = () => {
   return (
     <Sidebar width="100%" backgroundColor="#fff" className="my-custom-class">
       <Menu>
+      <MenuItem
+          component={
+            <Link className={path === "/" ? "active" : ""} href="/" />
+          }
+        >
+          Home
+        </MenuItem>
+
         {mobileMenuItems.map((item, index) => (
           <SubMenu
             key={index}
@@ -89,6 +97,7 @@ const ProSidebarContent = () => {
             )}
           </SubMenu>
         ))}
+
         <MenuItem
           component={
             <Link className={path === "/about" ? "active" : ""} href="/about" />
@@ -96,6 +105,7 @@ const ProSidebarContent = () => {
         >
           About
         </MenuItem>
+
         <MenuItem
           component={
             <Link

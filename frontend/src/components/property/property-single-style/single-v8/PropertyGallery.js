@@ -33,7 +33,7 @@ const PropertyGallery = ({ images }) => {
               <SwiperSlide key={i}>
                 <Item
                   original={`${imagekitURL}/${item}?tr=w-1206,h-671,f-webp,q-80`}
-                  thumbnail={`${imagekitURL}/${item}?tr=w-1206,h-671,f-webp,q-60`}
+                  thumbnail={`${imagekitURL}/${item}?tr=w-1206,h-671,f-webp,q-80`}
                   width={1206}
                   height={671}
                 >
@@ -75,7 +75,7 @@ const PropertyGallery = ({ images }) => {
                   <Image
                     height={90}
                     width={83}
-                    src={`${imagekitURL}/${item}?tr=w-83,h-90,f-webp,q-60`}
+                    src={`${imagekitURL}/${item}?tr=w-83,h-90,f-webp,q-80`}
                     alt="image"
                     className="w-100 bdrs12 cover pointer"
                   />

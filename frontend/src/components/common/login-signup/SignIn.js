@@ -27,7 +27,7 @@ const SignIn = ({ setPageTitle }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verificationEmail, setVerificationEmail] = useState("");
-  
+
   const [isLoading, setIsLoading] = useState(false);
   let [color, setColor] = useState("#ffffff");
 
@@ -55,14 +55,20 @@ const SignIn = ({ setPageTitle }) => {
       );
       const data = await response.json();
       if (data.error) {
-        toast.error(data.error);
+        toast.error(
+          typeof data.error === "string" ? data.error : "An error occured"
+        );
       } else {
         localStorage.setItem("session", JSON.stringify(data));
         setSession(data);
         toast.success("logged in successfully");
         document.getElementById("loginForm").reset();
-        if (redirect) {
-          router.replace(redirect);
+        if (redirect && redirect !== null) {
+          if (redirect === "/explore") {
+            router.replace("/explore?showFilter=true");
+          } else {
+            router.replace(redirect);
+          }
         } else {
           router.replace("/");
         }
@@ -77,20 +83,25 @@ const SignIn = ({ setPageTitle }) => {
   const handleSendEmail = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/auth/sendemail`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email: verificationEmail,
-        }),
-      })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/auth/sendemail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email: verificationEmail,
+          }),
+        }
+      );
 
       const data = await response.json();
       if (data.error) {
-        toast.error(typeof data.error === "string" ? data.error : "An error occurred");
+        toast.error(
+          typeof data.error === "string" ? data.error : "An error occurred"
+        );
       } else {
         localStorage.setItem("resetPasswordToken", JSON.stringify(data.token));
         setEmailSent(true);
@@ -98,10 +109,10 @@ const SignIn = ({ setPageTitle }) => {
     } catch (error) {
       console.error(error);
       toast.error("An error occurred");
-    } finally{
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <form id="loginForm" className="form-style1">

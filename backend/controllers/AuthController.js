@@ -46,7 +46,7 @@ const sendEmail = async (req, res) => {
       from: "onboarding@resend.dev",
       to: email,
       subject: "Password Reset",
-      html: `<strong>Click this <a href=${resetUrl}>word</a> to reset your password</strong>`,
+      html: `<strong>Click <a href=${resetUrl}>here</a> to reset your password</strong>`,
     });
 
     if (error) {

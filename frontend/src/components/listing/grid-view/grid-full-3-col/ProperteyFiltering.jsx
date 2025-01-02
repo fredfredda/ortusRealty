@@ -5,6 +5,7 @@ import FeaturedListings from "./FeatuerdListings";
 import PaginationTwo from "../../PaginationTwo";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import ClipLoader from "react-spinners/ClipLoader";
+import toast from "react-hot-toast";
 
 const override = {
   display: "block",
@@ -25,7 +26,6 @@ export default function ProperteyFiltering() {
   const [pageNumber, setPageNumber] = useState(1);
   const [colstyle, setColstyle] = useState(false);
   const [pageItems, setPageItems] = useState([]);
-  const [pageContentTrac, setPageContentTrac] = useState([]);
   const itemsPerPage = 6;
 
   const [color, setColor] = useState("#eb6753");
@@ -50,11 +50,13 @@ export default function ProperteyFiltering() {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(typeof data.error === "string" ? data.error : "An error occured");          
         } else {
           setSavedProperties(data);
         }
       } catch (error) {
         console.error(error);
+        toast.error("An error occured");
       } finally {
         setIsLoading(false);
       }

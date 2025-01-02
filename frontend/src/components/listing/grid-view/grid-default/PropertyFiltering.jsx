@@ -101,12 +101,14 @@ export default function PropertyFiltering() {
         );
         const data = await response.json();
         if (data.error) {
-          console.log(data.error);
+          console.log(data.error);          
+          toast.error(typeof data.error === "string" ? data.error : "An error occured");
         } else {
           setProperties(data.properties);
         }
       } catch (error) {
-        console.error(error);
+        console.error(error);        
+        toast.error("An error occured");
       }
     };
     fetchData();

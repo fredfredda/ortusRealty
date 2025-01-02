@@ -31,13 +31,14 @@ const MobileMenu = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/users/logout", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/logout`, {
         method: "POST",
         credentials: "include",
       });
       const data = await response.json();
       if (data.error) {
         console.log(data.error);
+        toast.error(typeof data.error === "string" ? data.error : "An error occured");
       } else {
         localStorage.removeItem("session");
         deleteSession();

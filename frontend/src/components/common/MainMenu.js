@@ -8,6 +8,9 @@ const MainMenu = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    if (pathname.split("/")[1] === "") {
+      setTopMenu("home");
+    }
     if (pathname.split("/")[1] === "contact") {
       setTopMenu("contact");
     }
@@ -30,6 +33,15 @@ const MainMenu = () => {
 
   return (
     <ul className="ace-responsive-menu">
+      <li className="visible_list dropitem">
+        <a className="list-item" href="/">
+          <span className={topMenu == "home" ? "title menuActive" : "title"}>
+            Home
+          </span>
+        </a>
+      </li>
+      {/* End property Items */}
+
       <li className="megamenu_style dropitem">
         <a className="list-item" href="#">
           <span className={topMenu == "explore" ? "title menuActive" : "title"}>

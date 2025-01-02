@@ -31,11 +31,13 @@ const FeaturedListings = ({ data, colstyle, selectedIds, setSelectedIds }) => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
+          toast.error(typeof data.error === "string" ? data.error : "An error occured");
         } else {
           removeProperty(propertyId);
         }
       } catch (error) {
-        console.error(error);
+        console.error(error);        
+        toast.error("An error occured");
       }
     }
     window.location.reload();
@@ -88,7 +90,7 @@ const FeaturedListings = ({ data, colstyle, selectedIds, setSelectedIds }) => {
                     width={382}
                     height={248}
                     className="w-100  cover"
-                    transformation={[{ quality: 60 }]}
+                    transformation={[{ quality: 80 }]}
                     pathName={listing.images.split(",")[0]}
                     loading="lazy"
                     alt="listings"
@@ -170,18 +172,7 @@ const FeaturedListings = ({ data, colstyle, selectedIds, setSelectedIds }) => {
                       style={{ textTransform: "capitalize" }}
                     >
                       {listing.saletype_name}
-                    </span>
-                    {/* <div className="icons d-flex align-items-center">
-                  <a href="#">
-                    <span className="flaticon-fullscreen" />
-                  </a>
-                  <a href="#">
-                    <span className="flaticon-new-tab" />
-                  </a>
-                  <a href="#">
-                    <span className="flaticon-like" />
-                  </a>
-                </div> */}
+                  </span>
                   </div>
                 </div>
               </div>

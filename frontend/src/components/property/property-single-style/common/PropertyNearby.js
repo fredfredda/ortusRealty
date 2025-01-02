@@ -1,19 +1,30 @@
-'use client';
+"use client";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const PropertyNearby = ({ neighborhoodId }) => {
   const [infrastructures, setInfrastructures] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/importantinfrastructure/${neighborhoodId}`
-      );
-      const data = await response.json();
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        setInfrastructures(data.importantInfrastructure);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/importantinfrastructure/${neighborhoodId}`
+        );
+        const data = await response.json();
+        if (data.error) {
+          console.log(data.error);
+          toast.error(
+            typeof data.error === "string"
+              ? data.error.toString()
+              : "An error occurred"
+          );
+        } else {
+          setInfrastructures(data.importantInfrastructure);
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("An error occurred");
       }
     };
 
@@ -37,10 +48,10 @@ const PropertyNearby = ({ neighborhoodId }) => {
                 className="nearby d-sm-flex align-items-center mb20"
               >
                 <div className="details">
-                <p className="dark-color fw600 mb-0">{item.infrastructure_type}</p>
-                  <p className="text mb-0">
-                    {item.infrastructure_name}
+                  <p className="dark-color fw600 mb-0">
+                    {item.infrastructure_type}
                   </p>
+                  <p className="text mb-0">{item.infrastructure_name}</p>
                 </div>
               </div>
             </div>
