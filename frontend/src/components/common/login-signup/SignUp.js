@@ -17,7 +17,7 @@ const SignUp = () => {
 
   const router = useRouter();
 
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams() || {};
   const redirect = searchParams.get("redirect") || "/";
 
   const [email, setEmail] = useState("");

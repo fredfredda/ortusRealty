@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import sortListings from "@/utilis/SortListings";
 
 export default function PropertyFiltering() {
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams() || {};
   const search = searchParams.get("search") || "";
   const saletype = searchParams.get("saleType") || "";
   const propertyType = searchParams.get("propertyType") || "";
