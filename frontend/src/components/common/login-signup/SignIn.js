@@ -75,6 +75,7 @@ const SignIn = ({ setPageTitle }) => {
       }
     } catch (error) {
       console.error(error);
+    toast.error("An error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +148,7 @@ const SignIn = ({ setPageTitle }) => {
               className="fz14 ff-heading"
               href={`/register?redirect=${redirect}`}
             >
-              Don't have an account? Sign Up
+              Don&apos;t have an account? Sign Up
             </a>
             <p
               className="fz14 ff-heading mt10 forgot_password"
