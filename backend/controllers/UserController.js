@@ -8,7 +8,7 @@ import {
   getAgentsFromDb,
   getSingleAgent,
 } from "../models/UserModel.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 import getTimeWithTimeZone from "../utils/helpers/getTimeWithTimeZone.js";
 import assignId from "../utils/helpers/assignId.js";
