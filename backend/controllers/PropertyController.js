@@ -26,7 +26,7 @@ const getAllProperties = async (req, res) => {
     }
     // filter by search input
     let propertiesByName = allProperties.filter((property) =>
-      property["prpty_name"].toLowerCase().includes(search.toLowerCase() || "")
+      property["prpty_name"].toLowerCase().includes(search?.toLowerCase() || "")
     );
     // filter by property type
     let propertiesByType = propertiesByName.filter((property) =>
