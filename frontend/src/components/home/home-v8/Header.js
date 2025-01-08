@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
+import removeCookie from "@/utilis/removeCookie.js";
 import toast from "react-hot-toast";
 
 const Header = () => {
@@ -74,6 +75,7 @@ const Header = () => {
         } else {
           window.location.reload();
         }
+        removeCookie("jwt");
       }
     } catch (error) {
       console.log(error);

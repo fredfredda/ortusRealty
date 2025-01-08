@@ -8,14 +8,14 @@ const middleware = async (req) => {
   const isAuthRoute = authRoutes.includes(currentPath);
   if (isProtectedRoute) {
     const cookie = req.cookies.get('jwt');
-    if (!cookie || cookie === "undefined" || cookie === null) {
+    if (!cookie || cookie === undefined || cookie === null) {
       return NextResponse.redirect(new URL(`/login?redirect=${currentPath}`, req.url));
     }
   }
   
   if (isAuthRoute) {
     const cookie = req.cookies.get('jwt');
-    if (cookie && cookie !== "undefined" && cookie !== null) {
+    if (cookie && cookie !== undefined && cookie !== null) {
       return NextResponse.redirect( new URL("/", req.url));
     }
   }
