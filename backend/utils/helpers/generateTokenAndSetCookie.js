@@ -9,7 +9,7 @@ const generateTokenAndSetCookie = (userId, email, username, res)=>{
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production' ? true : false,
         maxAge: 1 * 24 * 60 * 60 * 1000,
-        sameSite: "Strict",
+        sameSite: "None",
     })
 
     return token;
