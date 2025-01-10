@@ -65,8 +65,10 @@ const Header = () => {
         console.log(data.error);
         if (data.error === "Unauthorized") {
           toast.error("Unauthorized");
+        } else {
+          toast.error(typeof data.error === "string" ? data.error : "An error occured");
         }
-      } else {
+      } else if (data.success) {
         localStorage.removeItem("session");
         deleteSession();
         if (protectRoutes.includes(pathname)) {
