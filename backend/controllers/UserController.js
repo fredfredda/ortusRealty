@@ -190,7 +190,7 @@ const userLogout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
     console.log("user logged out");
-    return res.status(200).json({ success: "Log out successful" });
+    return res.status(201).json({ success: "Log out successful" });
   } catch (error) {
     return res.status(500).json({ error: error });
   }
