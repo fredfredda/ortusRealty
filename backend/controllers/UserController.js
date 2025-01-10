@@ -50,7 +50,7 @@ const googleOAuthHandler = async (req, res) => {
         });
         const data = await response.json();
         if (data.error) return { error: data.error_description };
-        
+
         return data;
       } catch (error) {
         console.log(error);
@@ -107,16 +107,9 @@ const userSignUp = async (req, res) => {
   try {
     const newUser = await getUserByEmail(email);
     if (newUser.length > 0)
-      return res
-        .status(400)
-        .json({ error: "Email already exists" });
+      return res.status(400).json({ error: "Email already exists" });
 
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !password
-    )
+    if (!firstName || !lastName || !email || !password)
       return res.status(400).json({ error: "All fields are required" });
 
     bcrypt.hash(password, saltRounds, async (error, hashed_password) => {
@@ -188,7 +181,12 @@ const userLogin = async (req, res) => {
 
 const userLogout = (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      secure: true,
+      maxAge: 0,
+      sameSite: "None",
+    });
     console.log("user logged out");
     return res.status(201).json({ success: "Log out successful" });
   } catch (error) {
@@ -218,23 +216,28 @@ const editPassword = async (req, res) => {
   const { password, newPassword } = req.body;
   try {
     const user = await getUserById(userId);
-    if (user.length === 0) return res.status(400).json({ error: "User not found" });
+    if (user.length === 0)
+      return res.status(400).json({ error: "User not found" });
 
     const oldPassword = user[0].pswrd;
 
-    if (oldPassword === 'google') return res.status(400).json({ error: "You signed up with Google" });
-    
+    if (oldPassword === "google")
+      return res.status(400).json({ error: "You signed up with Google" });
+
     const isPasswordCorrect = await bcrypt.compare(password, oldPassword);
     if (isPasswordCorrect === false)
-      return res.status(400).json({ error: "Make sure your current password is correct" });
+      return res
+        .status(400)
+        .json({ error: "Make sure your current password is correct" });
 
     bcrypt.hash(newPassword, saltRounds, async (error, hashedPassword) => {
       if (error) {
         console.error("Error hashing password:", error);
         return res.status(500).json(error);
       }
-      let modifyPassword = await updatePassword( userId, hashedPassword );
-      if (modifyPassword.error) return res.status(500).json({error: modifyPassword});
+      let modifyPassword = await updatePassword(userId, hashedPassword);
+      if (modifyPassword.error)
+        return res.status(500).json({ error: modifyPassword });
       return res.status(201).json({ success: "Password updated" });
     });
   } catch (error) {
@@ -261,27 +264,27 @@ const deleteAccount = async (req, res) => {
 };
 
 const getAgents = async (req, res) => {
-try {
-  const agents = await getAgentsFromDb();
-  if (agents.error) return res.status(500).json({ error: agents });
-  return res.status(200).json({agents});  
-} catch (error) {
-  console.log(error);
-  return res.status(500).json({ error });
-}
-}
+  try {
+    const agents = await getAgentsFromDb();
+    if (agents.error) return res.status(500).json({ error: agents });
+    return res.status(200).json({ agents });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
+  }
+};
 
 const getAgent = async (req, res) => {
-try {
-  const { agentId } = req.params;
-  const agent = await getSingleAgent(agentId);
-  if (agent.error) return res.status(500).json({ error: agent });
-  return res.status(200).json({agent: agent[0]});  
-} catch (error) {
-  console.log(error);
-  return res.status(500).json({ error });
-}
-}
+  try {
+    const { agentId } = req.params;
+    const agent = await getSingleAgent(agentId);
+    if (agent.error) return res.status(500).json({ error: agent });
+    return res.status(200).json({ agent: agent[0] });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
+  }
+};
 
 export {
   userSignUp,
