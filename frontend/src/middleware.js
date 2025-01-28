@@ -1,23 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 const middleware = async (req) => {
   const protectedRoutes = ["/profile", "/saved-properties"];
-  const currentPath = req.nextUrl.pathname;
-  console.log("currentPath:", currentPath);
-  const isProtectedRoute = protectedRoutes.includes(currentPath);
   const authRoutes = ["/login", "/register", "/reset-password"];
-  const isAuthRoute = authRoutes.includes(currentPath);
-  if (isProtectedRoute) {
-    const cookie = req.cookies.get('jwt');
-    if (!cookie || cookie === undefined || cookie === null) {
-      return NextResponse.redirect(new URL(`/login?redirect=${currentPath}`, req.url));
+  const currentPath = req.nextUrl.pathname;
+  const cookie = req.cookies.get("jwt");
+
+  if (protectedRoutes.includes(currentPath)) {
+    if (!cookie) {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${currentPath}`, req.url)
+      );
     }
   }
-  
-  if (isAuthRoute) {
-    const cookie = req.cookies.get('jwt');
-    if (cookie && cookie !== undefined && cookie !== null) {
-      return NextResponse.redirect( new URL("/", req.url));
+
+  if (authRoutes.includes(currentPath)) {
+    if (cookie) {
+      return NextResponse.redirect(new URL("/", req.url));
     }
   }
 
