@@ -6,7 +6,7 @@ const generateTokenAndSetCookie = (userId, email, username, res)=>{
     })
 
     res.cookie("jwt", token,{
-        httpOnly: true,
+        httpOnly: process.env.NODE_ENV === 'production' ? false : true,
         secure: process.env.NODE_ENV === 'production' ? true : false,
         maxAge: 1 * 24 * 60 * 60 * 1000,
         sameSite: process.env.NODE_ENV === 'production' ? "None" : "Strict",
