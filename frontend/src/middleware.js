@@ -20,7 +20,9 @@ const middleware = async (req) => {
     }
   }
 
-  return NextResponse.next();
+  return NextResponse.redirect(new URL("/about", req.url));
+
+  // return NextResponse.next();
 };
 
 export { middleware };
