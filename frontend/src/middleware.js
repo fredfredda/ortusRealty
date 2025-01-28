@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 const middleware = async (req) => {
   const protectedRoutes = ["/profile", "/saved-properties"];
   const currentPath = req.nextUrl.pathname;
+  console.log("currentPath:", currentPath);
   const isProtectedRoute = protectedRoutes.includes(currentPath);
-  const authRoutes = ["/login", "/register"];
+  const authRoutes = ["/login", "/register", "/reset-password"];
   const isAuthRoute = authRoutes.includes(currentPath);
   if (isProtectedRoute) {
     const cookie = req.cookies.get('jwt');
