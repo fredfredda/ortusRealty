@@ -13,8 +13,10 @@ import { isLoadingStore } from "@/store/isLoading";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import { toast } from "react-hot-toast";
 import ImageKit from "@/components/common/ImageKit";
+import { sessionStore } from "@/store/session";
 
 const FeaturedListings = () => {
+  const session = sessionStore((state) => state.session);
   const isLoading = isLoadingStore((state) => state.isLoading);
 
   const savedProperties = savedPropertiesStore(
@@ -49,13 +51,19 @@ const FeaturedListings = () => {
   }, []);
 
   const handleSaveUnsave = async (propertyId) => {
+    if (!session?.userId) {
+      toast.error("Login to save/unsave properties");
+      return;
+    }
     try {
       if (savedProperties.includes(propertyId)) {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/unsaveproperty/${propertyId}`,
           {
             headers: {
-              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+              authorization: `Bearer ${JSON.parse(
+                localStorage.getItem("token")
+              )}`,
             },
             method: "DELETE",
             credentials: "include",
@@ -77,7 +85,9 @@ const FeaturedListings = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+              authorization: `Bearer ${JSON.parse(
+                localStorage.getItem("token")
+              )}`,
             },
             credentials: "include",
           }

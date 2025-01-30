@@ -9,8 +9,10 @@ import Link from "next/link";
 import formatMoney from "@/utilis/FormatMoney";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import { toast } from "react-hot-toast";
+import { sessionStore } from "@/store/session";
 
 const FeaturedListings = ({ data, colstyle, showFilter }) => {
+  const session = sessionStore((state) => state.session);
   const savedProperties = savedPropertiesStore(
     (state) => state.savedProperties
   );
@@ -18,6 +20,10 @@ const FeaturedListings = ({ data, colstyle, showFilter }) => {
   const removeProperty = savedPropertiesStore((state) => state.removeProperty);
 
   const handleSaveUnsave = async (propertyId) => {
+    if (!session?.userId){
+      toast.error("Login to save/unsave properties");
+      return;
+    }
     try {
       if (savedProperties.includes(propertyId)) {
         const response = await fetch(
