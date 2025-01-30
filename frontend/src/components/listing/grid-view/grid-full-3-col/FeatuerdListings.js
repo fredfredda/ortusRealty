@@ -5,6 +5,7 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import formatMoney from "@/utilis/FormatMoney";
 import { savedPropertiesStore } from "@/store/savedProperties";
 import ImageKit from "@/components/common/ImageKit";
+import toast from "react-hot-toast";
 
 const FeaturedListings = ({ data, colstyle, selectedIds, setSelectedIds }) => {
   const removeProperty = savedPropertiesStore((state) => state.removeProperty);
@@ -24,16 +25,19 @@ const FeaturedListings = ({ data, colstyle, selectedIds, setSelectedIds }) => {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/unsaveproperty/${id}`,
           {
+            headers: {
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            },
             method: "DELETE",
             credentials: "include",
           }
         );
         const data = await response.json();
         if (data.error) {
-          console.log(data.error);
+          console.error(data.error);
           toast.error(typeof data.error === "string" ? data.error : "An error occured");
         } else {
-          removeProperty(propertyId);
+          removeProperty(id);
         }
       } catch (error) {
         console.error(error);        

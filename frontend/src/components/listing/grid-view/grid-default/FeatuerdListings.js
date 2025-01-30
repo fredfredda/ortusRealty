@@ -23,6 +23,9 @@ const FeaturedListings = ({ data, colstyle, showFilter }) => {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/unsaveproperty/${propertyId}`,
           {
+            headers: {
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            },
             method: "DELETE",
             credentials: "include",
           }
@@ -41,6 +44,7 @@ const FeaturedListings = ({ data, colstyle, showFilter }) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
             },
             credentials: "include",
           }

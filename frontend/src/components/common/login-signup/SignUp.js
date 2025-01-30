@@ -43,7 +43,7 @@ const SignUp = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/signup`,
+        '/api/auth/signup',
         {
           method: "POST",
           headers: {
@@ -65,8 +65,9 @@ const SignUp = () => {
           typeof data.error === "string" ? data.error : "An error occured"
         );
       } else {
-        localStorage.setItem("session", JSON.stringify(data));
-        setSession(data);
+        localStorage.setItem("session", JSON.stringify(data.user));
+        localStorage.setItem("token", JSON.stringify(data.token));
+        setSession(data.user);
         toast.success("account created successfully");
         document.getElementById("signupform").reset();
         if (redirect && redirect !== null) {

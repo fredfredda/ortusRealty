@@ -49,6 +49,9 @@ export default function RootLayout({ children }) {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/savedproperties`,
           {
+            headers: {
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`
+            },
             method: "GET",
             credentials: "include",
           }
@@ -80,6 +83,9 @@ export default function RootLayout({ children }) {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/auth/isloggedin`,
           {
+            headers: {
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token")) || ""}`,
+            },
             method: "GET",
             credentials: "include",
           }
@@ -91,7 +97,7 @@ export default function RootLayout({ children }) {
           if (data.isLoggedIn === true) {
             const session_ = JSON.parse(localStorage.getItem("session"));
             setSession(session_);
-          } else {
+          } else if (data.isLoggedIn === false) {
             localStorage.removeItem("session");
             deleteSession();
             resetProperties();

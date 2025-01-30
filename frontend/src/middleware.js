@@ -2,12 +2,17 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 const middleware = async (req) => {
-  const protectedRoutes = ["/profile", "/saved-properties"];
+  const protectedRoutes = ["/profile", "/saved-properties", "/compare"];
   const authRoutes = ["/login", "/register", "/reset-password"];
+  const currentHref = req.nextUrl.href;
   const currentPath = req.nextUrl.pathname;
-  const cookie = cookies().get("jwt")?.value;
+  const cookie = cookies().get("token")?.value;
 
-  if (protectedRoutes.includes(currentPath)) {
+  if (
+    protectedRoutes.some((protectedRoute) =>
+      currentHref.includes(protectedRoute)
+    )
+  ) {
     if (!cookie) {
       return NextResponse.redirect(
         new URL(`/login?redirect=${currentPath}`, req.url)
@@ -15,7 +20,7 @@ const middleware = async (req) => {
     }
   }
 
-  if (authRoutes.includes(currentPath)) {
+  if (authRoutes.some((authRoute) => currentHref.includes(authRoute))) {
     if (cookie) {
       return NextResponse.redirect(new URL("/", req.url));
     }

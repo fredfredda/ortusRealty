@@ -81,7 +81,7 @@ const googleOAuthHandler = async (req, res) => {
     }
 
     const userFromDb = user.length > 0 ? user : await getUserByEmail(email);
-    generateTokenAndSetCookie(
+    const token = generateTokenAndSetCookie(
       userFromDb[0].id,
       userFromDb[0].email,
       userFromDb[0].username,
@@ -89,11 +89,14 @@ const googleOAuthHandler = async (req, res) => {
     );
     console.log("Google user logged in");
     return res.status(201).json({
-      userId: userFromDb[0].id,
-      email: userFromDb[0].email,
-      username: userFromDb[0].username,
-      firstName: userFromDb[0].first_name,
-      lastName: userFromDb[0].last_name,
+      user: {
+        userId: userFromDb[0].id,
+        email: userFromDb[0].email,
+        username: userFromDb[0].username,
+        firstName: userFromDb[0].first_name,
+        lastName: userFromDb[0].last_name,
+      },
+      token,
     });
   } catch (error) {
     console.log(error);
@@ -129,7 +132,7 @@ const userSignUp = async (req, res) => {
       if (insertUser.error) return res.status(500).json(insertUser);
 
       const user = await getUserByEmail(email);
-      generateTokenAndSetCookie(
+      const token = generateTokenAndSetCookie(
         user[0].id,
         user[0].email,
         user[0].username,
@@ -137,11 +140,14 @@ const userSignUp = async (req, res) => {
       );
       console.log("user registered");
       return res.status(201).json({
-        userId: user[0].id,
-        email: user[0].email,
-        username: user[0].username,
-        firstName: user[0].first_name,
-        lastName: user[0].last_name,
+        user: {
+          userId: user[0].id,
+          email: user[0].email,
+          username: user[0].username,
+          firstName: user[0].first_name,
+          lastName: user[0].last_name,
+        },
+        token,
       });
     });
   } catch (error) {
@@ -162,16 +168,19 @@ const userLogin = async (req, res) => {
     if (isPasswordCorrect === false)
       return res.status(400).json({ error: "Incorrect password" });
 
-    generateTokenAndSetCookie(user[0].id, user[0].email, user[0].username, res);
+    const token = generateTokenAndSetCookie(user[0].id, user[0].email, user[0].username, res);
 
     console.log("user logged in");
 
     return res.status(201).json({
-      userId: user[0].id,
-      email: user[0].email,
-      username: user[0].username,
-      firstName: user[0].first_name,
-      lastName: user[0].last_name,
+      user: {
+        userId: user[0].id,
+        email: user[0].email,
+        username: user[0].username,
+        firstName: user[0].first_name,
+        lastName: user[0].last_name,
+      },
+      token,
     });
   } catch (error) {
     console.log(error);

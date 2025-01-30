@@ -37,6 +37,7 @@ const ChangePasswordForm = () => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
           },
           body: JSON.stringify({
             password: passwords.Oldpassword,

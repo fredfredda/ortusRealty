@@ -53,24 +53,25 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/logout`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
       const data = await response.json();
       if (data.error) {
         console.log(data.error);
         if (data.error === "Unauthorized") {
           toast.error("Unauthorized");
         } else {
-          toast.error(typeof data.error === "string" ? data.error : "An error occured");
+          toast.error(
+            typeof data.error === "string" ? data.error : "An error occured"
+          );
         }
       } else if (data.success) {
         localStorage.removeItem("session");
+        localStorage.removeItem("token");
         deleteSession();
+        toast.success("Logged out successfully");
         if (protectRoutes.includes(pathname)) {
           router.replace("/");
         } else {

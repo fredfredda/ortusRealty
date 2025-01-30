@@ -28,6 +28,9 @@ const PersonalInfo = () => {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/profile`,
           {
+            headers: {
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            },
             method: "GET",
             credentials: "include",
           }
@@ -64,6 +67,7 @@ const PersonalInfo = () => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
           },
           body: JSON.stringify({
             firstName: userInfo.firstName,

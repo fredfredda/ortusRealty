@@ -23,7 +23,7 @@ const LoggingInSection = () => {
     const getGoogleUser = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/oauth/google?code=${code}`,
+          `/api/auth/google?code=${code}`,
           {
             method: "GET",
             credentials: "include",
@@ -38,7 +38,8 @@ const LoggingInSection = () => {
             router.push("/");
           }
         } else {
-          localStorage.setItem("session", JSON.stringify(data));
+          localStorage.setItem("session", JSON.stringify(data.user));
+          localStorage.setItem("token", JSON.stringify(data.token));
           setSession(data);
           if (redirect && redirect !== null) {
             router.push(redirect);

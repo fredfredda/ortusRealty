@@ -43,6 +43,9 @@ export default function ProperteyFiltering() {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/savedpropertiesdetails`,
           {
+            headers: {
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            },
             method: "GET",
             credentials: "include",
           }

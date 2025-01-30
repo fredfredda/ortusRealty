@@ -1,4 +1,5 @@
 import { getUserByEmail, updatePassword } from "../models/UserModel.js";
+import jwt from "jsonwebtoken";
 import { Resend } from "resend";
 import {
   createToken,
@@ -12,12 +13,20 @@ const saltRounds = 10;
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const isLoggedin = (req, res) => {
+const isLoggedin = async (req, res) => {
   try {
-    const token = req.cookies.jwt;
-    if (!token) {
+    if (!req.headers.authorization)
+      return res.status(200).json({ isLoggedin: false });
+
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) return res.status(200).json({ isLoggedin: false });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await getUserByEmail(decoded.email);
+
+    if (!user) {
       return res.status(200).json({ isLoggedIn: false });
-    } else {
+    } else if(user) {
       return res.status(200).json({ isLoggedIn: true });
     }
   } catch (error) {

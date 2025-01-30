@@ -39,28 +39,26 @@ const SignIn = ({ setPageTitle }) => {
   const loginUser = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      );
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
       const data = await response.json();
       if (data.error) {
         toast.error(
           typeof data.error === "string" ? data.error : "An error occured"
         );
       } else {
-        localStorage.setItem("session", JSON.stringify(data));
-        setSession(data);
+        localStorage.setItem("session", JSON.stringify(data.user));
+        localStorage.setItem("token", JSON.stringify(data.token));
+        setSession(data.user);
         toast.success("logged in successfully");
         document.getElementById("loginForm").reset();
         if (redirect && redirect !== null) {
@@ -116,59 +114,118 @@ const SignIn = ({ setPageTitle }) => {
   };
 
   return (
-      <form id="loginForm" className="form-style1">
-        {showSignIn && (
+    <form id="loginForm" className="form-style1">
+      {showSignIn && (
+        <>
+          <div className="mb25">
+            <label className="form-label fw600 dark-color">Email</label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Enter Email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          {/* End Email */}
+
+          <div className="mb20">
+            <label className="form-label fw600 dark-color">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter Password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {/* End Password */}
+
+          <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
+            <a
+              className="fz14 ff-heading"
+              href={`/register?redirect=${redirect}`}
+            >
+              Don&apos;t have an account? Sign Up
+            </a>
+            <p
+              className="fz14 ff-heading mt10 forgot_password"
+              onClick={() => {
+                setShowSendEmail(true);
+                setShowSignIn(false);
+                setPageTitle("Verification Link");
+              }}
+            >
+              Forgot password?
+            </p>
+          </div>
+          {/* End  Lost your password? */}
+
+          <div className="d-grid mb20">
+            <button
+              className="ud-btn btn-thm"
+              data-bs-dismiss=""
+              disabled={isLoading}
+              onClick={handleSubmit}
+            >
+              {isLoading ? (
+                <ClipLoader
+                  color={color}
+                  loading={isLoading}
+                  cssOverride={override}
+                  size={15}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                <>Sign in</>
+              )}
+            </button>
+          </div>
+          {/* End submit */}
+
+          <div className="hr_content mb20">
+            <hr />
+            <span className="hr_top_text">OR</span>
+          </div>
+
+          <div className="d-grid mb10">
+            <button className="ud-btn btn-white" type="button">
+              <a href={getGooleOAuthUrl(redirect || "")}>
+                <i className="fab fa-google" /> Continue With Google
+              </a>
+            </button>
+          </div>
+        </>
+      )}
+
+      {showSendEmail &&
+        (emailSent ? (
+          <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-center mb10">
+            <p>Check your email inbox for the link</p>
+          </div>
+        ) : (
           <>
-            <div className="mb25">
-              <label className="form-label fw600 dark-color">Email</label>
+            <div className="mb15">
               <input
                 type="email"
                 className="form-control"
                 placeholder="Enter Email"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setVerificationEmail(e.target.value)}
                 required
               />
             </div>
-            {/* End Email */}
-
-            <div className="mb20">
-              <label className="form-label fw600 dark-color">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Enter Password"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {/* End Password */}
-
             <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
-              <a
-                className="fz14 ff-heading"
-                href={`/register?redirect=${redirect}`}
-              >
-                Don&apos;t have an account? Sign Up
-              </a>
-              <p
-                className="fz14 ff-heading mt10 forgot_password"
-                onClick={() => {
-                  setShowSendEmail(true);
-                  setShowSignIn(false);
-                  setPageTitle("Verification Link");
-                }}
-              >
-                Forgot password?
+              <p className="fz14 ff-heading mt10">
+                A verification link will be sent to your email
               </p>
             </div>
-            {/* End  Lost your password? */}
-
             <div className="d-grid mb20">
               <button
                 className="ud-btn btn-thm"
                 data-bs-dismiss=""
                 disabled={isLoading}
-                onClick={handleSubmit}
+                onClick={handleSendEmail}
               >
                 {isLoading ? (
                   <ClipLoader
@@ -180,72 +237,13 @@ const SignIn = ({ setPageTitle }) => {
                     data-testid="loader"
                   />
                 ) : (
-                  <>Sign in</>
+                  <>Send Email</>
                 )}
               </button>
             </div>
-            {/* End submit */}
-
-            <div className="hr_content mb20">
-              <hr />
-              <span className="hr_top_text">OR</span>
-            </div>
-
-            <div className="d-grid mb10">
-              <button className="ud-btn btn-white" type="button">
-                <a href={getGooleOAuthUrl(redirect || "")}>
-                  <i className="fab fa-google" /> Continue With Google
-                </a>
-              </button>
-            </div>
           </>
-        )}
-
-        {showSendEmail &&
-          (emailSent ? (
-            <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-center mb10">
-              <p>Check your email inbox for the link</p>
-            </div>
-          ) : (
-            <>
-              <div className="mb15">
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Enter Email"
-                  onChange={(e) => setVerificationEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb10">
-                <p className="fz14 ff-heading mt10">
-                  A verification link will be sent to your email
-                </p>
-              </div>
-              <div className="d-grid mb20">
-                <button
-                  className="ud-btn btn-thm"
-                  data-bs-dismiss=""
-                  disabled={isLoading}
-                  onClick={handleSendEmail}
-                >
-                  {isLoading ? (
-                    <ClipLoader
-                      color={color}
-                      loading={isLoading}
-                      cssOverride={override}
-                      size={15}
-                      aria-label="Loading Spinner"
-                      data-testid="loader"
-                    />
-                  ) : (
-                    <>Send Email</>
-                  )}
-                </button>
-              </div>
-            </>
-          ))}
-      </form>
+        ))}
+    </form>
   );
 };
 
