@@ -12,14 +12,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 const corsOptions = {
-    origin: (origin, callback) => {
-        // Allow all origins - dynamically set the origin based on the incoming request
-        callback(null, origin || '*');
-      },
-    // origin: process.env.FRONTEND_ENDPOINT,
-    optionsSuccessStatus: 200,
-    credentials: true,
-    // Some legacy browsers choke on 204
+  origin: process.env.FRONTEND_ENDPOINT,
+  optionsSuccessStatus: 200,
+  credentials: true,
 }
 
 app.use(cors(corsOptions));
