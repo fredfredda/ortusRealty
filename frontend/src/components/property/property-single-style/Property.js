@@ -25,6 +25,7 @@ const Property = ({ id }) => {
   const [propertyInfo, setPropertyInfo] = useState({});
   let [color, setColor] = useState("#eb6753");
   const [agentEmail, setAgentEmail] = useState("");
+  const [propertyFound, setPropertyFound] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
@@ -36,7 +37,14 @@ const Property = ({ id }) => {
         const data = await response.json();
         if (data.error) {
           console.log(data.error);
-          toast.error(typeof data.error === 'string' ? data.error.toString() : "An error occurred");
+          toast.error(
+            typeof data.error === "string"
+              ? data.error.toString()
+              : "An error occurred"
+          );
+          if (data.error === "Property Not Found") {
+            setPropertyFound(false);
+          }
         } else {
           setPropertyInfo((prev) => ({ ...prev, ...data }));
           setIsLoading(false);
@@ -61,6 +69,10 @@ const Property = ({ id }) => {
             aria-label="Loading Spinner"
             data-testid="loader"
           />
+        </div>
+      ) : propertyFound === false ? (
+        <div className="mt20 mb20">
+          <h2>Property not Found</h2>
         </div>
       ) : (
         <>
@@ -114,7 +126,10 @@ const Property = ({ id }) => {
                   <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
                     <h4 className="title fz17 mb10">View on map</h4>
                     <div className="row">
-                      <PropertyAddress latitude={propertyInfo.prpty_latitude} longitude={propertyInfo.prpty_longitude} />
+                      <PropertyAddress
+                        latitude={propertyInfo.prpty_latitude}
+                        longitude={propertyInfo.prpty_longitude}
+                      />
                     </div>
                   </div>
                   {/* End .ps-widget */}
