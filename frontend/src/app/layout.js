@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
 import { savedPropertiesStore } from "@/store/savedProperties";
+import { checkCookie } from "@/utilis/checkCookie.js";
 
 if (typeof window !== "undefined") {
   import("bootstrap");
@@ -40,7 +41,9 @@ export default function RootLayout({ children }) {
   const setIsLoading = isLoadingStore((state) => state.setIsLoading);
 
   const appendProperty = savedPropertiesStore((state) => state.appendProperty);
-  const resetProperties = savedPropertiesStore((state) => state.resetProperties);
+  const resetProperties = savedPropertiesStore(
+    (state) => state.resetProperties
+  );
 
   useEffect(() => {
     const getSavedProperties = async () => {
@@ -50,7 +53,9 @@ export default function RootLayout({ children }) {
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/savedproperties`,
           {
             headers: {
-              authorization: `Bearer ${JSON.parse(localStorage.getItem("token")) || ""}`,
+              authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("token")) || ""
+              }`,
             },
             method: "GET",
             credentials: "include",
@@ -77,37 +82,19 @@ export default function RootLayout({ children }) {
   }, [session]);
 
   useEffect(() => {
-    const checkSession = async () => {
+    const checkSession = () => {
       setIsLoading(true);
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/auth/isloggedin`,
-          {
-            headers: {
-              authorization: `Bearer ${JSON.parse(localStorage.getItem("token")) || ""}`,
-            },
-            method: "GET",
-            credentials: "include",
-          }
-        );
-        const data = await response.json();
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          if (data.isLoggedIn === true) {
-            const session_ = JSON.parse(localStorage.getItem("session"));
-            setSession(session_);
-          } else if (data.isLoggedIn === false) {
-            localStorage.removeItem("session");
-            deleteSession();
-            resetProperties();
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
+      const isLoggedIn = checkCookie();
+      if (isLoggedIn === true) {
+        const session_ = JSON.parse(localStorage.getItem("session"));
+        setSession(session_);
+      } else {
+        localStorage.removeItem("session");
+        localStorage.removeItem("token");
+        deleteSession();
+        resetProperties();
       }
+      setIsLoading(false);
     };
     checkSession();
   }, []);

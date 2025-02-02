@@ -1,4 +1,5 @@
 import { listingItems } from "@/data/navItems";
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -34,11 +35,11 @@ const MainMenu = () => {
   return (
     <ul className="ace-responsive-menu">
       <li className="visible_list dropitem">
-        <a className="list-item" href="/">
+        <Link className="list-item" href="/">
           <span className={topMenu == "home" ? "title menuActive" : "title"}>
             Home
           </span>
-        </a>
+        </Link>
       </li>
       {/* End property Items */}
 
@@ -78,20 +79,20 @@ const MainMenu = () => {
       {/* End listings */}
 
       <li className="visible_list dropitem">
-        <a className="list-item" href="/about">
+        <Link className="list-item" href="/about">
           <span className={topMenu == "about" ? "title menuActive" : "title"}>
             About
           </span>
-        </a>
+        </Link>
       </li>
       {/* End property Items */}
 
       <li className="visible_list dropitem">
-        <a className="list-item" href="/contact">
+        <Link className="list-item" href="/contact">
           <span className={topMenu == "contact" ? "title menuActive" : "title"}>
             Contact
           </span>
-        </a>
+        </Link>
       </li>
       {/* End contact */}
     </ul>
