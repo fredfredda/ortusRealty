@@ -83,7 +83,7 @@ const Header = () => {
     }
   };
 
-  if (isLoading === false)
+  // if (isLoading === false)
     return (
       <>
         <header

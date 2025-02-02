@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
           `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/properties/savedproperties`,
           {
             headers: {
-              authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`
+              authorization: `Bearer ${JSON.parse(localStorage.getItem("token")) || ""}`,
             },
             method: "GET",
             credentials: "include",
