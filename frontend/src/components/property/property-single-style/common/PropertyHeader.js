@@ -56,7 +56,7 @@ const PropertyHeader = ({ property }) => {
         }
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("An error occurred");
     }
   };
@@ -67,7 +67,7 @@ const PropertyHeader = ({ property }) => {
       await navigator.clipboard.writeText(link);
       toast.success("Link copied to clipboard");
     } catch (err) {
-      console.error("Failed to copy: ", err);
+      console.log("Failed to copy: ", err);
       toast.error("Failed to copy link");
     }
   };

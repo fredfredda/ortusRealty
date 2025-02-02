@@ -34,13 +34,13 @@ const FeaturedListings = ({ data, colstyle, selectedIds, setSelectedIds }) => {
         );
         const data = await response.json();
         if (data.error) {
-          console.error(data.error);
+          console.log(data.error);
           toast.error(typeof data.error === "string" ? data.error : "An error occured");
         } else {
           removeProperty(id);
         }
       } catch (error) {
-        console.error(error);        
+        console.log(error);        
         toast.error("An error occured");
       }
     }

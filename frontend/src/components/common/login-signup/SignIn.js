@@ -52,6 +52,7 @@ const SignIn = ({ setPageTitle }) => {
       });
       const data = await response.json();
       if (data.error) {
+        console.log(data.error);
         toast.error(
           typeof data.error === "string" ? data.error : "An error occured"
         );
@@ -72,7 +73,7 @@ const SignIn = ({ setPageTitle }) => {
         }
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("An error occurred");
     } finally {
       setIsLoading(false);
@@ -98,6 +99,7 @@ const SignIn = ({ setPageTitle }) => {
 
       const data = await response.json();
       if (data.error) {
+        console.log(data.error);
         toast.error(
           typeof data.error === "string" ? data.error : "An error occurred"
         );
@@ -106,7 +108,7 @@ const SignIn = ({ setPageTitle }) => {
         setEmailSent(true);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("An error occurred");
     } finally {
       setIsLoading(false);

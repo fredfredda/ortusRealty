@@ -47,7 +47,7 @@ const PersonalInfo = () => {
           });
         }
       } catch (error) {
-        console.error(error);        
+        console.log(error);        
         toast.error("An error occurred");
       } finally {
         setIsLoading(false);
@@ -77,12 +77,12 @@ const PersonalInfo = () => {
       );
       const data = await response.json();
       if (data.error) {
-        console.error(data.error);
+        console.log(data.error);
       } else {
         toast.success("Profile updated");
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

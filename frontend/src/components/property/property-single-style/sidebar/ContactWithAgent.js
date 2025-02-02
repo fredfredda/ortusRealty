@@ -30,7 +30,7 @@ const ContactWithAgent = ({ agentId, setAgentEmail }) => {
         setAgentEmail(data.agent.email);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("Failed to fetch agent details");
     } finally {
       setLoading(false);

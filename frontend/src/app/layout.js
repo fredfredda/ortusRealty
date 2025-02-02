@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
           }
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -104,7 +104,7 @@ export default function RootLayout({ children }) {
           }
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }

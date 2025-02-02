@@ -114,7 +114,7 @@ export default function PropertyFiltering() {
           setProperties(data.properties);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
         toast.error("An error occured");
       }
     };

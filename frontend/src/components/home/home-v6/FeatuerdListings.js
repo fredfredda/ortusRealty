@@ -43,7 +43,7 @@ const FeaturedListings = () => {
           setListings(data.properties);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
         toast.error("An error occured");
       }
     };
@@ -107,7 +107,7 @@ const FeaturedListings = () => {
         }
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("An error occured");
     }
   };
@@ -118,7 +118,7 @@ const FeaturedListings = () => {
       await navigator.clipboard.writeText(link);
       toast.success("Link copied to clipboard");
     } catch (err) {
-      console.error("Failed to copy: ", err);
+      console.log("Failed to copy: ", err);
       toast.error("Failed to copy link");
     }
   };

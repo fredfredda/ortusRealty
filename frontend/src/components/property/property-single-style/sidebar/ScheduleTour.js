@@ -59,7 +59,7 @@ const ScheduleTour = ({ property, agentEmail }) => {
       e.target.reset();
       toast.success(data.message);
     } else {
-      console.error("Error", data);
+      console.log("Error", data);
       toast.error(typeof data === "string" ? data : "An error occured");
     }
   };

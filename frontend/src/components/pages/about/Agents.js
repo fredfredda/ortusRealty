@@ -21,14 +21,14 @@ const Agents = () => {
       const data = await response.json();
 
       if (data.error) {
-        console.error(data.error);
+        console.log(data.error);
         toast.error("Failed to fetch agents");
       } else if (data.agents) {
         setAgents([]);
         setAgents(data.agents);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("Failed to fetch agents");
     }
   };

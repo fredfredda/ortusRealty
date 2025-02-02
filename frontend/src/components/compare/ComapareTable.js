@@ -29,7 +29,7 @@ const ComapareTable = ({ selectedIds }) => {
       const data = await response.json();
 
       if (data.error) {
-        console.error(data.error);
+        console.log(data.error);
         toast.error(
           typeof data.error === "string"
             ? data.error
@@ -44,7 +44,7 @@ const ComapareTable = ({ selectedIds }) => {
         );
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("An error occured");
     }
   };
@@ -57,7 +57,7 @@ const ComapareTable = ({ selectedIds }) => {
       const data = await response.json();
 
       if (data.error) {
-        console.error(data.error);
+        console.log(data.error);
         toast.error(
           typeof data.error === "string"
             ? data.error
@@ -67,7 +67,7 @@ const ComapareTable = ({ selectedIds }) => {
         setProperties((prev) => [...prev, data]);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("An error occured");
     }
   };

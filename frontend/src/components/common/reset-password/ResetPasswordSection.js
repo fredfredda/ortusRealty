@@ -58,7 +58,7 @@ const ResetPasswordSection = ({ tokenId }) => {
         router.replace("/login?redirect=/");
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("An error occurred");
     } finally {
       setIsLoading(false);

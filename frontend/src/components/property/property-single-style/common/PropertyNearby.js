@@ -23,7 +23,7 @@ const PropertyNearby = ({ neighborhoodId }) => {
           setInfrastructures(data.importantInfrastructure);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
         toast.error("An error occurred");
       }
     };
