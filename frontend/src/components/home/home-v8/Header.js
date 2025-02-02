@@ -83,10 +83,6 @@ const Header = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(session?.userId);
-  }, [session]);
-
   if (isLoading === false)
   return (
     <>

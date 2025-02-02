@@ -7,6 +7,22 @@ import ProSidebarContent from "./ProSidebarContent";
 import { usePathname } from "next/navigation";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
+import toast from "react-hot-toast";
+
+const menuItems = {
+  items: [
+    {
+      icon: "flaticon-user",
+      text: "My Profile",
+      href: "/profile",
+    },
+    {
+      icon: "flaticon-home",
+      text: "Saved Properties",
+      href: "/saved-properties",
+    },
+  ],
+};
 
 const MobileMenu = () => {
   const isLoading = isLoadingStore((state) => state.isLoading);
@@ -14,34 +30,33 @@ const MobileMenu = () => {
   const deleteSession = sessionStore((state) => state.deleteSession);
 
   const pathname = usePathname();
-  const menuItems = {
-    items: [
-      {
-        icon: "flaticon-user",
-        text: "My Profile",
-        href: "/profile",
-      },
-      {
-        icon: "flaticon-home",
-        text: "Saved Properties",
-        href: "/saved-properties",
-      },
-    ],
-  };
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/users/logout`, {
+      const response = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
       const data = await response.json();
       if (data.error) {
         console.log(data.error);
-        toast.error(typeof data.error === "string" ? data.error : "An error occured");
-      } else {
+        if (data.error === "Unauthorized") {
+          toast.error("Unauthorized");
+        } else {
+          toast.error(
+            typeof data.error === "string" ? data.error : "An error occured"
+          );
+        }
+      } else if (data.success) {
         localStorage.removeItem("session");
+        localStorage.removeItem("token");
         deleteSession();
+        toast.success("Logged out successfully");
+        if (protectRoutes.includes(pathname)) {
+          router.replace("/");
+        } else {
+          window.location.reload();
+        }
       }
     } catch (error) {
       console.log(error);
