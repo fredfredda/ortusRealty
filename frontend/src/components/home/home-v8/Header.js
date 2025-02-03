@@ -122,7 +122,7 @@ const Header = () => {
               </div>
               {/* End .col-auto */}
 
-              {!session?.userId ? (
+              {/* {!session?.userId ? (
                 <div className="col-auto">
                   <div className="d-flex align-items-center">
                     <a
@@ -186,7 +186,7 @@ const Header = () => {
                     </ul>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </nav>

@@ -92,7 +92,7 @@ const MobileMenu = () => {
                     alt="logo"
                   />
                 </Link>
-                {session?.userId ? (
+                {/* {session?.userId ? (
                   <div className=" user_setting">
                     <div className="dropdown">
                       <a className="btn" href="#" data-bs-toggle="dropdown">
@@ -139,7 +139,7 @@ const MobileMenu = () => {
                   <Link href={`/login?redirect=${pathname}`}>
                     <span className="icon fz18 far fa-user-circle" />
                   </Link>
-                )}
+                )} */}
               </div>
             </div>
           </div>

@@ -82,9 +82,9 @@ export default function RootLayout({ children }) {
   }, [session]);
 
   useEffect(() => {
-    const checkSession = () => {
+    const checkSession = async () => {
       setIsLoading(true);
-      const isLoggedIn = checkCookie();
+      const isLoggedIn = await checkCookie();
       if (isLoggedIn === true) {
         const session_ = JSON.parse(localStorage.getItem("session"));
         setSession(session_);
