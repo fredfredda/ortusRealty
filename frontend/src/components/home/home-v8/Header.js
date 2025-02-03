@@ -9,6 +9,21 @@ import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
 import toast from "react-hot-toast";
 
+const menuItems = {
+  items: [
+    {
+      icon: "flaticon-user",
+      text: "My Profile",
+      href: "/profile",
+    },
+    {
+      icon: "flaticon-home",
+      text: "Saved Properties",
+      href: "/saved-properties",
+    },
+  ],
+};
+
 const Header = () => {
   const isLoading = isLoadingStore((state) => state.isLoading);
   const [navbar, setNavbar] = useState(false);
@@ -20,21 +35,6 @@ const Header = () => {
   const pathname = usePathname();
 
   const protectRoutes = ["/profile", "/saved-properties"];
-
-  const menuItems = {
-    items: [
-      {
-        icon: "flaticon-user",
-        text: "My Profile",
-        href: "/profile",
-      },
-      {
-        icon: "flaticon-home",
-        text: "Saved Properties",
-        href: "/saved-properties",
-      },
-    ],
-  };
 
   const changeBackground = () => {
     if (window.scrollY >= 10) {
@@ -122,7 +122,7 @@ const Header = () => {
               </div>
               {/* End .col-auto */}
 
-              {/* {!session?.userId ? (
+              {!session?.userId ? (
                 <div className="col-auto">
                   <div className="d-flex align-items-center">
                     <a
@@ -186,7 +186,7 @@ const Header = () => {
                     </ul>
                   </div>
                 </div>
-              )} */}
+              )}
             </div>
           </div>
         </nav>

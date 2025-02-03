@@ -4,7 +4,7 @@ import Image from "next/image";
 import ContactInfo from "./ContactInfo";
 import Social from "./Social";
 import ProSidebarContent from "./ProSidebarContent";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { sessionStore } from "@/store/session";
 import { isLoadingStore } from "@/store/isLoading";
 import toast from "react-hot-toast";
@@ -30,6 +30,8 @@ const MobileMenu = () => {
   const deleteSession = sessionStore((state) => state.deleteSession);
 
   const pathname = usePathname();
+  const router = useRouter();
+  const protectRoutes = ["/profile", "/saved-properties"];
 
   const handleLogout = async () => {
     try {
@@ -92,7 +94,7 @@ const MobileMenu = () => {
                     alt="logo"
                   />
                 </Link>
-                {/* {session?.userId ? (
+                {session?.userId ? (
                   <div className=" user_setting">
                     <div className="dropdown">
                       <a className="btn" href="#" data-bs-toggle="dropdown">
@@ -139,7 +141,7 @@ const MobileMenu = () => {
                   <Link href={`/login?redirect=${pathname}`}>
                     <span className="icon fz18 far fa-user-circle" />
                   </Link>
-                )} */}
+                )}
               </div>
             </div>
           </div>
