@@ -25,7 +25,7 @@ export default function MainRoot() {
         {/* End Main Header Nav */}
 
         {/* Mobile Nav  */}
-        {/* <MobileMenu /> */}
+        <MobileMenu />
         {/* End Mobile Nav  */}
 
         {/* Home Banner Style V1 */}
