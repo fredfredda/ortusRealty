@@ -21,11 +21,11 @@ export default function MainRoot() {
     <Wrapper>
       <>
         {/* Main Header Nav */}
-        {/* <Header /> */}
+        <Header />
         {/* End Main Header Nav */}
 
         {/* Mobile Nav  */}
-        <MobileMenu />
+        {/* <MobileMenu /> */}
         {/* End Mobile Nav  */}
 
         {/* Home Banner Style V1 */}
