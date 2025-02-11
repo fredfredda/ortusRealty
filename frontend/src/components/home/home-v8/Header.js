@@ -32,7 +32,7 @@ const Header = () => {
 
   const router = useRouter();
 
-  const pathname = usePathname();
+  const pathname = '/';
 
   const protectRoutes = ["/profile", "/saved-properties"];
 
@@ -70,8 +70,8 @@ const Header = () => {
           );
         }
       } else if (data.success) {
-        localStorage.removeItem("session");
-        localStorage.removeItem("token");
+        // localStorage.removeItem("session");
+        // localStorage.removeItem("token");
         deleteSession();
         toast.success("Logged out successfully");
         if (protectRoutes.includes(pathname)) {
