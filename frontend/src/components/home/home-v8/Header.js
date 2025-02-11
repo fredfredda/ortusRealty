@@ -32,7 +32,7 @@ const Header = () => {
 
   const router = useRouter();
 
-  const pathname = typeof window !== "undefined" ? usePathname() : "/";
+  const pathname = usePathname();
 
   const protectRoutes = ["/profile", "/saved-properties"];
 
