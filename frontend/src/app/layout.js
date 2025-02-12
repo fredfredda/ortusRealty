@@ -76,6 +76,7 @@ export default function RootLayout({ children }) {
         setIsLoading(false);
       }
     };
+    
     if (session?.userId) {
       getSavedProperties();
     }
@@ -84,18 +85,24 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const checkSession = async () => {
       setIsLoading(true);
-      const isLoggedIn = await checkCookie();
-      if (isLoggedIn === true) {
-        const session_ = JSON.parse(localStorage.getItem("session"));
-        setSession(session_);
-      } else {
-        localStorage.removeItem("session");
-        localStorage.removeItem("token");
-        deleteSession();
-        resetProperties();
+      try {
+        const isLoggedIn = await checkCookie();
+        if (isLoggedIn === true) {
+          const session_ = JSON.parse(localStorage.getItem("session"));
+          setSession(session_);
+        } else {
+          localStorage.removeItem("session");
+          localStorage.removeItem("token");
+          deleteSession();
+          resetProperties();
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
+
     checkSession();
   }, []);
 
