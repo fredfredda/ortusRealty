@@ -1,0 +1,8 @@
+1. Recommendation system based on:
+	. user location
+	. user historical searches
+	. user interests
+	. collaborative interests
+	. popularity
+	. Similar properties
+	. Nearby properties
