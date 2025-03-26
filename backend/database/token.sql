@@ -1,5 +1,11 @@
 -- CREATING TABLES
 
+CREATE TABLE investors_tokens_statuses(
+    id SERIAL PRIMARY KEY,
+    investors_tokens_status VARCHAR(120),
+    description VARCHAR(200)
+)
+
 CREATE TABLE exchange_token_statuses(
     id SERIAL PRIMARY KEY,
     exchange_token_status VARCHAR(120),
@@ -103,12 +109,45 @@ CREATE TABLE investors_tokens(
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id),
     property_token_id INT REFERENCES property_tokens(id),
+    investors_tokens_status_id INT REFERENCES investors_tokens_statuses(id),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
 
+CREATE TABLE token_history_prices(
+    id SERIAL PRIMARY KEY,
+    development_project_id INT REFERENCES development_projects(id),
+    token_rating_id INT REFERENCES token_ratings(id),
+    previous_price NUMERIC,
+    current_price NUMERIC,
+    created_at TIMESTAMP
+);
+
+CREATE TABLE token_payouts(
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    num_of_tokens INT,
+    token_rating_id INT REFERENCES token_ratings(id),
+    development_project_id INT REFERENCES development_projects(id),
+    payout_amount NUMERIC,
+    created_at TIMESTAMP
+);
+
+CREATE TABLE token_valuation_history(
+    id SERIAL PRIMARY KEY,
+    development_project_id INT REFERENCES development_projects(id),
+    token_rating_id INT REFERENCES token_ratings(id),
+    previous_estimated_return NUMERIC,
+    current_estimated_return NUMERIC,
+    created_at TIMESTAMP
+);
+
 
 -- POPULATING TABLES
+
+INSERT INTO investors_tokens_statuses (investors_tokens_status) VALUES
+('investor not yet paid'),
+('investor has been paid');
 
 INSERT INTO token_statuses (token_status, description) VALUES
 ('inactive', 'The token is most likely with the issuing agent'),
