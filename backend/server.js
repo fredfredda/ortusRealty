@@ -2,6 +2,7 @@ import express from 'express';
 import AuthRoutes from './routes/AuthRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
 import PropertyRoutes from './routes/PropertyRoutes.js';
+import investorRoutes from './routes/investorRoutes.js';
 import pg from 'pg';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
@@ -44,5 +45,6 @@ app.use(cookieParser())
 app.use('/api/auth', AuthRoutes); // auth routes
 app.use('/api/users', UserRoutes); // user routes
 app.use('/api/properties', PropertyRoutes); // property routes
+app.use('/api/investors', investorRoutes); // investor routes
 
 app.listen(PORT, () => console.log(`Server listening at port ${PORT}`) );

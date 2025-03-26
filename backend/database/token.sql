@@ -38,7 +38,8 @@ CREATE TABLE token_purchase_request_statuses(
 
 CREATE TABLE token_orders(
     id SERIAL PRIMARY KEY,
-    issuer_id INT REFERENCES agents(id),
+    issuer_id INT REFERENCES agents(id), -- might delete this column
+    development_project_id INT REFERENCES development_projects(id),
     requested_by_id INT REFERENCES users(id),
     num_of_tokens INT,
     token_rating_id INT REFERENCES token_ratings(id),
@@ -50,6 +51,7 @@ CREATE TABLE token_orders(
 CREATE TABLE exchange_tokens(
     id SERIAL PRIMARY KEY,
     listed_by_id INT REFERENCES users(id),
+    development_project_id INT REFERENCES development_projects(id),
     description VARCHAR(500),
     num_of_tokens INT,
     token_rating_id INT REFERENCES token_ratings(id),
@@ -64,6 +66,7 @@ CREATE TABLE token_purchase_requests(
     exchange_token_id INT REFERENCES exchange_tokens(id),
     num_of_tokens INT,
     token_rating_id INT REFERENCES token_ratings(id),
+    development_project_id INT REFERENCES development_projects(id),
     token_purchase_request_status_id INT REFERENCES token_purchase_request_statuses(id),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
@@ -92,6 +95,14 @@ CREATE TABLE property_tokens(
     token_description VARCHAR(500),
     token_expiry_time TIMESTAMP,
     token_status_id INT REFERENCES token_statuses(id),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TABLE investors_tokens(
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    property_token_id INT REFERENCES property_tokens(id),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -126,7 +137,8 @@ INSERT INTO exchange_token_statuses (exchange_token_status) VALUES
 INSERT INTO token_order_statuses (token_order_status) VALUES
 ('pending'),
 ('approved'),
-('disapproved');
+('disapproved'),
+('completed');
 
 INSERT INTO token_purchase_request_statuses (token_purchase_request_status) VALUES
 ('pending'),
