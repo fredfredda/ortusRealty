@@ -4,8 +4,6 @@ import {
   orderTokensFromDb,
   getOrderDetailsFromDb,
   deleteOrderFromDb,
-  getInvestorTokenListingsFromDb,
-  getInvestorTokenListingDetailsFromDb,
   checkUserTokensFromDb,
   listTokensFromDb,
   updateTokenListingFromDb,
@@ -18,6 +16,12 @@ import {
   updateTokenRequestStatusFromDb,
   updateExchangeTokenStatusFromDb,
   updateTokensOwnerFromDb,
+  checkTokensAvailabilityFromDb,
+  getInvestorTokenOrdersFromDb,
+  getTokenListingDetailsFromDb,
+  getAllTokenListingsFromDb,
+  deleteTokenRequestFromDb,
+  getSentTokenRequestsFromDb,
 } from "../models/InvestorModel.js";
 
 const getAllDvpProjects = async (req, res) => {
@@ -47,18 +51,50 @@ const getDvpDetails = async (req, res) => {
   }
 };
 
+const getInvestorTokenOrders = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const orders = await getInvestorTokenOrdersFromDb(userId);
+    if (orders.error) return res.status(500).json({ error: "Internal server error" });
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getInvestorTokenOrderDetails = async (req,res) => {
+  try {
+    const { userId} = req.user;
+    const { orderId } = req.params;
+
+    const order = await getOrderDetailsFromDb(userId, orderId);
+    if (!order) return res.status(404).json({ error: "Order not found"});
+    if (order.error) return res.status(500).json({ error: order.error});
+
+    return res.status(200).json({order});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error })
+  }
+}
+
 const orderTokens = async (req, res) => {
   try {
     const { userId } = req.user;
-    const { projectId } = req.params;
-    const { numOfTokens, tokenRatingId } = req.body;
+    const { projectId, numOfTokens, tokenRatingId } = req.body;
 
-    if (!numOfTokens || !tokenRatingId)
+    if (!projectId || !numOfTokens || !tokenRatingId)
       return res.status(400).json({ error: "Please provide all fields" });
 
     const dvpDetails = await getDvpDetailsFromDb(projectId);
     if (!dvpDetails)
       return res.status(404).json({ error: "Project not found" });
+    if (dvpDetails.minimum_tokens_to_buy > numOfTokens)
+      return res.status(400).json({ error: "Minimum tokens to buy is not met" });
+
+    const tokensAvailable = await checkTokensAvailabilityFromDb(projectId, numOfTokens, tokenRatingId);
+    if (!tokensAvailable) return res.status(400).json({ error: "Insufficient tokens" });
 
     const createdAt = new Date().toISOString();
     const statusId = 1;
@@ -85,10 +121,8 @@ const cancelOrder = async (req, res) => {
     const { userId } = req.user;
     const { orderId } = req.params;
 
-    const order = await getOrderDetailsFromDb(orderId);
+    const order = await getOrderDetailsFromDb(userId, orderId);
     if (!order) return res.status(404).json({ error: "Order not found" });
-    if (order.requested_by_id !== userId)
-      return res.status(401).json({ error: "Unauthorized" });
     if (order.token_order_status_id === 2)
       return res.status(400).json({ error: "Order already approved" });
     if (order.token_order_status_id === 4)
@@ -105,10 +139,10 @@ const cancelOrder = async (req, res) => {
   }
 };
 
-const getInvestorTokenListings = async (req, res) => {
+const getAllTokenListings = async (req, res) => {
   try {
     const { userId } = req.user;
-    const tokenListings = await getInvestorTokenListingsFromDb(userId);
+    const tokenListings = await getAllTokenListingsFromDb();
     if (tokenListings.error)
       return res.status(500).json({ error: "Internal server error" });
     res.status(200).json({ tokenListings });
@@ -118,14 +152,11 @@ const getInvestorTokenListings = async (req, res) => {
   }
 };
 
-const getInvestorTokenListingDetails = async (req, res) => {
+const getTokenListingDetails = async (req, res) => {
   try {
     const { userId } = req.user;
     const { listingId } = req.params;
-    const tokenListing = await getInvestorTokenListingDetailsFromDb(
-      userId,
-      listingId
-    );
+    const tokenListing = await getTokenListingDetailsFromDb(listingId);
     if (!tokenListing)
       return res.status(404).json({ error: "Token listing not found" });
     if (tokenListing.error)
@@ -163,6 +194,7 @@ const listTokens = async (req, res) => {
       description,
       tokenRatingId,
       statusId,
+      projectId,
       createdAt
     );
     if (list_tokens.error)
@@ -175,66 +207,62 @@ const listTokens = async (req, res) => {
   }
 };
 
-const updateTokenListing = async (req, res) => {
-  try {
-    const { userId } = req.user;
-    const { listingId } = req.params;
-    const { numOfTokens, tokenRatingId, projectId, description } = req.body;
+// const updateTokenListing = async (req, res) => {
+//   try {
+//     const { userId } = req.user;
+//     const { listingId } = req.params;
+//     const { numOfTokens, tokenRatingId, projectId, description } = req.body;
 
-    if (!numOfTokens || !tokenRatingId || !projectId || !description)
-      return res.status(400).json({ error: "Please provide all fields" });
+//     if (!numOfTokens || !tokenRatingId || !projectId || !description)
+//       return res.status(400).json({ error: "Please provide all fields" });
 
-    const tokenListing = await getInvestorTokenListingDetailsFromDb(
-      userId,
-      listingId
-    );
-    if (!tokenListing)
-      return res.status(404).json({ error: "Token listing not found" });
-    if (tokenListing.exchange_token_status_id === 2)
-      return res.status(400).json({ error: "Tokens have already been bought" });
+//     const tokenListing = await getTokenListingDetailsFromDb(listingId);
+//     if (!tokenListing)
+//       return res.status(404).json({ error: "Token listing not found" });
+//     if (tokenListing.listed_by_id !== userId)
+//       return res.status(401).json({ error: "Unauthorized" });
+//     if (tokenListing.exchange_token_status_id === 2)
+//       return res.status(400).json({ error: "Tokens have already been bought" });
 
-    // check if the user has enough tokens to list
-    const tokensAvailable = await checkUserTokensFromDb(
-      userId,
-      numOfTokens,
-      tokenRatingId,
-      projectId
-    );
-    if (!tokensAvailable)
-      return res.status(400).json({ error: "Insufficient tokens" });
+//     // check if the user has enough tokens to list
+//     const tokensAvailable = await checkUserTokensFromDb(
+//       userId,
+//       numOfTokens,
+//       tokenRatingId,
+//       projectId
+//     );
+//     if (!tokensAvailable)
+//       return res.status(400).json({ error: "Insufficient tokens" });
 
-    const updatedAt = new Date().toISOString();
-    const statusId = 1;
-    const update_listing = await updateTokenListingFromDb(
-      listingId,
-      numOfTokens,
-      description,
-      statusId,
-      updatedAt
-    );
-    if (update_listing.error)
-      return res.status(500).json({ error: "Internal server error" });
+//     const updatedAt = new Date().toISOString();
+//     const statusId = 1;
+//     const update_listing = await updateTokenListingFromDb(
+//       listingId,
+//       numOfTokens,
+//       description,
+//       statusId,
+//       updatedAt
+//     );
+//     if (update_listing.error)
+//       return res.status(500).json({ error: "Internal server error" });
 
-    res.status(200).json({ success: "Token listing updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+//     res.status(200).json({ success: "Token listing updated successfully" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 const deleteTokenListing = async (req, res) => {
   try {
     const { userId } = req.user;
     const { listingId } = req.params;
 
-    const tokenListing = await getInvestorTokenListingDetailsFromDb(
-      userId,
-      listingId
-    );
+    const tokenListing = await getTokenListingDetailsFromDb(listingId);
     if (!tokenListing)
       return res.status(404).json({ error: "Token listing not found" });
-    if (tokenListing.exchange_token_status_id === 2)
-      return res.status(400).json({ error: "Tokens have already been bought" });
+    if (tokenListing.listed_by_id !== userId)
+      return res.status(401).json({ error: "Unauthorized" });
 
     const delete_listing = await deleteTokenListingFromDb(listingId);
     if (delete_listing.error)
@@ -247,7 +275,7 @@ const deleteTokenListing = async (req, res) => {
   }
 };
 
-const getInvestorTokenRequests = async (listingId) => {
+const getInvestorTokenRequests = async (req, res) => {
   try {
     const { userId } = req.user;
 
@@ -286,23 +314,19 @@ const getInvestorTokenRequestDetails = async (req, res) => {
 const requestTokens = async (req, res) => {
   try {
     const { userId } = req.user;
-    const { listingId } = req.params;
-    const { proposedNumOfTokens, tokenRatingId, projectId } = req.body;
+    const { listingId, proposedNumOfTokens, tokenRatingId, projectId } = req.body;
 
-    if (!proposedNumOfTokens || !tokenRatingId || !projectId)
+    if (!listingId || !proposedNumOfTokens || !tokenRatingId || !projectId)
       return res.status(400).json({ error: "Please provide all fields" });
 
-    const tokenListing = await getInvestorTokenListingDetailsFromDb(
-      (listingId = listingId)
-    );
+    const tokenListing = await getTokenListingDetailsFromDb(listingId);
     if (!tokenListing)
       return res.status(404).json({ error: "Token listing not found" });
-    if (tokenListing.exchange_token_status_id === 2)
-      return res.status(400).json({ error: "Tokens have already been bought" });
-    if (tokenListing.exchange_token_status_id === 3)
-      return res
-        .status(400)
-        .json({ error: "Tokens have already been removed" });
+    if (tokenListing.listed_by_id === userId)
+      return res.status(400).json({ error: "You cannot request tokens from yourself" });
+
+    const requestExists = await checkRequestExistsFromDb(userId, listingId);
+    if (requestExists) return res.status(400).json({ error: "Request already exists" });
 
     const tokensAvailable = await checkUserTokensFromDb(
       userId,
@@ -333,54 +357,54 @@ const requestTokens = async (req, res) => {
   }
 };
 
-const updateTokenRequest = async (req, res) => {
-  try {
-    const { userId } = req.user;
-    const { requestId } = req.params;
-    const { proposedNumOfTokens, tokenRatingId, projectId } = req.body;
+// const updateTokenRequest = async (req, res) => {
+//   try {
+//     const { userId } = req.user;
+//     const { requestId } = req.params;
+//     const { proposedNumOfTokens, tokenRatingId, projectId } = req.body;
 
-    if (!proposedNumOfTokens || !tokenRatingId || !projectId)
-      return res.status(400).json({ error: "Please provide all fields" });
+//     if (!proposedNumOfTokens || !tokenRatingId || !projectId)
+//       return res.status(400).json({ error: "Please provide all fields" });
 
-    const request = await getInvestorTokenRequestDetailsFromDb(
-      userId,
-      requestId
-    );
-    if (!request)
-      return res.status(404).json({ error: "Token request not found" });
-    if (request.requested_by_id !== userId)
-      return res.status(401).json({ error: "Unauthorized" });
-    if (request.token_purchase_request_status_id === 2)
-      return res.status(400).json({ error: "Token request already accepted" });
+//     const request = await getInvestorTokenRequestDetailsFromDb(
+//       userId,
+//       requestId
+//     );
+//     if (!request)
+//       return res.status(404).json({ error: "Token request not found" });
+//     if (request.requested_by_id !== userId)
+//       return res.status(401).json({ error: "Unauthorized" });
+//     if (request.token_purchase_request_status_id === 2)
+//       return res.status(400).json({ error: "Token request already accepted" });
 
-    const tokensAvailable = await checkUserTokensFromDb(
-      userId,
-      proposedNumOfTokens,
-      tokenRatingId,
-      projectId
-    );
-    if (!tokensAvailable)
-      return res.status(400).json({ error: "Insufficient tokens" });
+//     const tokensAvailable = await checkUserTokensFromDb(
+//       userId,
+//       proposedNumOfTokens,
+//       tokenRatingId,
+//       projectId
+//     );
+//     if (!tokensAvailable)
+//       return res.status(400).json({ error: "Insufficient tokens" });
 
-    const updatedAt = new Date().toISOString();
-    const statusId = 1;
-    const update_request = await updateTokenRequestFromDb(
-      requestId,
-      proposedNumOfTokens,
-      tokenRatingId,
-      projectId,
-      statusId,
-      updatedAt
-    );
-    if (update_request.error)
-      return res.status(500).json({ error: "Internal server error" });
+//     const updatedAt = new Date().toISOString();
+//     const statusId = 1;
+//     const update_request = await updateTokenRequestFromDb(
+//       requestId,
+//       proposedNumOfTokens,
+//       tokenRatingId,
+//       projectId,
+//       statusId,
+//       updatedAt
+//     );
+//     if (update_request.error)
+//       return res.status(500).json({ error: "Internal server error" });
 
-    res.status(200).json({ success: "Token request updated successfully" });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-};
+//     res.status(200).json({ success: "Token request updated successfully" });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 const deleteTokenRequest = async (req, res) => {
   try {
@@ -395,8 +419,6 @@ const deleteTokenRequest = async (req, res) => {
       return res.status(404).json({ error: "Token request not found" });
     if (request.requested_by_id !== userId)
       return res.status(401).json({ error: "Unauthorized" });
-    if (request.token_purchase_request_status_id === 2)
-      return res.status(400).json({ error: "Token request already accepted" });
 
     const delete_request = await deleteTokenRequestFromDb(requestId);
     if (delete_request.error)
@@ -452,10 +474,6 @@ const acceptTokenRequest = async (req, res) => {
       return res.status(404).json({ error: "Token request not found" });
     if (request.listed_by_id !== userId)
       return res.status(401).json({ error: "Unauthorized" });
-    if (request.exchange_token_status_id !== 1)
-      return res.status(400).json({ error: "The exchange deal is not pending" });
-    if (request.token_purchase_request_status_id === 2)
-      return res.status(400).json({ error: "Token request already accepted" });
 
     const updatedAt = new Date().toISOString();
     const change_token_request_status = await updateTokenRequestStatusFromDb(
@@ -505,10 +523,6 @@ const rejectTokenRequest = async (req, res) => {
             return res.status(404).json({ error: "Token request not found" });
         if (request.listed_by_id !== userId)
             return res.status(401).json({ error: "Unauthorized" });
-        if (request.exchange_token_status_id !== 1)
-            return res.status(400).json({ error: "The exchange deal is not pending" });
-        if (request.token_purchase_request_status_id !== 1)
-            return res.status(400).json({ error: "Token request is not pending" });
 
         const updatedAt = new Date().toISOString();
         const change_token_request_status = await updateTokenRequestStatusFromDb(requestId, 3, updatedAt);
@@ -526,17 +540,19 @@ export {
   getAllDvpProjects,
   getDvpDetailsFromDb,
   getDvpDetails,
+  getInvestorTokenOrders,
+  getInvestorTokenOrderDetails,
   orderTokens,
   cancelOrder,
-  getInvestorTokenListings,
-  getInvestorTokenListingDetails,
+  getAllTokenListings,
+  getTokenListingDetails,
   listTokens,
-  updateTokenListing,
+  // updateTokenListing,
   deleteTokenListing,
   getInvestorTokenRequests,
   getInvestorTokenRequestDetails,
   requestTokens,
-  updateTokenRequest,
+  // updateTokenRequest,
   deleteTokenRequest,
   getSentTokenRequests,
   getSentTokenRequestDetails,

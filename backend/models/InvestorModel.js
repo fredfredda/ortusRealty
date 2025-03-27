@@ -2,7 +2,17 @@ import { db } from "../server.js";
 
 const getAllDvpProjectsFromDb = async () => {
   try {
-    const dvpProjects = await db.query(`SELECT * FROM development_projects`);
+    const dvpProjects = await db.query(`
+      SELECT dp.id, dp.property_id, p.prpty_name, p.prpty_description,
+      dp.launching_date, dp.estimated_finishing_date, dp.total_tokens,
+      dp.minimum_tokens_to_buy, dp.tokens_description, 
+      dp.development_project_status_id, dps.development_project_status
+      FROM development_projects as dp
+      JOIN properties as p ON dp.property_id = p.id
+      JOIN development_project_statuses as dps
+      ON dp.development_project_status_id = dps.id
+      WHERE dp.development_project_status_id = 2
+`);
     const data = dvpProjects.rows;
     return data;
   } catch (error) {
@@ -14,11 +24,35 @@ const getAllDvpProjectsFromDb = async () => {
 const getDvpDetailsFromDb = async (projectId) => {
   try {
     const dvpDetails = await db.query(
-      `SELECT * FROM development_projects WHERE id = $1`,
+      `SELECT dp.id, dp.property_id, p.prpty_name, p.prpty_description,
+      dp.launching_date, dp.estimated_finishing_date, dp.total_tokens,
+      dp.minimum_tokens_to_buy, dp.tokens_description, 
+      dp.development_project_status_id, dps.development_project_status
+      FROM development_projects as dp
+      JOIN properties as p ON dp.property_id = p.id
+      JOIN development_project_statuses as dps
+      ON dp.development_project_status_id = dps.id
+      WHERE dp.development_project_status_id = 2 AND dp.id = $1`,
       [projectId]
     );
     const data = dvpDetails.rows[0];
     return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+const checkTokensAvailabilityFromDb = async (projectId, numOfTokens, tokenRatingId) =>{
+  try {
+    const tokens = await db.query(`
+      SELECT id FROM property_tokens WHERE development_project_id = $1 AND token_rating_id = $2 AND token_status_id = 1
+    `,[projectId, tokenRatingId]);
+    const data = tokens.rows;
+    if(data.length < numOfTokens){
+      return false;
+    }
+    return true;
   } catch (error) {
     console.log(error);
     return { error };
@@ -35,7 +69,7 @@ const orderTokensFromDb = async (
 ) => {
   try {
     await db.query(
-      `INSERT INTO orders (requested_by_id, development_project_id, num_of_tokens, token_rating_id, token_order_status_id, created_at) VALUES ($1, $2, $3, $4, $5, $6)`,
+      `INSERT INTO token_orders (requested_by_id, development_project_id, num_of_tokens, token_rating_id, token_order_status_id, created_at) VALUES ($1, $2, $3, $4, $5, $6)`,
       [userId, projectId, numOfTokens, tokenRatingId, statusId, createdAt]
     );
     return { success: true };
@@ -45,10 +79,47 @@ const orderTokensFromDb = async (
   }
 };
 
-const getOrderDetailsFromDb = async (orderId) => {
+const getInvestorTokenOrdersFromDb = async (userId) => {
   try {
-    const order = await db.query(`SELECT * FROM token_orders WHERE id = $1`, [
-      orderId,
+    const order = await db.query(`
+      SELECT t.id, t.num_of_tokens, t.token_rating_id,
+      tr.token_rating, t.token_order_status_id,
+      tos.token_order_status, t.development_project_id,
+      dp.property_id, p.prpty_name
+      FROM token_orders AS t
+      JOIN token_ratings AS tr ON t.token_rating_id = tr.id
+      JOIN token_order_statuses AS tos
+      ON t.token_order_status_id = tos.id
+      JOIN development_projects AS dp 
+      ON t.development_project_id = dp.id
+      JOIN properties AS p ON dp.property_id = p.id
+      WHERE t.requested_by_id = $1`, [
+      userId,
+    ]);
+    const data = order.rows;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
+const getOrderDetailsFromDb = async (userId, orderId) => {
+  try {
+    const order = await db.query(`
+      SELECT t.id, t.num_of_tokens, t.token_rating_id,
+      tr.token_rating, t.token_order_status_id,
+      tos.token_order_status, t.development_project_id,
+      dp.property_id, p.prpty_name
+      FROM token_orders AS t
+      JOIN token_ratings AS tr ON t.token_rating_id = tr.id
+      JOIN token_order_statuses AS tos
+      ON t.token_order_status_id = tos.id
+      JOIN development_projects AS dp 
+      ON t.development_project_id = dp.id
+      JOIN properties AS p ON dp.property_id = p.id
+      WHERE t.requested_by_id = $1 AND t.id = $2`, [
+      userId, orderId
     ]);
     const data = order.rows[0];
     return data;
@@ -68,11 +139,22 @@ const deleteOrderFromDb = async (orderId) => {
   }
 };
 
-const getInvestorTokenListingsFromDb = async (userId) => {
+const getAllTokenListingsFromDb = async () => {
   try {
     const tokenListings = await db.query(
-      `SELECT * FROM exchange_tokens WHERE listed_by_id = $1`,
-      [userId]
+      `
+      SELECT et.id, et.listed_by_id, u.first_name, u.last_name,
+      et.description, et.num_of_tokens, et.token_rating_id,
+      tr.token_rating, et.development_project_id,
+      dp.property_id, p.prpty_name
+      FROM exchange_tokens AS et
+      JOIN users AS u ON et.listed_by_id = u.id
+      JOIN token_ratings AS tr ON et.token_rating_id = tr.id
+      JOIN development_projects AS dp
+      ON et.development_project_id = dp.id
+      JOIN properties AS p ON dp.property_id = p.id
+      WHERE et.exchange_token_status_id = 1
+      `,
     );
     const data = tokenListings.rows;
     return data;
@@ -82,20 +164,23 @@ const getInvestorTokenListingsFromDb = async (userId) => {
   }
 };
 
-const getInvestorTokenListingDetailsFromDb = async (userId, listingId) => {
+const getTokenListingDetailsFromDb = async (listingId) => {
   try {
-    if (!userId) {
-      const tokenListing = await db.query(
-        `SELECT * FROM exchange_tokens WHERE id = $1`,
-        [listingId]
-      );
-      const data = tokenListing.rows[0];
-      return data;
-    }
-
     const tokenListing = await db.query(
-      `SELECT * FROM exchange_tokens WHERE listed_by_id = $1 AND id = $2`,
-      [userId, listingId]
+      `
+      SELECT et.id, et.listed_by_id, u.first_name, u.last_name,
+      et.description, et.num_of_tokens, et.token_rating_id,
+      tr.token_rating, et.development_project_id,
+      dp.property_id, p.prpty_name
+      FROM exchange_tokens AS et
+      JOIN users AS u ON et.listed_by_id = u.id
+      JOIN token_ratings AS tr ON et.token_rating_id = tr.id
+      JOIN development_projects AS dp
+      ON et.development_project_id = dp.id
+      JOIN properties AS p ON dp.property_id = p.id
+      WHERE et.exchange_token_status_id = 1 AND et.id = $1
+      `,
+      [listingId]
     );
     const data = tokenListing.rows[0];
     return data;
@@ -136,15 +221,16 @@ const checkUserTokensFromDb = async (
 
     // getting total investor tokens
     const tokenCount = await db.query(
-      `SELECT COUNT(id) FROM investors_tokens WHERE user_id = $1 AND t.token_rating_id = $2 AND t.development_project_id = $3 AND token_status_id = 2`,
+      `SELECT COUNT(it.id) FROM investors_tokens AS it 
+      JOIN property_tokens AS pt ON it.property_token_id = pt.id
+      WHERE it.user_id = $1 AND pt.token_rating_id = $2 AND pt.development_project_id = $3 AND pt.token_status_id = 2 AND it.investors_tokens_status_id = 1`,
       [userId, tokenRatingId, projectId]
     );
     const tokenCountData = tokenCount.rows[0];
-    const totalInvestorTokens = tokenCountData.count;
+    const totalInvestorTokens = Number(tokenCountData.count);
 
     // checking if user has enough tokens to sell
-    const numOfTokensToSell =
-      totalInvestorTokens - (totaltokensOnRequests + totalTokensOnExchange);
+    const numOfTokensToSell = totalInvestorTokens - (totaltokensOnRequests + totalTokensOnExchange);
     if (numOfTokensToSell < numOfTokens) {
       return false;
     }
@@ -161,12 +247,13 @@ const listTokensFromDb = async (
   description,
   tokenRatingId,
   statusId,
+  projectId,
   createdAt
 ) => {
   try {
     await db.query(
-      `INSERT INTO exchange_tokens (listed_by_id, num_of_tokens, description, token_rating_id, exchange_token_status_id, created_at) VALUES ($1, $2, $3, $4, $5, $6)`,
-      [userId, numOfTokens, description, tokenRatingId, statusId, createdAt]
+      `INSERT INTO exchange_tokens (listed_by_id, num_of_tokens, description, token_rating_id, exchange_token_status_id, development_project_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [userId, numOfTokens, description, tokenRatingId, statusId, projectId, createdAt]
     );
     return { success: true };
   } catch (error) {
@@ -207,7 +294,18 @@ const deleteTokenListingFromDb = async (listingId) => {
 const getInvestorTokenRequestsFromDb = async (userId) => {
   try {
     const tokenRequests = await db.query(
-      `SELECT * FROM token_purchase_requests WHERE requested_by_id = $1`,
+      `
+      SELECT tpr.id, tpr.num_of_tokens,
+      tpr.token_rating_id, tr.token_rating,
+      tpr.token_purchase_request_status_id,
+      tprs.token_purchase_request_status, tpr.development_project_id,
+      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      FROM token_purchase_requests AS tpr
+      JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
+      JOIN token_purchase_request_statuses AS tprs
+      ON tpr.token_purchase_request_status_id = tprs.id
+      JOIN exchange_tokens AS et ON tpr.exchange_token_id = et.id
+      WHERE tpr.requested_by_id = $1 AND tpr.token_purchase_request_status_id = 1`,
       [userId]
     );
     const data = tokenRequests.rows;
@@ -221,7 +319,18 @@ const getInvestorTokenRequestsFromDb = async (userId) => {
 const getInvestorTokenRequestDetailsFromDb = async (userId, requestId) => {
   try {
     const tokenRequest = await db.query(
-      `SELECT * FROM token_purchase_requests WHERE requested_by_id = $1 AND id = $2`,
+      `
+      SELECT tpr.id, tpr.num_of_tokens,
+      tpr.token_rating_id, tr.token_rating,
+      tpr.token_purchase_request_status_id,
+      tprs.token_purchase_request_status, tpr.development_project_id,
+      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      FROM token_purchase_requests AS tpr
+      JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
+      JOIN token_purchase_request_statuses AS tprs
+      ON tpr.token_purchase_request_status_id = tprs.id
+      JOIN exchange_tokens AS et ON tpr.exchange_token_id = et.id
+      WHERE tpr.requested_by_id = $1 AND tpr.id = $2 AND tpr.token_purchase_request_status_id = 1`,
       [userId, requestId]
     );
     const data = tokenRequest.rows[0];
@@ -231,6 +340,20 @@ const getInvestorTokenRequestDetailsFromDb = async (userId, requestId) => {
     return { error };
   }
 };
+
+const checkRequestExistsFromDb = async (userId, listingId) => {
+  try {
+    const request = await db.query(
+      `SELECT * FROM token_purchase_requests WHERE requested_by_id = $1 AND exchange_token_id = $2 AND token_purchase_request_status_id != 2`, 
+      [userId, listingId]
+    );
+    const data = request.rows;
+    return data.length > 0;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
 
 const requestTokensFromDb = async (
   userId,
@@ -301,7 +424,17 @@ const deleteTokenRequestFromDb = async (requestId) => {
 const getSentTokenRequestsFromDb = async (userId) => {
   try {
     const requests = await db.query(
-      `SELECT * FROM token_purchase_requests WHERE exchange_token_id IN (SELECT id FROM exchange_tokens WHERE listed_by_id = $1)`,
+      `SELECT tpr.id, tpr.num_of_tokens,
+      tpr.token_rating_id, tr.token_rating,
+      tpr.token_purchase_request_status_id,
+      tprs.token_purchase_request_status, tpr.development_project_id,
+      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      FROM token_purchase_requests AS tpr
+      JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
+      JOIN token_purchase_request_statuses AS tprs
+      ON tpr.token_purchase_request_status_id = tprs.id
+      JOIN exchange_tokens AS et ON tpr.exchange_token_id = et.id
+      WHERE et.listed_by_id = $1 AND tpr.token_purchase_request_status_id = 1 AND et.exchange_token_status_id = 1`,
       [userId]
     );
     const data = requests.rows;
@@ -315,7 +448,17 @@ const getSentTokenRequestsFromDb = async (userId) => {
 const getSentTokenRequestDetailsFromDb = async (userId, requestId) => {
   try {
     const request = await db.query(
-      `SELECT * FROM token_purchase_requests WHERE exchange_token_id IN (SELECT id FROM exchange_tokens WHERE listed_by_id = $1) AND id = $2`,
+      `SELECT tpr.id, tpr.num_of_tokens,
+      tpr.token_rating_id, tr.token_rating,
+      tpr.token_purchase_request_status_id,
+      tprs.token_purchase_request_status, tpr.development_project_id,
+      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      FROM token_purchase_requests AS tpr
+      JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
+      JOIN token_purchase_request_statuses AS tprs
+      ON tpr.token_purchase_request_status_id = tprs.id
+      JOIN exchange_tokens AS et ON tpr.exchange_token_id = et.id
+      WHERE et.listed_by_id = $1 AND tpr.token_purchase_request_status_id = 1 AND et.exchange_token_status_id = 1 AND tpr.id = $2`,
       [userId, requestId]
     );
     const data = request.rows[0];
@@ -375,7 +518,7 @@ const updateTokensOwnerFromDb = async (
     await db.query(
       `UPDATE investors_tokens SET user_id = $1, updated_at = $2 
        WHERE user_id = $3 
-       AND token_id IN (SELECT id FROM tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2) LIMIT $6`,
+       AND token_id IN (SELECT id FROM property_tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2 LIMIT $6)`,
       [
         buyerId,
         updatedAt,
@@ -389,7 +532,7 @@ const updateTokensOwnerFromDb = async (
     await db.query(
       `UPDATE investors_tokens SET user_id = $1, updated_at = $2 
        WHERE user_id = $3 
-       AND token_id IN (SELECT id FROM tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2) LIMIT $6`,
+       AND token_id IN (SELECT id FROM property_tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2 LIMIT $6)`,
       [
         sellerId,
         updatedAt,
@@ -410,17 +553,20 @@ const updateTokensOwnerFromDb = async (
 export {
   getAllDvpProjectsFromDb,
   getDvpDetailsFromDb,
+  checkTokensAvailabilityFromDb,
+  getInvestorTokenOrdersFromDb,
   orderTokensFromDb,
   getOrderDetailsFromDb,
   deleteOrderFromDb,
-  getInvestorTokenListingsFromDb,
-  getInvestorTokenListingDetailsFromDb,
+  getAllTokenListingsFromDb,
+  getTokenListingDetailsFromDb,
   checkUserTokensFromDb,
   listTokensFromDb,
   updateTokenListingFromDb,
   deleteTokenListingFromDb,
   getInvestorTokenRequestsFromDb,
   getInvestorTokenRequestDetailsFromDb,
+  checkRequestExistsFromDb,
   requestTokensFromDb,
   updateTokenRequestFromDb,
   deleteTokenRequestFromDb,
