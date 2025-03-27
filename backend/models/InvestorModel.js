@@ -589,6 +589,26 @@ const updateTokensOwnerFromDb = async (
   }
 };
 
+const getAllTokenPriceHistoryFromDb = async () => {
+  try {
+    const prices = await db.query(`SELECT * FROM token_history_prices`);
+    return prices.rows;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+const getAllTokenValuationHistoryFromDb = async () => {
+  try {
+    const valuations = await db.query(`SELECT * FROM token_valuation_history`);
+    return valuations.rows;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
 export {
   getPortfolioFromDb,
   getAllDvpProjectsFromDb,
@@ -615,4 +635,6 @@ export {
   updateTokenRequestStatusFromDb,
   updateExchangeTokenStatusFromDb,
   updateTokensOwnerFromDb,
+  getAllTokenPriceHistoryFromDb,
+  getAllTokenValuationHistoryFromDb,
 };

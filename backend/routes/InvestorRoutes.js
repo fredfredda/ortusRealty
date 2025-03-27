@@ -22,6 +22,8 @@ import {
   getInvestorTokenOrders,
   getInvestorTokenOrderDetails,
   getPortfolio,
+  getAllTokenPriceHistory,
+  getAllTokenValuationHistory,
 } from "../controllers/InvestorController.js";
 
 const router = express.Router();
@@ -74,5 +76,9 @@ router.get("/sent-requests", protectRoute, getSentTokenRequests);
 router.get("/sent-request/:requestId", protectRoute, getSentTokenRequestDetails);
 router.put("/accept-token-request/:requestId", protectRoute, acceptTokenRequest);
 router.put("/reject-token-request/:requestId", protectRoute, rejectTokenRequest);
+
+// [this can be real time]
+router.get("/tokens-price-history", protectRoute, getAllTokenPriceHistory);
+router.get("/tokens-valuation-history", protectRoute, getAllTokenValuationHistory);
 
 export default router;

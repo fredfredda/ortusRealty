@@ -24,6 +24,8 @@ import {
   getSentTokenRequestsFromDb,
   getPortfolioFromDb,
   checkRequestExistsFromDb,
+  getAllTokenPriceHistoryFromDb,
+  getAllTokenValuationHistoryFromDb,
 } from "../models/InvestorModel.js";
 
 const getPortfolio = async (req, res) => {
@@ -566,6 +568,30 @@ const rejectTokenRequest = async (req, res) => {
   }
 };
 
+const getAllTokenPriceHistory = async (req, res) => {
+  try {
+    const tokenPriceHistory = await getAllTokenPriceHistoryFromDb();
+    if (tokenPriceHistory.error)
+      return res.status(500).json({ error: tokenPriceHistory.error });
+    return res.status(200).json({ tokenPriceHistory });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const getAllTokenValuationHistory = async (req, res) => {
+  try {
+    const tokenValuationHistory = await getAllTokenValuationHistoryFromDb();
+    if (tokenValuationHistory.error)
+      return res.status(500).json({ error: tokenValuationHistory.error });
+    return res.status(200).json({ tokenValuationHistory });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 export {
   getPortfolio,
   getAllDvpProjects,
@@ -589,4 +615,6 @@ export {
   getSentTokenRequestDetails,
   acceptTokenRequest,
   rejectTokenRequest,
+  getAllTokenPriceHistory,
+  getAllTokenValuationHistory,
 };
