@@ -45,6 +45,6 @@ app.use(cookieParser())
 app.use('/api/auth', AuthRoutes); // auth routes
 app.use('/api/users', UserRoutes); // user routes
 app.use('/api/properties', PropertyRoutes); // property routes
-app.use('/api/investors', InvestorRoutes); // investor routes
+app.use('/api/investor', InvestorRoutes); // investor routes
 
 app.listen(PORT, () => console.log(`Server listening at port ${PORT}`) );

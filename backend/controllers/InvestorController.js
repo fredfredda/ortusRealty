@@ -6,12 +6,12 @@ import {
   deleteOrderFromDb,
   checkUserTokensFromDb,
   listTokensFromDb,
-  updateTokenListingFromDb,
+  // updateTokenListingFromDb,
   deleteTokenListingFromDb,
   getInvestorTokenRequestsFromDb,
   getInvestorTokenRequestDetailsFromDb,
   requestTokensFromDb,
-  updateTokenRequestFromDb,
+  // updateTokenRequestFromDb,
   getSentTokenRequestDetailsFromDb,
   updateTokenRequestStatusFromDb,
   updateExchangeTokenStatusFromDb,
@@ -22,7 +22,22 @@ import {
   getAllTokenListingsFromDb,
   deleteTokenRequestFromDb,
   getSentTokenRequestsFromDb,
+  getPortfolioFromDb,
+  checkRequestExistsFromDb,
 } from "../models/InvestorModel.js";
+
+const getPortfolio = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const portfolio = await getPortfolioFromDb(userId);
+    if (portfolio.error)
+      return res.status(500).json({ error: "Internal server error" });
+    res.status(200).json({ portfolio });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 const getAllDvpProjects = async (req, res) => {
   try {
@@ -55,7 +70,8 @@ const getInvestorTokenOrders = async (req, res) => {
   try {
     const { userId } = req.user;
     const orders = await getInvestorTokenOrdersFromDb(userId);
-    if (orders.error) return res.status(500).json({ error: "Internal server error" });
+    if (orders.error)
+      return res.status(500).json({ error: "Internal server error" });
     res.status(200).json({ orders });
   } catch (error) {
     console.log(error);
@@ -63,21 +79,21 @@ const getInvestorTokenOrders = async (req, res) => {
   }
 };
 
-const getInvestorTokenOrderDetails = async (req,res) => {
+const getInvestorTokenOrderDetails = async (req, res) => {
   try {
-    const { userId} = req.user;
+    const { userId } = req.user;
     const { orderId } = req.params;
 
     const order = await getOrderDetailsFromDb(userId, orderId);
-    if (!order) return res.status(404).json({ error: "Order not found"});
-    if (order.error) return res.status(500).json({ error: order.error});
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    if (order.error) return res.status(500).json({ error: order.error });
 
-    return res.status(200).json({order});
+    return res.status(200).json({ order });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error })
+    return res.status(500).json({ error });
   }
-}
+};
 
 const orderTokens = async (req, res) => {
   try {
@@ -91,10 +107,17 @@ const orderTokens = async (req, res) => {
     if (!dvpDetails)
       return res.status(404).json({ error: "Project not found" });
     if (dvpDetails.minimum_tokens_to_buy > numOfTokens)
-      return res.status(400).json({ error: "Minimum tokens to buy is not met" });
+      return res
+        .status(400)
+        .json({ error: "Minimum tokens to buy is not met" });
 
-    const tokensAvailable = await checkTokensAvailabilityFromDb(projectId, numOfTokens, tokenRatingId);
-    if (!tokensAvailable) return res.status(400).json({ error: "Insufficient tokens" });
+    const tokensAvailable = await checkTokensAvailabilityFromDb(
+      projectId,
+      numOfTokens,
+      tokenRatingId
+    );
+    if (!tokensAvailable)
+      return res.status(400).json({ error: "Insufficient tokens" });
 
     const createdAt = new Date().toISOString();
     const statusId = 1;
@@ -314,7 +337,8 @@ const getInvestorTokenRequestDetails = async (req, res) => {
 const requestTokens = async (req, res) => {
   try {
     const { userId } = req.user;
-    const { listingId, proposedNumOfTokens, tokenRatingId, projectId } = req.body;
+    const { listingId, proposedNumOfTokens, tokenRatingId, projectId } =
+      req.body;
 
     if (!listingId || !proposedNumOfTokens || !tokenRatingId || !projectId)
       return res.status(400).json({ error: "Please provide all fields" });
@@ -323,10 +347,13 @@ const requestTokens = async (req, res) => {
     if (!tokenListing)
       return res.status(404).json({ error: "Token listing not found" });
     if (tokenListing.listed_by_id === userId)
-      return res.status(400).json({ error: "You cannot request tokens from yourself" });
+      return res
+        .status(400)
+        .json({ error: "You cannot request tokens from yourself" });
 
     const requestExists = await checkRequestExistsFromDb(userId, listingId);
-    if (requestExists) return res.status(400).json({ error: "Request already exists" });
+    if (requestExists)
+      return res.status(400).json({ error: "Request already exists" });
 
     const tokensAvailable = await checkUserTokensFromDb(
       userId,
@@ -344,6 +371,7 @@ const requestTokens = async (req, res) => {
       listingId,
       proposedNumOfTokens,
       tokenRatingId,
+      projectId,
       statusId,
       createdAt
     );
@@ -417,8 +445,6 @@ const deleteTokenRequest = async (req, res) => {
     );
     if (!request)
       return res.status(404).json({ error: "Token request not found" });
-    if (request.requested_by_id !== userId)
-      return res.status(401).json({ error: "Unauthorized" });
 
     const delete_request = await deleteTokenRequestFromDb(requestId);
     if (delete_request.error)
@@ -472,10 +498,22 @@ const acceptTokenRequest = async (req, res) => {
     const request = await getSentTokenRequestDetailsFromDb(userId, requestId);
     if (!request)
       return res.status(404).json({ error: "Token request not found" });
-    if (request.listed_by_id !== userId)
-      return res.status(401).json({ error: "Unauthorized" });
 
     const updatedAt = new Date().toISOString();
+    const change_tokens_holder = await updateTokensOwnerFromDb(
+      userId,
+      request.requested_by_id,
+      request.listed_project_id,
+      request.proposed_project_id,
+      request.listed_num_of_tokens,
+      request.proposed_num_of_tokens,
+      request.listed_token_rating_id,
+      request.proposed_token_rating_id,
+      updatedAt
+    );
+    if (change_tokens_holder.error)
+      return res.status(500).json({ error: "Internal server error" });
+
     const change_token_request_status = await updateTokenRequestStatusFromDb(
       requestId,
       2,
@@ -492,20 +530,6 @@ const acceptTokenRequest = async (req, res) => {
     if (change_exchange_token_status.error)
       return res.status(500).json({ error: "Internal server error" });
 
-    const change_tokens_holder = await updateTokensOwnerFromDb(
-      userId,
-      request.requested_by_id,
-      request.sold_development_project_id,
-      request.proposed_development_project_id,
-      request.sold_num_of_tokens,
-      request.proposed_num_of_tokens,
-      request.sold_token_rating_id,
-      request.proposed_token_rating_id,
-      updatedAt
-    );
-    if (change_tokens_holder.error)
-      return res.status(500).json({ error: "Internal server error" });
-
     res.status(200).json({ success: "Token request accepted successfully" });
   } catch (error) {
     console.log(error);
@@ -514,29 +538,36 @@ const acceptTokenRequest = async (req, res) => {
 };
 
 const rejectTokenRequest = async (req, res) => {
-    try {
-        const { userId } = req.user;
-        const { requestId } = req.params;
+  try {
+    const { userId } = req.user;
+    const { requestId } = req.params;
 
-        const request = await getSentTokenRequestDetailsFromDb(userId, requestId);
-        if (!request)
-            return res.status(404).json({ error: "Token request not found" });
-        if (request.listed_by_id !== userId)
-            return res.status(401).json({ error: "Unauthorized" });
+    const request = await getSentTokenRequestDetailsFromDb(userId, requestId);
+    if (!request)
+      return res.status(404).json({ error: "Token request not found" });
+    if (request.listed_by_id !== userId)
+      return res.status(401).json({ error: "Unauthorized" });
 
-        const updatedAt = new Date().toISOString();
-        const change_token_request_status = await updateTokenRequestStatusFromDb(requestId, 3, updatedAt);
-        if (change_token_request_status.error)
-            return res.status(500).json({ error: "Internal server error" });
+    const updatedAt = new Date().toISOString();
+    const change_token_request_status = await updateTokenRequestStatusFromDb(
+      requestId,
+      3,
+      updatedAt
+    );
+    if (change_token_request_status.error)
+      return res.status(500).json({ error: "Internal server error" });
 
-        return res.status(200).json({ success: "Token request rejected successfully" });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: "Internal server error" });
-    }
+    return res
+      .status(200)
+      .json({ success: "Token request rejected successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export {
+  getPortfolio,
   getAllDvpProjects,
   getDvpDetailsFromDb,
   getDvpDetails,

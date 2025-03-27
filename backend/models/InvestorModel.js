@@ -1,5 +1,38 @@
 import { db } from "../server.js";
 
+const getPortfolioFromDb = async (userId) => {
+  try {
+    // get unpaid tokens
+    const { rows: investorTokens } = await db.query(`
+      SELECT COUNT(it.id) AS total_tokens_per_rating, 
+      pt.token_rating_id, pt.development_project_id
+      FROM investors_tokens AS it
+      JOIN property_tokens AS pt ON it.property_token_id = pt.id
+      WHERE user_id = $1 AND it.investors_tokens_status_id = 1
+      GROUP BY(pt.token_rating_id, pt.development_project_id)
+      `, [userId]);
+    
+    const { rows: tokensOnExchange } = await db.query(`
+      SELECT SUM(num_of_tokens) AS num_of_tokens, token_rating_id, development_project_id
+      FROM exchange_tokens
+      WHERE listed_by_id = $1 AND exchange_token_status_id = 1
+      GROUP BY(token_rating_id, development_project_id)
+    `, [userId]);
+
+    const { rows: tokensOnRequest } = await db.query(`
+      SELECT SUM(num_of_tokens) AS num_of_tokens, token_rating_id, development_project_id
+      FROM token_purchase_requests
+      WHERE requested_by_id = $1 AND token_purchase_request_status_id = 1
+      GROUP BY(token_rating_id, development_project_id)
+    `, [userId]);
+
+    return { investorTokens, tokensOnExchange, tokensOnRequest };
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
 const getAllDvpProjectsFromDb = async () => {
   try {
     const dvpProjects = await db.query(`
@@ -295,11 +328,12 @@ const getInvestorTokenRequestsFromDb = async (userId) => {
   try {
     const tokenRequests = await db.query(
       `
-      SELECT tpr.id, tpr.num_of_tokens,
-      tpr.token_rating_id, tr.token_rating,
+      SELECT tpr.id, tpr.num_of_tokens AS proposed_num_of_tokens,
+      tpr.token_rating_id AS proposed_rating_id, tr.token_rating AS proposed_token_rating,
       tpr.token_purchase_request_status_id,
-      tprs.token_purchase_request_status, tpr.development_project_id,
-      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      tprs.token_purchase_request_status, tpr.development_project_id AS proposed_project_id,
+      tpr.exchange_token_id, et.num_of_tokens AS num_of_tokens_on_sale, et.token_rating_id
+      AS listed_token_rating_id, et.development_project_id AS listed_project_id
       FROM token_purchase_requests AS tpr
       JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
       JOIN token_purchase_request_statuses AS tprs
@@ -320,11 +354,12 @@ const getInvestorTokenRequestDetailsFromDb = async (userId, requestId) => {
   try {
     const tokenRequest = await db.query(
       `
-      SELECT tpr.id, tpr.num_of_tokens,
-      tpr.token_rating_id, tr.token_rating,
+      SELECT tpr.id, tpr.num_of_tokens AS proposed_num_of_tokens,
+      tpr.token_rating_id AS proposed_rating_id, tr.token_rating AS proposed_token_rating,
       tpr.token_purchase_request_status_id,
-      tprs.token_purchase_request_status, tpr.development_project_id,
-      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      tprs.token_purchase_request_status, tpr.development_project_id AS proposed_project_id,
+      tpr.exchange_token_id, et.num_of_tokens AS num_of_tokens_on_sale, et.token_rating_id
+      AS listed_token_rating_id, et.development_project_id AS listed_project_id
       FROM token_purchase_requests AS tpr
       JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
       JOIN token_purchase_request_statuses AS tprs
@@ -344,7 +379,7 @@ const getInvestorTokenRequestDetailsFromDb = async (userId, requestId) => {
 const checkRequestExistsFromDb = async (userId, listingId) => {
   try {
     const request = await db.query(
-      `SELECT * FROM token_purchase_requests WHERE requested_by_id = $1 AND exchange_token_id = $2 AND token_purchase_request_status_id != 2`, 
+      `SELECT id FROM token_purchase_requests WHERE requested_by_id = $1 AND exchange_token_id = $2 AND token_purchase_request_status_id != 2`, 
       [userId, listingId]
     );
     const data = request.rows;
@@ -360,17 +395,19 @@ const requestTokensFromDb = async (
   listingId,
   proposedNumOfTokens,
   tokenRatingId,
+  projectId,
   statusId,
   createdAt
 ) => {
   try {
     await db.query(
-      `INSERT INTO token_purchase_requests (requested_by_id, exchange_token_id, num_of_tokens, token_rating_id, token_purchase_request_status_id, created_at) VALUES ($1, $2, $3, $4, $5, $6)`,
+      `INSERT INTO token_purchase_requests (requested_by_id, exchange_token_id, num_of_tokens, token_rating_id, development_project_id, token_purchase_request_status_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
         userId,
         listingId,
         proposedNumOfTokens,
         tokenRatingId,
+        projectId,
         statusId,
         createdAt,
       ]
@@ -424,11 +461,12 @@ const deleteTokenRequestFromDb = async (requestId) => {
 const getSentTokenRequestsFromDb = async (userId) => {
   try {
     const requests = await db.query(
-      `SELECT tpr.id, tpr.num_of_tokens,
-      tpr.token_rating_id, tr.token_rating,
+      `SELECT tpr.id, tpr.requested_by_id, tpr.num_of_tokens AS proposed_num_of_tokens,
+      tpr.token_rating_id AS proposed_rating_id, tr.token_rating AS proposed_token_rating,
       tpr.token_purchase_request_status_id,
-      tprs.token_purchase_request_status, tpr.development_project_id,
-      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      tprs.token_purchase_request_status, tpr.development_project_id AS proposed_project_id,
+      tpr.exchange_token_id, et.num_of_tokens AS listed_num_of_tokens,
+      et.token_rating_id AS listed_token_rating_id, et.development_project_id AS listed_project_id
       FROM token_purchase_requests AS tpr
       JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
       JOIN token_purchase_request_statuses AS tprs
@@ -448,11 +486,12 @@ const getSentTokenRequestsFromDb = async (userId) => {
 const getSentTokenRequestDetailsFromDb = async (userId, requestId) => {
   try {
     const request = await db.query(
-      `SELECT tpr.id, tpr.num_of_tokens,
-      tpr.token_rating_id, tr.token_rating,
+      `SELECT tpr.id, tpr.requested_by_id, tpr.num_of_tokens AS proposed_num_of_tokens,
+      tpr.token_rating_id AS proposed_token_rating_id, tr.token_rating AS proposed_token_rating,
       tpr.token_purchase_request_status_id,
-      tprs.token_purchase_request_status, tpr.development_project_id,
-      tpr.exchange_token_id, et.num_of_tokens, et.token_rating_id
+      tprs.token_purchase_request_status, tpr.development_project_id AS proposed_project_id,
+      tpr.exchange_token_id, et.num_of_tokens AS listed_num_of_tokens,
+      et.token_rating_id AS listed_token_rating_id, et.development_project_id AS listed_project_id
       FROM token_purchase_requests AS tpr
       JOIN token_ratings AS tr ON tpr.token_rating_id = tr.id
       JOIN token_purchase_request_statuses AS tprs
@@ -518,7 +557,7 @@ const updateTokensOwnerFromDb = async (
     await db.query(
       `UPDATE investors_tokens SET user_id = $1, updated_at = $2 
        WHERE user_id = $3 
-       AND token_id IN (SELECT id FROM property_tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2 LIMIT $6)`,
+       AND property_token_id IN (SELECT id FROM property_tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2 LIMIT $6)`,
       [
         buyerId,
         updatedAt,
@@ -532,7 +571,7 @@ const updateTokensOwnerFromDb = async (
     await db.query(
       `UPDATE investors_tokens SET user_id = $1, updated_at = $2 
        WHERE user_id = $3 
-       AND token_id IN (SELECT id FROM property_tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2 LIMIT $6)`,
+       AND property_token_id IN (SELECT id FROM property_tokens WHERE token_rating_id = $4 AND development_project_id = $5 AND token_status_id = 2 LIMIT $6)`,
       [
         sellerId,
         updatedAt,
@@ -551,6 +590,7 @@ const updateTokensOwnerFromDb = async (
 };
 
 export {
+  getPortfolioFromDb,
   getAllDvpProjectsFromDb,
   getDvpDetailsFromDb,
   checkTokensAvailabilityFromDb,

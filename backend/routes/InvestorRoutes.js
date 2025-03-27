@@ -21,9 +21,12 @@ import {
   rejectTokenRequest,
   getInvestorTokenOrders,
   getInvestorTokenOrderDetails,
+  getPortfolio,
 } from "../controllers/InvestorController.js";
 
 const router = express.Router();
+
+router.get("/", protectRoute, getPortfolio);
 
 router.get("/development-projects", protectRoute, getAllDvpProjects);
 router.get("/development-project/:projectId", protectRoute, getDvpDetails);
@@ -69,7 +72,7 @@ router.delete("/delete-token-request/:requestId", protectRoute, deleteTokenReque
 
 router.get("/sent-requests", protectRoute, getSentTokenRequests);
 router.get("/sent-request/:requestId", protectRoute, getSentTokenRequestDetails);
-router.put("/accept-request/:requestId", protectRoute, acceptTokenRequest);
-router.put("/reject-request/:requestId", protectRoute, rejectTokenRequest);
+router.put("/accept-token-request/:requestId", protectRoute, acceptTokenRequest);
+router.put("/reject-token-request/:requestId", protectRoute, rejectTokenRequest);
 
 export default router;
