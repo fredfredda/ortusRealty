@@ -21,6 +21,11 @@ const menuItems = {
       text: "Saved Properties",
       href: "/saved-properties",
     },
+    {
+      icon: "flaticon-home",
+      text: "Investor Module",
+      href: "/investor-module/portfolio",
+    },
   ],
 };
 
@@ -156,6 +161,7 @@ const Header = () => {
                           </a>
                           <div className="dropdown-menu">
                             <div className="user_setting_content">
+                              {/* Drop down menu items */}
                               <div>
                                 {menuItems.items.map((item, itemIndex) => (
                                   <Link
@@ -170,6 +176,8 @@ const Header = () => {
                                   </Link>
                                 ))}
                               </div>
+
+                              {/* Logout */}
                               <div>
                                 <button
                                   className="dropdown-item"

@@ -85,7 +85,7 @@ const MainMenu = () => {
           </span>
         </Link>
       </li>
-      {/* End property Items */}
+      {/* End About */}
 
       <li className="visible_list dropitem">
         <Link className="list-item" href="/contact">
