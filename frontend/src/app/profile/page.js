@@ -3,7 +3,7 @@ import Footer from "@/components/home/home-v8/footer";
 import Header from "@/components/home/home-v8/Header";
 import MobileMenu from "@/components/common/mobile-menu";
 import ChangePasswordForm from "@/components/property/dashboard/dashboard-profile/ChangePasswordForm";
-import PersonalInfo from "@/components/property/dashboard/dashboard-profile/PersonalInfo";
+import PersonalInfo from "@/components/profile/PersonalInfo";
 
 export const metadata = {
   title: "Ortus Realty - Profile",

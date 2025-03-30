@@ -28,7 +28,8 @@ import {
 
 const router = express.Router();
 
-router.get("/", protectRoute, getPortfolio);
+// router.get("/", protectRoute, getPortfolio);
+router.get("/", getPortfolio); // for testing purposes
 
 router.get("/development-projects", protectRoute, getAllDvpProjects);
 router.get("/development-project/:projectId", protectRoute, getDvpDetails);

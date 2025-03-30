@@ -751,6 +751,14 @@ li {
     -o-box-shadow: 0px 1px 4px rgba(24, 26, 32, 0.07);
     box-shadow: 0px 1px 4px rgba(24, 26, 32, 0.07);
 }
+.statistics_funfact.active-investment{
+    background-color: #e2eef8;
+    border: 2px solid rgb(124, 124, 255);
+}
+.statistics_funfact.ready-for-payout{
+    background-color: #f0f8ff;
+    border: 2px solid rgb(109, 220, 109);
+}
 .statistics_funfact .icon {
     background-color: #f3f5f6;
     border-radius: 50%;
@@ -1319,6 +1327,11 @@ li {
         width: 100%;
     }
 }
+@media (max-width: 767.98px) {
+    .listing-style1.listing-type {
+        display: block;
+    }
+}
 @media screen and (max-width: 636px) {
     .listing-style1.listing-type .project-info {
         flex-direction: column;
@@ -1329,11 +1342,6 @@ li {
     }
     .listing-style1.listing-type .list-content {
         width: 96%;
-    }
-}
-@media (max-width: 767.98px) {
-    .listing-style1.listing-type {
-        display: block;
     }
 }
 .listing-style1.listing-type .list-content {
@@ -3222,7 +3230,7 @@ li {
 .sp-v5-property-details {
     margin-top: -180px;
     position: relative;
-    z-index: 1;
+    z-index: 1; 
 }
 .sp-v5-property-details .sp-lg-title,
 .sp-v5-property-details .text,
@@ -10538,4 +10546,11 @@ input:focus-visible {
 
 .forgot_password:hover{
     color: var(--primary-color);
+}
+
+.title.active-investment, .active-investment{
+    color: blue;
+}
+.title.ready-for-payout, .ready-for-payout{
+    color: green;
 }

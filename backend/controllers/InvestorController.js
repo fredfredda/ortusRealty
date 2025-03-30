@@ -30,11 +30,42 @@ import {
 
 const getPortfolio = async (req, res) => {
   try {
-    const { userId } = req.user;
+    // const { userId } = req.user;
+    const userId = 47; // for testing purposes, remove this line later
+
     const portfolio = await getPortfolioFromDb(userId);
     if (portfolio.error)
       return res.status(500).json({ error: "Internal server error" });
-    res.status(200).json({ portfolio });
+
+    const calculateSum = (arr, propertyName) => {
+      let sum = 0;
+      arr.forEach((item) => {
+        sum += Number(item[propertyName]);
+      });
+      return sum;
+    };
+    const sumActiveInvestments = calculateSum(portfolio.activeInvestments, "monetary_value");
+    const sumReadyForPayout = calculateSum(portfolio.readyForPayout, "monetary_value");
+    
+    const activeInvestments = {
+      // title: "Active Investments",
+      balance: sumActiveInvestments,
+      tokenInfo: portfolio.activeInvestments.map( (item) => ({rating: item.token_rating, value: item.num_of_tokens})),
+      // styleClass: "active-investment",
+      // description: "Estimated return of all your active tokens combined",
+    };
+
+    const readyForPayout = {
+      // title: "Active Investments",
+      balance: sumReadyForPayout,
+      tokenInfo: portfolio.readyForPayout.map((item) => ({
+        rating: item.token_rating, value: item.num_of_tokens
+      })),
+      // styleClass: "active-investment",
+      // description: "Estimated return of all your active tokens combined",
+    };
+
+    res.status(200).json({ activeInvestments, readyForPayout });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Internal server error" });

@@ -2,7 +2,7 @@ import express from 'express';
 import AuthRoutes from './routes/AuthRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
 import PropertyRoutes from './routes/PropertyRoutes.js';
-import InvestorRoutes from './routes/investorRoutes.js';
+import InvestorRoutes from './routes/InvestorRoutes.js';
 import pg from 'pg';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';

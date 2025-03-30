@@ -2,31 +2,37 @@ import { db } from "../server.js";
 
 const getPortfolioFromDb = async (userId) => {
   try {
-    // get unpaid tokens
-    const { rows: investorTokens } = await db.query(`
-      SELECT COUNT(it.id) AS total_tokens_per_rating, 
-      pt.token_rating_id, pt.development_project_id
-      FROM investors_tokens AS it
-      JOIN property_tokens AS pt ON it.property_token_id = pt.id
-      WHERE user_id = $1 AND it.investors_tokens_status_id = 1
-      GROUP BY(pt.token_rating_id, pt.development_project_id)
+    // get number of active and unpaid tokens
+    const { rows: activeInvestments } = await db.query(`
+      SELECT COUNT(pt.id) AS num_of_tokens, SUM(pt.estimated_return) AS monetary_value,
+      pt.token_rating_id, tr.token_rating
+      FROM property_tokens AS pt
+      JOIN (
+        SELECT property_token_id
+        FROM investors_tokens
+        WHERE user_id = $1 AND investors_tokens_status_id = 1
+      ) AS it ON pt.id = it.property_token_id
+      JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
+      WHERE pt.token_status_id = 2
+      GROUP BY(pt.token_rating_id, tr.token_rating)
       `, [userId]);
-    
-    const { rows: tokensOnExchange } = await db.query(`
-      SELECT SUM(num_of_tokens) AS num_of_tokens, token_rating_id, development_project_id
-      FROM exchange_tokens
-      WHERE listed_by_id = $1 AND exchange_token_status_id = 1
-      GROUP BY(token_rating_id, development_project_id)
-    `, [userId]);
 
-    const { rows: tokensOnRequest } = await db.query(`
-      SELECT SUM(num_of_tokens) AS num_of_tokens, token_rating_id, development_project_id
-      FROM token_purchase_requests
-      WHERE requested_by_id = $1 AND token_purchase_request_status_id = 1
-      GROUP BY(token_rating_id, development_project_id)
-    `, [userId]);
+      // get number of tokens ready for payout
+    const { rows: readyForPayout } = await db.query(`
+      SELECT COUNT(pt.id) AS num_of_tokens,
+      SUM(pt.estimated_return) AS monetary_value, pt.token_rating_id, tr.token_rating
+      FROM property_tokens AS pt
+      JOIN (
+        SELECT property_token_id
+        FROM investors_tokens
+        WHERE user_id = $1 AND investors_tokens_status_id = 1
+      ) AS it ON pt.id = it.property_token_id
+      JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
+      WHERE pt.token_status_id = 3
+      GROUP BY(pt.token_rating_id, tr.token_rating)
+      `, [userId]);
 
-    return { investorTokens, tokensOnExchange, tokensOnRequest };
+    return { activeInvestments, readyForPayout };
   } catch (error) {
     console.log(error);
     return { error };
