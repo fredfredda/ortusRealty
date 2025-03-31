@@ -24,14 +24,14 @@ import {
   getSentTokenRequestsFromDb,
   getPortfolioFromDb,
   checkRequestExistsFromDb,
-  getAllTokenPriceHistoryFromDb,
-  getAllTokenValuationHistoryFromDb,
+  getTokensValuationHistoryFromDb,
+  getTokensPriceHistoryFromDb,
 } from "../models/InvestorModel.js";
 
 const getPortfolio = async (req, res) => {
   try {
-    // const { userId } = req.user;
-    const userId = 47; // for testing purposes, remove this line later
+    const { userId } = req.user;
+    // const userId = 47; // for testing purposes, remove this line later
 
     const portfolio = await getPortfolioFromDb(userId);
     if (portfolio.error)
@@ -44,37 +44,113 @@ const getPortfolio = async (req, res) => {
       });
       return sum;
     };
-    const sumActiveInvestments = calculateSum(portfolio.activeInvestments, "monetary_value");
-    const sumReadyForPayout = calculateSum(portfolio.readyForPayout, "monetary_value");
-    
+    const sumActiveInvestments = calculateSum(
+      portfolio.activeInvestments,
+      "monetary_value"
+    );
+    const sumReadyForPayout = calculateSum(
+      portfolio.readyForPayout,
+      "monetary_value"
+    );
+
     const activeInvestments = {
       // title: "Active Investments",
       balance: sumActiveInvestments,
-      tokenInfo: portfolio.activeInvestments.map( (item) => ({rating: item.token_rating, value: item.num_of_tokens})),
+      tokenInfo: portfolio.activeInvestments.map((item) => ({
+        rating: item.token_rating,
+        value: item.num_of_tokens,
+      })),
       // styleClass: "active-investment",
       // description: "Estimated return of all your active tokens combined",
     };
-
     const readyForPayout = {
       // title: "Active Investments",
       balance: sumReadyForPayout,
       tokenInfo: portfolio.readyForPayout.map((item) => ({
-        rating: item.token_rating, value: item.num_of_tokens
+        rating: item.token_rating,
+        value: item.num_of_tokens,
       })),
       // styleClass: "active-investment",
       // description: "Estimated return of all your active tokens combined",
     };
 
-    res.status(200).json({ activeInvestments, readyForPayout });
+    const generateTokenDetails = (arr) => {
+      let formattedArr = [];
+
+      if (arr.length > 0){
+        while (true) {
+          let project_id = arr[0].development_project_id;
+          let property_name = arr[0].prpty_name;
+          let similar_items = [];
+  
+          for (let i = 0; i < arr.length; i++) {
+            if (arr[i].development_project_id === arr[0].development_project_id) {
+              similar_items.push({
+                rating: arr[i].token_rating,
+                value: arr[i].num_of_tokens,
+                return: Math.round((((arr[i].estimated_return - arr[i].token_price) * 100) /
+                arr[i].token_price) * 100) / 100,
+              });
+            }
+          }
+  
+          arr = arr.filter((item) => item.development_project_id !== project_id);
+          formattedArr.push({
+            projectId: project_id,
+            propertyName: property_name,
+            tokenInfo: similar_items,
+          });
+          if (arr.length === 0) break;
+        }
+      }
+
+      return formattedArr;
+    };
+    const activeTokensDetails = generateTokenDetails(
+      portfolio.activeTokensDetails
+    );
+    const burntUnpaidTokensDetails = generateTokenDetails(
+      portfolio.burntUnpaidTokensDetails
+    );
+
+    res
+      .status(200)
+      .json({ activeInvestments, readyForPayout, activeTokensDetails, burntUnpaidTokensDetails });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
 
+const getTokensValuationHistory = async (req, res) => {
+  try {
+    const { dataLength, offset } = req.query;
+    const valuationHistory = await getTokensValuationHistoryFromDb(dataLength, offset);
+    if (valuationHistory.error) return res.status(500).json({ error: "Internal Server Error"});
+    res.status(200).json({valuationHistory})
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error })
+  }
+}
+
+const getTokensPriceHistory = async (req, res) => {
+  try {
+    const { dataLength, offset } = req.query;
+    const priceHistory = await getTokensPriceHistoryFromDb(dataLength, offset);
+    if (priceHistory.error) return res.status(500).json({ error: "Internal Server Error"});
+    res.status(200).json({priceHistory})
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error })
+  }
+}
+
 const getAllDvpProjects = async (req, res) => {
   try {
-    const dvpProjects = await getAllDvpProjectsFromDb();
+    const { dataLength, page } = req.query;
+    const offset = (page - 1) * dataLength;
+    const dvpProjects = await getAllDvpProjectsFromDb(dataLength, offset);
     if (dvpProjects.error)
       return res.status(500).json({ error: "Internal server error" });
     res.status(200).json({ dvpProjects });
@@ -599,32 +675,10 @@ const rejectTokenRequest = async (req, res) => {
   }
 };
 
-const getAllTokenPriceHistory = async (req, res) => {
-  try {
-    const tokenPriceHistory = await getAllTokenPriceHistoryFromDb();
-    if (tokenPriceHistory.error)
-      return res.status(500).json({ error: tokenPriceHistory.error });
-    return res.status(200).json({ tokenPriceHistory });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-const getAllTokenValuationHistory = async (req, res) => {
-  try {
-    const tokenValuationHistory = await getAllTokenValuationHistoryFromDb();
-    if (tokenValuationHistory.error)
-      return res.status(500).json({ error: tokenValuationHistory.error });
-    return res.status(200).json({ tokenValuationHistory });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-
 export {
   getPortfolio,
+  getTokensValuationHistory,
+  getTokensPriceHistory,
   getAllDvpProjects,
   getDvpDetailsFromDb,
   getDvpDetails,
@@ -646,6 +700,4 @@ export {
   getSentTokenRequestDetails,
   acceptTokenRequest,
   rejectTokenRequest,
-  getAllTokenPriceHistory,
-  getAllTokenValuationHistory,
 };

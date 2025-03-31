@@ -807,6 +807,10 @@ li {
     width: 40px;
 }
 
+.recent-activity .icon.green-bg {
+    background-color: #f0f8ff;
+}
+
 .pending-style {
     font-family: var(--title-font-family);
     font-weight: 400;
@@ -10549,8 +10553,15 @@ input:focus-visible {
 }
 
 .title.active-investment, .active-investment{
-    color: blue;
+    color: rgb(124, 124, 255);
 }
 .title.ready-for-payout, .ready-for-payout{
-    color: green;
+    color: rgb(109, 220, 109);
+}
+
+.view-more{
+    cursor: pointer;
+}
+.view-more:hover{
+    text-decoration: underline;
 }
