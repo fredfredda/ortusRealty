@@ -90,6 +90,36 @@ const getPortfolioFromDb = async (userId) => {
   }
 };
 
+const getInvestorTokensFromDb = async (userId) => {
+  try {
+    const tokens = await db.query(`
+      SELECT COUNT(pt.id) AS num_of_tokens, p.prpty_price,
+      pt.development_project_id, p.prpty_name, p.prpty_location,
+      p.images, dp.launching_date, dp.estimated_finishing_date,
+      tr.token_rating, pt.estimated_return, ts.token_status
+      FROM property_tokens AS pt
+      JOIN token_statuses AS ts ON pt.token_status_id = ts.id 
+      JOIN investors_tokens AS it ON pt.id = it.property_token_id
+      JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
+      JOIN development_projects AS dp
+      ON pt.development_project_id = dp.id
+      JOIN properties AS p ON dp.property_id = p.id
+      WHERE pt.token_status_id != 1 AND it.user_id = $1
+      AND it.investors_tokens_status_id = 1
+      GROUP BY(pt.development_project_id, tr.token_rating,
+            pt.estimated_return,
+          p.prpty_name, p.prpty_location, p.images,
+          dp.launching_date, dp.estimated_finishing_date,
+          ts.token_status, p.prpty_price)
+    `, [userId]);
+    const data = tokens.rows;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
 const getTokensValuationHistoryFromDb = async (dataLength, offset) => {
   try {
     const valuationHistory = await db.query(
@@ -150,7 +180,7 @@ const getAllDvpProjectsFromDb = async (dataLength, offset) => {
     WHERE dp.development_project_status_id = 2
     LIMIT $1 OFFSET $2
 `,
-      [dataLength, offset]
+      [dataLength || 4, offset || 0]
     );
     const data = dvpProjects.rows;
     return data;
@@ -181,6 +211,38 @@ const getDvpDetailsFromDb = async (projectId) => {
     return { error };
   }
 };
+
+const getTokensByProjectIdFromDb = async (projectId) => {
+  try {
+    const { rows:tokens } = await db.query(`
+      SELECT tr.token_rating, 
+      COUNT(pt.id) AS num_of_tokens, pt.estimated_return
+      FROM property_tokens AS pt
+      JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
+      JOIN development_projects AS dp ON pt.development_project_id = dp.id
+      WHERE pt.token_status_id != 3
+      AND pt.development_project_id = $1 AND dp.development_project_status_id = 2
+      GROUP BY(pt.token_rating_id, tr.token_rating, pt.estimated_return)
+      ORDER BY pt.token_rating_id;
+      `, [projectId]);
+
+    const { rows: tokenPrices } = await db.query(`
+      SELECT pt.token_price, pt.token_rating_id, tr.token_rating
+      FROM property_tokens AS pt
+      JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
+      JOIN development_projects AS dp ON pt.development_project_id = dp.id
+      WHERE pt.token_status_id = 1
+      AND pt.development_project_id = $1 AND dp.development_project_status_id = 2
+      GROUP BY (pt.token_rating_id, tr.token_rating, pt.token_price)
+      ORDER BY pt.token_rating_id
+    `, [projectId]);
+
+    return { tokens, tokenPrices };
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
 
 const checkTokensAvailabilityFromDb = async (
   projectId,
@@ -225,14 +287,15 @@ const orderTokensFromDb = async (
   }
 };
 
-const getInvestorTokenOrdersFromDb = async (userId) => {
+const getInvestorTokenOrdersFromDb = async (userId, dataLength, offset) => {
   try {
     const order = await db.query(
       `
-      SELECT t.id, t.num_of_tokens, t.token_rating_id,
-      tr.token_rating, t.token_order_status_id,
+      SELECT t.id, t.num_of_tokens, tr.token_rating, 
       tos.token_order_status, t.development_project_id,
-      dp.property_id, p.prpty_name
+      p.prpty_name, p.prpty_location, p.images, p.is_featured,
+      p.prpty_price, dp.launching_date, dp.estimated_finishing_date,
+      t.created_at, dp.total_tokens
       FROM token_orders AS t
       JOIN token_ratings AS tr ON t.token_rating_id = tr.id
       JOIN token_order_statuses AS tos
@@ -240,8 +303,10 @@ const getInvestorTokenOrdersFromDb = async (userId) => {
       JOIN development_projects AS dp 
       ON t.development_project_id = dp.id
       JOIN properties AS p ON dp.property_id = p.id
-      WHERE t.requested_by_id = $1`,
-      [userId]
+      WHERE t.requested_by_id = $1
+      ORDER BY t.id DESC
+      LIMIT $2 OFFSET $3`,
+      [userId, dataLength, offset]
     );
     const data = order.rows;
     return data;
@@ -291,12 +356,19 @@ const getAllTokenListingsFromDb = async () => {
   try {
     const tokenListings = await db.query(
       `
-      SELECT et.id, et.listed_by_id, u.first_name, u.last_name,
-      et.description, et.num_of_tokens, et.token_rating_id,
-      tr.token_rating, et.development_project_id,
-      dp.property_id, p.prpty_name
+      SELECT et.id, et.listed_by_id, et.description, et.num_of_tokens,
+      tr.token_rating, et.development_project_id, p.prpty_name,
+      p.prpty_location, p.prpty_price, dp.launching_date,
+      dp.estimated_finishing_date, pt.estimated_return
       FROM exchange_tokens AS et
-      JOIN users AS u ON et.listed_by_id = u.id
+      JOIN (
+        SELECT estimated_return, token_rating_id AS tkr_id,
+        development_project_id AS dp_id
+        FROM property_tokens
+        GROUP BY(development_project_id, token_rating_id, 
+            estimated_return)
+      ) AS pt ON et.development_project_id = pt.dp_id
+      AND et.token_rating_id = pt.tkr_id
       JOIN token_ratings AS tr ON et.token_rating_id = tr.id
       JOIN development_projects AS dp
       ON et.development_project_id = dp.id
@@ -715,10 +787,12 @@ const updateTokensOwnerFromDb = async (
 
 export {
   getPortfolioFromDb,
+  getInvestorTokensFromDb,
   getTokensValuationHistoryFromDb,
   getTokensPriceHistoryFromDb,
   getAllDvpProjectsFromDb,
   getDvpDetailsFromDb,
+  getTokensByProjectIdFromDb,
   checkTokensAvailabilityFromDb,
   getInvestorTokenOrdersFromDb,
   orderTokensFromDb,
@@ -742,22 +816,3 @@ export {
   updateExchangeTokenStatusFromDb,
   updateTokensOwnerFromDb,
 };
-
-
-// SELECT tr.token_rating, 
-// COUNT(pt.id) AS num_of_tokens, pt.estimated_return
-// FROM property_tokens AS pt
-// JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
-// WHERE pt.token_status_id != 3
-// AND pt.development_project_id = 1
-// GROUP BY(pt.token_rating_id, tr.token_rating, pt.estimated_return)
-// ORDER BY pt.token_rating_id;
-
-// SELECT pt.token_price, pt.token_rating_id, tr.token_rating
-// FROM property_tokens AS pt
-// JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
-// WHERE pt.token_status_id = 1
-// AND pt.development_project_id = 1
-// GROUP BY (pt.token_rating_id, tr.token_rating,
-// 		 pt.token_price)
-// ORDER BY pt.token_rating_id

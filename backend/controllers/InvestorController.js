@@ -26,6 +26,8 @@ import {
   checkRequestExistsFromDb,
   getTokensValuationHistoryFromDb,
   getTokensPriceHistoryFromDb,
+  getTokensByProjectIdFromDb,
+  getInvestorTokensFromDb,
 } from "../models/InvestorModel.js";
 
 const getPortfolio = async (req, res) => {
@@ -52,7 +54,6 @@ const getPortfolio = async (req, res) => {
       portfolio.readyForPayout,
       "monetary_value"
     );
-
     const activeInvestments = {
       // title: "Active Investments",
       balance: sumActiveInvestments,
@@ -77,24 +78,32 @@ const getPortfolio = async (req, res) => {
     const generateTokenDetails = (arr) => {
       let formattedArr = [];
 
-      if (arr.length > 0){
+      if (arr.length > 0) {
         while (true) {
           let project_id = arr[0].development_project_id;
           let property_name = arr[0].prpty_name;
           let similar_items = [];
-  
+
           for (let i = 0; i < arr.length; i++) {
-            if (arr[i].development_project_id === arr[0].development_project_id) {
+            if (
+              arr[i].development_project_id === arr[0].development_project_id
+            ) {
               similar_items.push({
                 rating: arr[i].token_rating,
                 value: arr[i].num_of_tokens,
-                return: Math.round((((arr[i].estimated_return - arr[i].token_price) * 100) /
-                arr[i].token_price) * 100) / 100,
+                return:
+                  Math.round(
+                    (((arr[i].estimated_return - arr[i].token_price) * 100) /
+                      arr[i].token_price) *
+                      100
+                  ) / 100,
               });
             }
           }
-  
-          arr = arr.filter((item) => item.development_project_id !== project_id);
+
+          arr = arr.filter(
+            (item) => item.development_project_id !== project_id
+          );
           formattedArr.push({
             projectId: project_id,
             propertyName: property_name,
@@ -113,38 +122,58 @@ const getPortfolio = async (req, res) => {
       portfolio.burntUnpaidTokensDetails
     );
 
-    res
-      .status(200)
-      .json({ activeInvestments, readyForPayout, activeTokensDetails, burntUnpaidTokensDetails });
+    res.status(200).json({
+      activeInvestments,
+      readyForPayout,
+      activeTokensDetails,
+      burntUnpaidTokensDetails,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
 
+const getInvestorTokens = async (req,res) => {
+  try {
+    const { userId } = req.user;
+    const tokens = await getInvestorTokensFromDb(userId);
+    if (tokens.error) return res.status(400).json({ error: "Internal server error"});
+    return res.status(200).json({tokens});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
+  }
+}
+
 const getTokensValuationHistory = async (req, res) => {
   try {
     const { dataLength, offset } = req.query;
-    const valuationHistory = await getTokensValuationHistoryFromDb(dataLength, offset);
-    if (valuationHistory.error) return res.status(500).json({ error: "Internal Server Error"});
-    res.status(200).json({valuationHistory})
+    const valuationHistory = await getTokensValuationHistoryFromDb(
+      dataLength,
+      offset
+    );
+    if (valuationHistory.error)
+      return res.status(500).json({ error: "Internal Server Error" });
+    res.status(200).json({ valuationHistory });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error })
+    return res.status(500).json({ error });
   }
-}
+};
 
 const getTokensPriceHistory = async (req, res) => {
   try {
     const { dataLength, offset } = req.query;
     const priceHistory = await getTokensPriceHistoryFromDb(dataLength, offset);
-    if (priceHistory.error) return res.status(500).json({ error: "Internal Server Error"});
-    res.status(200).json({priceHistory})
+    if (priceHistory.error)
+      return res.status(500).json({ error: "Internal Server Error" });
+    res.status(200).json({ priceHistory });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error })
+    return res.status(500).json({ error });
   }
-}
+};
 
 const getAllDvpProjects = async (req, res) => {
   try {
@@ -175,10 +204,38 @@ const getDvpDetails = async (req, res) => {
   }
 };
 
+const getTokensByProjectId = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const tokens = await getTokensByProjectIdFromDb(projectId);
+    if (tokens.error)
+      return res.status(500).json({ error: "Internal server error" });
+
+    for (let i = 0; i < tokens.tokens.length; i++) {
+      tokens.tokens[i].token_price = tokens.tokenPrices[i].token_price;
+      tokens.tokens[i].estimated_return =
+        Math.round(
+          (((tokens.tokens[i].estimated_return -
+            tokens.tokenPrices[i].token_price) *
+            100) /
+            tokens.tokenPrices[i].token_price) *
+            100
+        ) / 100;
+    }
+
+    res.status(200).json({ tokens: tokens.tokens });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const getInvestorTokenOrders = async (req, res) => {
   try {
     const { userId } = req.user;
-    const orders = await getInvestorTokenOrdersFromDb(userId);
+    const { dataLength, page } = req.query;
+    const offset = (page - 1) * dataLength;
+    const orders = await getInvestorTokenOrdersFromDb(userId, dataLength, offset);
     if (orders.error)
       return res.status(500).json({ error: "Internal server error" });
     res.status(200).json({ orders });
@@ -677,10 +734,11 @@ const rejectTokenRequest = async (req, res) => {
 
 export {
   getPortfolio,
+  getInvestorTokens,
   getTokensValuationHistory,
   getTokensPriceHistory,
   getAllDvpProjects,
-  getDvpDetailsFromDb,
+  getTokensByProjectId,
   getDvpDetails,
   getInvestorTokenOrders,
   getInvestorTokenOrderDetails,

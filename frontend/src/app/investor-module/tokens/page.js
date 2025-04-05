@@ -1,13 +1,12 @@
 import Header from "@/components/home/home-v8/Header";
 import MobileMenu from "@/components/common/mobile-menu";
-import Pagination from "@/components/property/Pagination";
-import DboardMobileNavigation from "@/components/property/dashboard/DboardMobileNavigation";
-import Footer from "@/components/property/dashboard/Footer";
-import SidebarDashboard from "@/components/property/dashboard/SidebarDashboard";
-import Tokens from "@/components/property/dashboard/dashboard-message/Tokens";
+import DboardMobileNavigation from "@/components/property/investor-module/DboardMobileNavigation";
+import Footer from "@/components/property/investor-module/Footer";
+import SidebarDashboard from "@/components/property/investor-module/SidebarDashboard";
+import Tokens from "@/components/property/investor-module/tokens/Tokens";
 
 export const metadata = {
-  title: "Dashboard My Favourites || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty - My Tokens",
 };
 
 const DashboardMyFavourites = () => {
@@ -48,13 +47,6 @@ const DashboardMyFavourites = () => {
 
               <div className="row">
                 <Tokens />
-                <div className="col-xl-12">
-                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-                    <div className="mt30">
-                      <Pagination />
-                    </div>
-                  </div>
-                </div>
               </div>
               {/* End .row */}
             </div>

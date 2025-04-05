@@ -46,11 +46,6 @@ const SidebarDashboard = () => {
       href: "/sent-requests",
       icon: "flaticon-protection",
       text: "Sent Requests",
-    },
-    {
-      href: "/logout",
-      icon: "flaticon-user",
-      text: "Logout",
     }
   ];
 

@@ -4,11 +4,12 @@ import ImageKit from "@/components/common/ImageKit";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import formatMoney from "@/utilis/FormatMoney";
+import TokensTable from "./TokensTable";
 
 const ListingsFavourites = () => {
   const [projects, setProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
-  const dataLength = 1;
+  const dataLength = 4;
   const [page, setPage] = useState(1);
   const fetchProjectsRef = useRef(false);
 
@@ -126,63 +127,7 @@ const ListingsFavourites = () => {
               </div>
             </div>
 
-            <div className="col-xl-7">
-              <p className="text-center fz20 fwb mb0">Tokens Info</p>
-              <table className="table">
-                <thead>
-                  <tr className="text-center">
-                    <th scope="col">Rating</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Estimated return</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-center">
-                    <th scope="row">AAA</th>
-                    <td>70</td>
-                    <td>3,500,000</td>
-                    <td>10%</td>
-                  </tr>
-                  <tr className="text-center">
-                    <th scope="row">AAA</th>
-                    <td>70</td>
-                    <td>3,500,000</td>
-                    <td>10%</td>
-                  </tr>
-                  <tr className="text-center">
-                    <th scope="row">AAA</th>
-                    <td>70</td>
-                    <td>3,500,000</td>
-                    <td>10%</td>
-                  </tr>
-                  <tr className="text-center">
-                    <th scope="row">AAA</th>
-                    <td>70</td>
-                    <td>3,500,000</td>
-                    <td>10%</td>
-                  </tr>
-                  <tr className="text-center">
-                    <th scope="row">AAA</th>
-                    <td>70</td>
-                    <td>3,500,000</td>
-                    <td>10%</td>
-                  </tr>
-                  <tr className="text-center">
-                    <th scope="row">AAA</th>
-                    <td>70</td>
-                    <td>3,500,000</td>
-                    <td>10%</td>
-                  </tr>
-                  <tr className="text-center">
-                    <th scope="row">AAA</th>
-                    <td>70</td>
-                    <td>3,500,000</td>
-                    <td>10%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <TokensTable projectId={project.id}/>
           </div>
         ))}
 

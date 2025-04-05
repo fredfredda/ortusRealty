@@ -1,44 +1,96 @@
 "use client";
-import React from "react";
-import { Tooltip as ReactTooltip } from "react-tooltip";
-import listings from "@/data/listings";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import ImageKit from "@/components/common/ImageKit";
+import formatMoney from "@/utilis/FormatMoney";
 
 const ListingsFavourites = () => {
-  const [favoriteListings, setFavoriteListings] = useState(
-    listings.slice(0, 8)
-  );
+  const [tokenOrders, setTokenOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const dataLength = 4;
+  const fetchOrders = useRef(false);
 
-  const handleDeleteListing = (id) => {
-    const updatedListings = favoriteListings.filter(
-      (listing) => listing.id !== id
-    );
-    setFavoriteListings(updatedListings);
+  const fetchTokenOrders = async () => {
+    if (fetchOrders.current === true) return;
+    setLoading(true);
+    fetchOrders.current = true;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/token-orders?dataLength=${dataLength}&page=${page}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.error) {
+        console.error("Error Fetching Tks Orders: ", data.error);
+        toast.error(
+          typeof data.error === "string" ? data.error : "An error occured"
+        );
+      } else if (data.orders) {
+        setTokenOrders((prev) => [...prev, ...data.orders]);
+      }
+    } catch (error) {
+      console.error("Error fetching Tks orders: ", error);
+      toast.error("Error fetching Tks orders");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchTokenOrders();
+  }, [page]);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {
+      fetchOrders.current = false;
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
-      {favoriteListings.length === 0 ? (
-        <h3>No items available.</h3>
+      {tokenOrders.length === 0 ? (
+        <p className="text-center fz20">No items available.</p>
       ) : (
-        favoriteListings.map((listing) => (
-            <div className="listing-style1 listing-type">
-
+        <>
+          {tokenOrders.map((order, index) => (
+            <div key={index} className="listing-style1 listing-type">
               <div className="col-xl-5 mb15">
                 <p className="fz20 fwb mb5">Project Info</p>
                 <div className="row project-info mb15">
                   <div className="list-thumb">
-                    <Image
+                    <ImageKit
                       width={382}
                       height={248}
                       className="w-100 h-100 cover"
-                      src={"/images/listings/g1-2.jpg"}
+                      pathName={order.images.split(",")[0]}
+                      transformation={[{ quality: 80 }]}
+                      loading="lazy"
                       alt="listings"
                     />
                     <div className="sale-sticker-wrap">
-                      {!listing.forRent && (
+                      {order.is_featured && (
                         <div className="list-tag fz12">
                           <span className="flaticon-electricity me-2" />
                           FEATURED
@@ -46,41 +98,60 @@ const ListingsFavourites = () => {
                       )}
                     </div>
                     <div className="list-price">
-                      {listing.price} / <span>mo</span>
+                      Value: Bif {formatMoney(order.prpty_price)}
                     </div>
                   </div>
 
                   <div className="list-content">
                     <h6 className="list-title">
-                      <Link href={`/single-v4/${listing.id}`}>
-                        {listing.title}
+                      <Link href={`/development-project/${order.id}`}>
+                        {order.prpty_name}
                       </Link>
                     </h6>
-                    <p className="list-text order-text">{listing.location}</p>
-                    <p className="list-text2">Launching date: 26/03/2025</p>
-                    <p className="list-text2">Estimated Finishing date: 26/03/2025</p>
-                    <Link href="#" className="fwb">View project details {">>"}</Link>
+                    <p className="list-text">{order.prpty_location}</p>
+                    <p className="list-text2">
+                      Launching date: {order.launching_date.split("T")[0]}
+                    </p>
+                    <p className="list-text2">
+                      Estimated Finishing date:{" "}
+                      {order.estimated_finishing_date.split("T")[0]}
+                    </p>
+                    <p className="list-text2">
+                      Total TKs: {order.total_tokens}
+                    </p>
+                    <Link
+                      href={`/development-project/${order.id}`}
+                      className="fwb"
+                    >
+                      View project details {">>"}
+                    </Link>
                   </div>
                 </div>
               </div>
 
               <div className="col-xl-5">
                 <p className="fz20 fwb mb0">Order Info</p>
-                  <div className="list-content token-order-info">
-                    <p className="list-text2">Num of Tokens: 12</p>
-                    <p className="list-text2">Tokens Rating: BB</p>
-                    <p className="list-text2">Tokens Expiry date: 26/03/2027 23:59:59</p>
-                    <p className="list-text2">Total Price: Bif 36,000,000</p>
-                    <p className="list-text2">Estimated Return: 5.7%</p>
-                    <p className="list-text2">Date of order: 20/04/2025</p>
-                    <p className="list-text2">Order status: Pending</p>
-                    <Link href="#" className="fwb">View Tokens History {">>"}</Link>
-                  </div>
+                <div className="list-content token-order-info">
+                  <p className="list-text2">
+                    Num of Tks: {order.num_of_tokens}
+                  </p>
+                  <p className="list-text2">
+                    Tokens Rating: {order.token_rating}
+                  </p>
+                  <p className="list-text2">
+                    Date of order: {order.created_at.split("T")[0]}
+                  </p>
+                  <p className="list-text2">
+                    Order status: {order.token_order_status}
+                  </p>
+                </div>
                 {/* </div> */}
               </div>
-
             </div>
-        ))
+          ))}
+
+          {loading && <p className="text-center fz17">A moment please...</p>}
+        </>
       )}
     </>
   );

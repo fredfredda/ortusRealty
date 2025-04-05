@@ -24,16 +24,20 @@ import {
   getPortfolio,
   getTokensValuationHistory,
   getTokensPriceHistory,
+  getTokensByProjectId,
+  getInvestorTokens,
 } from "../controllers/InvestorController.js";
 
 const router = express.Router();
 
 router.get("/", protectRoute, getPortfolio);
+router.get("/tokens", protectRoute, getInvestorTokens);
 router.get("/tokens-valuation-history", protectRoute, getTokensValuationHistory);
 router.get("/tokens-price-history", protectRoute, getTokensPriceHistory);
 
 router.get("/development-projects", protectRoute, getAllDvpProjects);
 router.get("/development-project/:projectId", protectRoute, getDvpDetails);
+router.get("/tokens/:projectId", protectRoute, getTokensByProjectId);
 
 router.get("/token-orders", protectRoute, getInvestorTokenOrders);
 router.get("/token-order/:orderId", protectRoute, getInvestorTokenOrderDetails);

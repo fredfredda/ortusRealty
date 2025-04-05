@@ -39,7 +39,7 @@ const RecentActivities = () => {
 
       const data = await response.json();
       if (data.error) {
-        console.log("Error fecthing tokens valuation history: ", data.error);
+        console.log("Error fecthing Tks valuation history: ", data.error);
         toast.error(
           typeof data.error === "string" ? data.error : "An error occured"
         );
@@ -50,7 +50,7 @@ const RecentActivities = () => {
         setValuationFetchOffset(valuationFetchOffset + dataLength);
       }
     } catch (error) {
-      console.log("Error fetching tokens valuation history: ", error);
+      console.log("Error fetching Tks valuation history: ", error);
       toast.error("Error fetching valuation history");
     } finally {
       setLoadingValuation(false);

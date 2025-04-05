@@ -6,7 +6,7 @@ import SidebarDashboard from "@/components/property/investor-module/SidebarDashb
 import DevelopmentProjects from "@/components/property/investor-module/development-projects/DevelopmentProjects";
 
 export const metadata = {
-  title: "Dashboard My Favourites || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty - Development Projects",
 };
 
 const DashboardMyFavourites = () => {

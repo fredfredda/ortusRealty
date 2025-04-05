@@ -3,104 +3,6 @@ import formatMoney from "@/utilis/FormatMoney";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-// const accountData = [
-//   {
-//     title: "Active Investments",
-//     balance: "Bif 3,500,000",
-//     tokenInfo:
-//     [
-//         { rating: "AAA", value: "70" },
-//         { rating: "AA", value: "70" },
-//         { rating: "A", value: "70" },
-//         { rating: "BBB", value: "70" },
-//         { rating: "BB", value: "70" },
-//         { rating: "B", value: "70" },
-//         { rating: "C", value: "70" }
-//     ],
-//     styleClass: "active-investment",
-//     description: "Estimated return of all your active tokens combined",
-//   },
-//   {
-//     title: "Ready For Payout",
-//     balance: "Bif 3,500,000",
-//     tokenInfo:
-//     [
-//         { rating: "AAA", value: "70" },
-//         { rating: "AA", value: "70" },
-//         { rating: "A", value: "70" },
-//         { rating: "BBB", value: "70" },
-//         { rating: "BB", value: "70" },
-//         { rating: "B", value: "70" },
-//         { rating: "C", value: "70" }
-//     ],
-//     styleClass: "ready-for-payout",
-//     description: "Return on your investments ready for payout",
-//   },
-// ];
-
-const tokensData = [
-  {
-    propertyName: "Apartment project in Kigobe",
-    tokens: [
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "AAA",
-      },
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "BBB",
-      },
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "CCC",
-      },
-    ],
-  },
-  {
-    propertyName: "Apartment project in Kigobe",
-    tokens: [
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "AAA",
-      },
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "BBB",
-      },
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "CCC",
-      },
-    ],
-  },
-  {
-    propertyName: "Apartment project in Kigobe",
-    tokens: [
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "AAA",
-      },
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "BBB",
-      },
-      {
-        title: "7",
-        estimatedReturn: "Bif 3,500,000",
-        rating: "CCC",
-      },
-    ],
-  },
-];
-
 const TopStateBlock = () => {
   const [activeInvestments, setActiveInvestments] = useState({});
   const [readyForPayout, setReadyForPayout] = useState({});
@@ -240,7 +142,7 @@ const TopStateBlock = () => {
                   {data.tokenInfo.map((data, index) => (
                     <div
                       key={index}
-                      className="d-flex justify-content-between statistics_funfact"
+                      className="d-flex justify-content-between statistics_funfact active-investment"
                     >
                       <div className="details">
                         <div className="title ready-for-payout">{data.value} Tks</div>
