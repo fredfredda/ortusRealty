@@ -58,7 +58,17 @@ const TokensTable = ({ projectId }) => {
         </thead>
         <tbody>
           {loading ? (
-            <p className="text-center fz17">A moment please...</p>
+            <tr>
+              <td colSpan={4} className="text-center fz17">
+                A moment please...
+              </td>
+            </tr>
+          ) : tokens.length === 0 ? (
+            <tr>
+              <td colSpan={4} className="text-center fz17">
+                All TKs sold out! Check the TKs Exchange
+              </td>
+            </tr>
           ) : (
             tokens.map((token, index) => (
               <tr key={index} className="text-center">

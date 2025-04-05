@@ -211,19 +211,17 @@ const getTokensByProjectId = async (req, res) => {
     if (tokens.error)
       return res.status(500).json({ error: "Internal server error" });
 
-    for (let i = 0; i < tokens.tokens.length; i++) {
-      tokens.tokens[i].token_price = tokens.tokenPrices[i].token_price;
-      tokens.tokens[i].estimated_return =
+    tokens.forEach((token) => {
+      token.estimated_return =
         Math.round(
-          (((tokens.tokens[i].estimated_return -
-            tokens.tokenPrices[i].token_price) *
+          (((token.estimated_return - token.token_price) *
             100) /
-            tokens.tokenPrices[i].token_price) *
+            token.token_price) *
             100
         ) / 100;
-    }
+    });
 
-    res.status(200).json({ tokens: tokens.tokens });
+    res.status(200).json({ tokens });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
@@ -233,9 +231,7 @@ const getTokensByProjectId = async (req, res) => {
 const getInvestorTokenOrders = async (req, res) => {
   try {
     const { userId } = req.user;
-    const { dataLength, page } = req.query;
-    const offset = (page - 1) * dataLength;
-    const orders = await getInvestorTokenOrdersFromDb(userId, dataLength, offset);
+    const orders = await getInvestorTokenOrdersFromDb(userId);
     if (orders.error)
       return res.status(500).json({ error: "Internal server error" });
     res.status(200).json({ orders });

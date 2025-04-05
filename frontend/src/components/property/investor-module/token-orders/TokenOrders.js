@@ -1,16 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import ImageKit from "@/components/common/ImageKit";
 import formatMoney from "@/utilis/FormatMoney";
 
-const ListingsFavourites = () => {
+const TokenOrders = () => {
   const [tokenOrders, setTokenOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const dataLength = 4;
   const fetchOrders = useRef(false);
 
   const fetchTokenOrders = async () => {
@@ -19,7 +16,7 @@ const ListingsFavourites = () => {
     fetchOrders.current = true;
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/token-orders?dataLength=${dataLength}&page=${page}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/token-orders`,
         {
           method: "GET",
           headers: {
@@ -51,21 +48,6 @@ const ListingsFavourites = () => {
 
   useEffect(() => {
     fetchTokenOrders();
-  }, [page]);
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
-    ) {
-      fetchOrders.current = false;
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -104,7 +86,7 @@ const ListingsFavourites = () => {
 
                   <div className="list-content">
                     <h6 className="list-title">
-                      <Link href={`/development-project/${order.id}`}>
+                      <Link href={`/development-project/${order.development_project_id}`}>
                         {order.prpty_name}
                       </Link>
                     </h6>
@@ -120,7 +102,7 @@ const ListingsFavourites = () => {
                       Total TKs: {order.total_tokens}
                     </p>
                     <Link
-                      href={`/development-project/${order.id}`}
+                      href={`/development-project/${order.development_project_id}`}
                       className="fwb"
                     >
                       View project details {">>"}
@@ -157,4 +139,4 @@ const ListingsFavourites = () => {
   );
 };
 
-export default ListingsFavourites;
+export default TokenOrders;

@@ -214,35 +214,28 @@ const getDvpDetailsFromDb = async (projectId) => {
 
 const getTokensByProjectIdFromDb = async (projectId) => {
   try {
-    const { rows:tokens } = await db.query(`
+    const { rows: tokens } = await db.query(
+      `
       SELECT tr.token_rating, 
-      COUNT(pt.id) AS num_of_tokens, pt.estimated_return
-      FROM property_tokens AS pt
-      JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
-      JOIN development_projects AS dp ON pt.development_project_id = dp.id
-      WHERE pt.token_status_id != 3
-      AND pt.development_project_id = $1 AND dp.development_project_status_id = 2
-      GROUP BY(pt.token_rating_id, tr.token_rating, pt.estimated_return)
-      ORDER BY pt.token_rating_id;
-      `, [projectId]);
-
-    const { rows: tokenPrices } = await db.query(`
-      SELECT pt.token_price, pt.token_rating_id, tr.token_rating
+      COUNT(pt.id) AS num_of_tokens, pt.estimated_return,
+      pt.token_price
       FROM property_tokens AS pt
       JOIN token_ratings AS tr ON pt.token_rating_id = tr.id
       JOIN development_projects AS dp ON pt.development_project_id = dp.id
       WHERE pt.token_status_id = 1
       AND pt.development_project_id = $1 AND dp.development_project_status_id = 2
-      GROUP BY (pt.token_rating_id, tr.token_rating, pt.token_price)
-      ORDER BY pt.token_rating_id
-    `, [projectId]);
+      GROUP BY(pt.token_rating_id, tr.token_rating, pt.estimated_return, pt.token_price)
+      ORDER BY pt.token_rating_id;
+      `,
+      [projectId]
+    );
 
-    return { tokens, tokenPrices };
+    return tokens;
   } catch (error) {
     console.log(error);
     return { error };
   }
-}
+};
 
 const checkTokensAvailabilityFromDb = async (
   projectId,
@@ -287,7 +280,7 @@ const orderTokensFromDb = async (
   }
 };
 
-const getInvestorTokenOrdersFromDb = async (userId, dataLength, offset) => {
+const getInvestorTokenOrdersFromDb = async (userId) => {
   try {
     const order = await db.query(
       `
@@ -304,9 +297,8 @@ const getInvestorTokenOrdersFromDb = async (userId, dataLength, offset) => {
       ON t.development_project_id = dp.id
       JOIN properties AS p ON dp.property_id = p.id
       WHERE t.requested_by_id = $1
-      ORDER BY t.id DESC
-      LIMIT $2 OFFSET $3`,
-      [userId, dataLength, offset]
+      ORDER BY t.id DESC`,
+      [userId]
     );
     const data = order.rows;
     return data;
