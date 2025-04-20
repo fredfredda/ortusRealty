@@ -717,7 +717,8 @@ li {
 
 .dashboard__content {
     border-radius: 16px;
-    padding: 30px 60px 20px;
+    padding: 20px;
+    // padding: 30px 60px 20px;
     width: 100%;
 }
 @media (max-width: 767.98px) {
@@ -9947,6 +9948,11 @@ input:focus-visible {
 
 .table-style2 table.table > :not(caption) > * > * {
     border-bottom-width: 0;
+}
+
+.table-style3 {
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .table-style3.table {

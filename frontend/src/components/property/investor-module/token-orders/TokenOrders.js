@@ -3,12 +3,18 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import ImageKit from "@/components/common/ImageKit";
+import PaginationTwo from "@/components/listing/PaginationTwo";
 import formatMoney from "@/utilis/FormatMoney";
 
 const TokenOrders = () => {
   const [tokenOrders, setTokenOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchOrders = useRef(false);
+
+  const [numOfItems, setNumOfItems] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageItems, setPageItems] = useState([]);
+  const itemsPerPage = 5;
 
   const fetchTokenOrders = async () => {
     if (fetchOrders.current === true) return;
@@ -37,6 +43,7 @@ const TokenOrders = () => {
         );
       } else if (data.orders) {
         setTokenOrders((prev) => [...prev, ...data.orders]);
+        setNumOfItems(data.orders.length);
       }
     } catch (error) {
       console.error("Error fetching Tks orders: ", error);
@@ -50,91 +57,96 @@ const TokenOrders = () => {
     fetchTokenOrders();
   }, []);
 
+  useEffect(() => {
+    setPageItems(
+      tokenOrders.slice(
+        (pageNumber - 1) * itemsPerPage,
+        pageNumber * itemsPerPage
+      )
+    );
+  }, [pageNumber, tokenOrders]);
+
   return (
     <>
-      {tokenOrders.length === 0 ? (
-        <p className="text-center fz20">No items available.</p>
-      ) : (
-        <>
-          {tokenOrders.map((order, index) => (
-            <div key={index} className="listing-style1 listing-type">
-              <div className="col-xl-5 mb15">
-                <p className="fz20 fwb mb5">Project Info</p>
-                <div className="row project-info mb15">
-                  <div className="list-thumb">
-                    <ImageKit
-                      width={382}
-                      height={248}
-                      className="w-100 h-100 cover"
-                      pathName={order.images.split(",")[0]}
-                      transformation={[{ quality: 80 }]}
-                      loading="lazy"
-                      alt="listings"
-                    />
-                    <div className="sale-sticker-wrap">
-                      {order.is_featured && (
-                        <div className="list-tag fz12">
-                          <span className="flaticon-electricity me-2" />
-                          FEATURED
-                        </div>
-                      )}
+      <table className="table-style3 at-savesearch">
+        <thead className="t-head">
+          <tr>
+            <th scope="col">Project</th>
+            <th scope="col">Num Of TKs</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Date of Order</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody className="t-body">
+          {loading ? (
+            <tr>
+              <td colSpan={6} className="text-center fz17">
+                A moment please...
+              </td>
+            </tr>
+          ) : pageItems.length === 0 ? (
+            <tr>
+              <td colSpan={6} className="text-center fz17">
+                No data to display
+              </td>
+            </tr>
+          ) : (
+            pageItems.map((order) => (
+              <tr key={order.id}>
+                <th scope="row">
+                  <div className="listing-style1 dashboard-style d-xxl-flex align-items-center mb-0">
+                    <div className="list-thumb">
+                      <ImageKit
+                        width={110}
+                        height={94}
+                        className="w-100"
+                        pathName={order.images.split(",")[0]}
+                        transformation={[{ quality: 60 }]}
+                        loading="lazy"
+                        alt="order"
+                      />
                     </div>
-                    <div className="list-price">
-                      Value: Bif {formatMoney(order.prpty_price)}
+                    <div className="list-content py-0 p-0 mt-2 mt-xxl-0 ps-xxl-4">
+                      <div className="h6 list-title">
+                        <Link
+                          href={`/investor-module/development-project/${order.id}`}
+                        >
+                          {order.prpty_name.slice(0, 36)}
+                          {order.prpty_name.length > 36 && "..."}
+                        </Link>
+                      </div>
+                      <p className="list-text mb-0">{order.prpty_location}</p>
+                      <p>Launching date: {order.launching_date.split("T")[0]}</p>
+                      <p>Estimated Finishing Date: {order.estimated_finishing_date.split("T")[0]}</p>
                     </div>
                   </div>
-
-                  <div className="list-content">
-                    <h6 className="list-title">
-                      <Link href={`/development-project/${order.development_project_id}`}>
-                        {order.prpty_name}
-                      </Link>
-                    </h6>
-                    <p className="list-text">{order.prpty_location}</p>
-                    <p className="list-text2">
-                      Launching date: {order.launching_date.split("T")[0]}
-                    </p>
-                    <p className="list-text2">
-                      Estimated Finishing date:{" "}
-                      {order.estimated_finishing_date.split("T")[0]}
-                    </p>
-                    <p className="list-text2">
-                      Total TKs: {order.total_tokens}
-                    </p>
-                    <Link
-                      href={`/development-project/${order.development_project_id}`}
-                      className="fwb"
-                    >
-                      View project details {">>"}
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-xl-5">
-                <p className="fz20 fwb mb0">Order Info</p>
-                <div className="list-content token-order-info">
-                  <p className="list-text2">
-                    Num of Tks: {order.num_of_tokens}
-                  </p>
-                  <p className="list-text2">
-                    Tokens Rating: {order.token_rating}
-                  </p>
-                  <p className="list-text2">
-                    Date of order: {order.created_at.split("T")[0]}
-                  </p>
-                  <p className="list-text2">
-                    Order status: {order.token_order_status}
-                  </p>
-                </div>
-                {/* </div> */}
-              </div>
-            </div>
-          ))}
-
-          {loading && <p className="text-center fz17">A moment please...</p>}
-        </>
-      )}
+                </th>
+                <td className="vam">
+                  <h5>{order.num_of_tokens}</h5>
+                </td>
+                <td className="vam">
+                  <h5>{order.token_rating}</h5>
+                </td>
+                <td className="vam">{order.created_at.split("T")[0]}</td>
+                <td className="vam">{order.token_order_status}</td>
+                <td className="vam">
+                  <button>cancel</button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+      <div className="mt30">
+        <PaginationTwo
+          pageCapacity={itemsPerPage}
+          data={tokenOrders}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+        />
+      </div>
     </>
   );
 };

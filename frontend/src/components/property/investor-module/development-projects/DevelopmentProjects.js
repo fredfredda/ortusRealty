@@ -30,6 +30,7 @@ const ListingsFavourites = () => {
   const fetchProjectsRef = useRef(false);
 
   const [ratings, setRatings] = useState([]);
+  const [showOrderTKsForm, setShowOrderTKsForm] = useState(false);
 
   const fetchProjects = async () => {
     if (fetchProjectsRef.current === true) return;
@@ -136,44 +137,64 @@ const ListingsFavourites = () => {
                     <p className="list-text2">
                       Total TKs: {project.total_tokens}
                     </p>
-                    <button className="mt5 btn btn-dark">Order TKs</button>
-                    {/* <form>
-                      <div className="row">
-                        <div className="col-6 mb-0">
-                          <div className="">
-                            <Select
-                              name="colors"
-                              options={ratings}
-                              styles={customStyles}
-                              className="select-custom pl-0"
-                              classNamePrefix="select"
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="col-5 mb-0">
-                          <input
-                            type="number"
-                            className="form-control"
-                            placeholder="No TKs"
-                            required
-                          />
-                        </div>
-                        <div className="row justify-content-center align-items-center mt5 ">
-                            <input className="col-10 btn btn-dark" type="submit" value="Confirm Order" />
 
-                          <div className="col-5 align-items-center text-center">
-                            <p className="curp text-underline">Cancel</p>
-                          </div>
-                        </div>
-                      </div>
-                    </form> */}
                     <Link
                       href={`/investor-module/development-project/${project.id}`}
                       className="fwb"
                     >
                       View project details {">>"}
                     </Link>
+                    {showOrderTKsForm ? (
+                      <form className="mt5">
+                        <div className="row">
+                          <div className="col-6 mb-0">
+                            <div className="">
+                              <Select
+                                name="colors"
+                                options={ratings}
+                                styles={customStyles}
+                                className="select-custom pl-0"
+                                classNamePrefix="select"
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="col-5 mb-0">
+                            <input
+                              type="number"
+                              className="form-control"
+                              placeholder="No TKs"
+                              required
+                            />
+                          </div>
+                          <div className="row justify-content-center align-items-center mt5 ">
+                            <input
+                              className="col-10 btn btn-dark"
+                              type="submit"
+                              value="Confirm Order"
+                            />
+
+                            <div className="col-5 align-items-center text-center">
+                              <p
+                                className="curp text-underline"
+                                onClick={() => setShowOrderTKsForm(false)}
+                              >
+                                Cancel
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    ) : (
+                      <div className="mt5">
+                        <button
+                          className="btn btn-dark"
+                          onClick={() => setShowOrderTKsForm(true)}
+                        >
+                          Order TKs
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
