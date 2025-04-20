@@ -28,7 +28,7 @@ const DashboardMyFavourites = () => {
 
           <div className="dashboard__main pl0-md">
             <div className="dashboard__content bgc-f7">
-              <div className="row pb10">
+              <div className="row">
                 <div className="col-lg-12">
                   <DboardMobileNavigation />
                 </div>
@@ -36,7 +36,7 @@ const DashboardMyFavourites = () => {
               </div>
               {/* End .row */}
 
-              <div className="row">
+              <div className="row p10">
                 <DevelopmentProjects />
               </div>
               {/* End .row */}

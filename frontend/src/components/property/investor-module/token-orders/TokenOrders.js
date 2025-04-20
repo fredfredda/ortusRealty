@@ -68,7 +68,7 @@ const TokenOrders = () => {
 
   return (
     <>
-      <table className="table-style3 at-savesearch">
+      <table className="table-style1 table at-savesearch">
         <thead className="t-head">
           <tr>
             <th scope="col">Project</th>
@@ -118,8 +118,13 @@ const TokenOrders = () => {
                         </Link>
                       </div>
                       <p className="list-text mb-0">{order.prpty_location}</p>
-                      <p>Launching date: {order.launching_date.split("T")[0]}</p>
-                      <p>Estimated Finishing Date: {order.estimated_finishing_date.split("T")[0]}</p>
+                      <p className="mb-0">
+                        Launching date: {order.launching_date.split("T")[0]}
+                      </p>
+                      <p>
+                        Estimated Finishing Date:{" "}
+                        {order.estimated_finishing_date.split("T")[0]}
+                      </p>
                     </div>
                   </div>
                 </th>
@@ -132,7 +137,9 @@ const TokenOrders = () => {
                 <td className="vam">{order.created_at.split("T")[0]}</td>
                 <td className="vam">{order.token_order_status}</td>
                 <td className="vam">
-                  <button>cancel</button>
+                  {order.token_order_status !== "completed" && (
+                    <button className="btn btn-white2">cancel</button>
+                  )}
                 </td>
               </tr>
             ))

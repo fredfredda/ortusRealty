@@ -1,13 +1,12 @@
 import Header from "@/components/home/home-v8/Header";
 import MobileMenu from "@/components/common/mobile-menu";
-import Pagination from "@/components/property/Pagination";
-import DboardMobileNavigation from "@/components/property/dashboard/DboardMobileNavigation";
-import Footer from "@/components/property/dashboard/Footer";
-import SidebarDashboard from "@/components/property/dashboard/SidebarDashboard";
-import TokensExchange from "@/components/property/dashboard/dashboard-reviews/TokensExchange";
+import DboardMobileNavigation from "@/components/property/investor-module/DboardMobileNavigation";
+import Footer from "@/components/property/investor-module/Footer";
+import SidebarDashboard from "@/components/property/investor-module/SidebarDashboard";
+import SidebarDashboard from "@/components/property/investor-module/exchange/TokensExchange";
 
 export const metadata = {
-  title: "Dashboard My Favourites || Homez - Real Estate NextJS Template",
+  title: "Ortus Realty - My Tokens",
 };
 
 const DashboardMyFavourites = () => {
@@ -37,26 +36,15 @@ const DashboardMyFavourites = () => {
               </div>
               {/* End .row */}
 
-              <div className="row align-items-center pb40">
-                <div className="col-lg-12">
-                  <div className="dashboard_title_area">
-                    <h2>My Tokens Listings</h2>
-                  </div>
-                </div>
-              </div>
-              {/* End .row */}
-
               <div className="row">
-                <TokensExchange />
                 <div className="col-xl-12">
                   <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-                    <div className="mt30">
-                      <Pagination />
+                    <div className="packages_table table-responsive">
+                      <TokensExchange />
                     </div>
                   </div>
                 </div>
               </div>
-              {/* End .row */}
             </div>
             {/* End .dashboard__content */}
 

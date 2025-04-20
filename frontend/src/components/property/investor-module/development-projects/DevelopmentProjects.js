@@ -31,6 +31,7 @@ const ListingsFavourites = () => {
 
   const [ratings, setRatings] = useState([]);
   const [showOrderTKsForm, setShowOrderTKsForm] = useState(false);
+  const [ordersDetails, setOrdersDetails] = useState([]);
 
   const fetchProjects = async () => {
     if (fetchProjectsRef.current === true) return;
@@ -84,6 +85,32 @@ const ListingsFavourites = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const formatOrderDetails = (project_id, field, value) => {
+    let newOrdersDetails = ordersDetails;
+    let orderFound = false;
+    newOrdersDetails.forEach(order => {
+      if (order.projectId === project_id) {
+        order[field] = value;
+        orderFound = true;
+        return;
+      }
+    })
+    if (!orderFound) {
+      let newOrder = {projectId: project_id}
+      newOrder[field] = value
+      newOrdersDetails.push(newOrder);
+    }
+    console.log("order found: ", orderFound)
+    console.log("new orders: ", newOrdersDetails)
+    setOrdersDetails(newOrdersDetails)
+  }
+
+  const handleConfirmOrder = (e, projectId) => {}
+
+  useEffect(() => {
+    console.log(ordersDetails)
+  }, [ordersDetails])
 
   return (
     <>
@@ -145,7 +172,7 @@ const ListingsFavourites = () => {
                       View project details {">>"}
                     </Link>
                     {showOrderTKsForm ? (
-                      <form className="mt5">
+                      <form onSubmit={(e) => handleConfirmOrder(e, project.id)} className="mt5">
                         <div className="row">
                           <div className="col-6 mb-0">
                             <div className="">
@@ -155,6 +182,7 @@ const ListingsFavourites = () => {
                                 styles={customStyles}
                                 className="select-custom pl-0"
                                 classNamePrefix="select"
+                                onChange={(e) => formatOrderDetails(project.id, "tokenRatingId", e.value)}
                                 required
                               />
                             </div>
@@ -164,6 +192,7 @@ const ListingsFavourites = () => {
                               type="number"
                               className="form-control"
                               placeholder="No TKs"
+                              onChange={(e) => formatOrderDetails(project.id, "numOfTokens", e.target.value)}
                               required
                             />
                           </div>

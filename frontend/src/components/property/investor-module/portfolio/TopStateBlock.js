@@ -57,7 +57,7 @@ const TopStateBlock = () => {
         <p className="text-center fz20">A moment please...</p>
       ) : (
         <>
-          <div className="row gap-3 p-0 mb50">
+          <div className="row justify-content-between p-0 mb50">
             <div
               className={`d-flex justify-content-between statistics_funfact`}
             >

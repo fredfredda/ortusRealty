@@ -5,7 +5,7 @@ import PropertyViews from "@/components/property/investor-module/portfolio/prope
 const DashboardHome = () => {
   return (
     <>
-      <div className="row mb50">
+      <div className="row p30 pt-0 mb50">
         <TopStateBlock />
       </div>
       {/* End .row */}
