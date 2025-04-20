@@ -11,9 +11,9 @@ const DashboardHome = () => {
       {/* End .row */}
 
       <div className="row">
+        <h4 className="title fz20 mb5 text-center">Recent Activities</h4>
         <div className="col-xl-12">
           <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
-            <h4 className="title fz20 mb25 text-center">Recent Activities</h4>
             <RecentActivities />
           </div>
         </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 
-const RecentActivities = () => {
+const RecentActivities = ({projectId}) => {
   const [valuationHistory, setValuationHistory] = useState([]);
   const [loadingValuation, setLoadingValuation] = useState(true);
   const [valuationFetchOffset, setValuationFetchOffset] = useState(0);
@@ -17,7 +17,7 @@ const RecentActivities = () => {
 
   const dataLength = 5;
   const fetchValuation = useRef(false);
-  const fetchPrice = useRef(false);
+  const fetchPrice = useRef(false); 
 
   const fetchValuationHistory = async () => {
     if (fetchValuation.current === true) return;
@@ -25,7 +25,7 @@ const RecentActivities = () => {
     fetchValuation.current = true;
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/tokens-valuation-history?offset=${valuationFetchOffset}&dataLength=${dataLength}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/tokens-valuation-history?projectId=${projectId || 0}&offset=${valuationFetchOffset}&dataLength=${dataLength}`,
         {
           method: "GET",
           headers: {
@@ -63,7 +63,7 @@ const RecentActivities = () => {
     fetchPrice.current = true;
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/tokens-price-history?offset=${priceFetchOffset}&dataLength=${dataLength}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/tokens-price-history?projectId=${projectId || 0}&offset=${priceFetchOffset}&dataLength=${dataLength}`,
         {
           method: "GET",
           headers: {
@@ -124,7 +124,7 @@ const RecentActivities = () => {
               <Link
                 href={`/development-project/${valuation.development_project_id}`}
               >
-                {!valuation.previous_estimated_return ? (
+                {valuation.previous_estimated_return == 0 ? (
                   <>
                     {`${valuation.prpty_name} - ${valuation.token_rating} Tks initiated at `}
                     <span className="fwb">
@@ -177,7 +177,7 @@ const RecentActivities = () => {
               <Link
                 href={`development-project/${price.development_project_id}`}
               >
-                {!price.previous_price ? (
+                {price.previous_price == 0 ? (
                   <>
                     {`${price.prpty_name} - ${price.token_rating} Tks initiated at `}
                     <span className="fwb">

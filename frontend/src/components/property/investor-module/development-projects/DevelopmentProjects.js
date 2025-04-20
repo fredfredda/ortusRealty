@@ -5,6 +5,22 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import formatMoney from "@/utilis/FormatMoney";
 import TokensTable from "./TokensTable";
+import Select from "react-select";
+
+const customStyles = {
+  option: (styles, { isFocused, isSelected, isHovered }) => {
+    return {
+      ...styles,
+      backgroundColor: isSelected
+        ? "#eb6753"
+        : isHovered
+        ? "#eb675312"
+        : isFocused
+        ? "#eb675312"
+        : undefined,
+    };
+  },
+};
 
 const ListingsFavourites = () => {
   const [projects, setProjects] = useState([]);
@@ -12,6 +28,8 @@ const ListingsFavourites = () => {
   const dataLength = 4;
   const [page, setPage] = useState(1);
   const fetchProjectsRef = useRef(false);
+
+  const [ratings, setRatings] = useState([]);
 
   const fetchProjects = async () => {
     if (fetchProjectsRef.current === true) return;
@@ -72,68 +90,101 @@ const ListingsFavourites = () => {
         <p className="text-center fz20">No items available.</p>
       ) : (
         <>
-        {projects.map((project) => (
-          <div className="listing-style1 listing-type">
-            <div className="col-xl-4">
-              <p className="text-center fz20 fwb mb0">Project Info</p>
-              <div className="row project-info mb15">
-                <div className="list-thumb">
-                  <ImageKit
-                    width={382}
-                    height={248}
-                    className="w-100 h-100 cover"
-                    pathName={project.images.split(",")[0]}
-                    transformation={[{ quality: 80 }]}
-                    loading="lazy"
-                    alt="listings"
-                  />
-                  <div className="sale-sticker-wrap">
-                    {project.is_featured && (
-                      <div className="list-tag fz12">
-                        <span className="flaticon-electricity me-2" />
-                        FEATURED
-                      </div>
-                    )}
+          {projects.map((project) => (
+            <div className="listing-style1 listing-type">
+              <div className="col-xl-4">
+                <div className="row project-info mb15">
+                  <div className="list-thumb">
+                    <ImageKit
+                      width={382}
+                      height={248}
+                      className="w-100 h-100 cover"
+                      pathName={project.images.split(",")[0]}
+                      transformation={[{ quality: 80 }]}
+                      loading="lazy"
+                      alt="listings"
+                    />
+                    <div className="sale-sticker-wrap">
+                      {project.is_featured && (
+                        <div className="list-tag fz12">
+                          <span className="flaticon-electricity me-2" />
+                          FEATURED
+                        </div>
+                      )}
+                    </div>
+                    <div className="list-price">
+                      Value: Bif {formatMoney(project.prpty_price)}
+                    </div>
                   </div>
-                  <div className="list-price">
-                    Value: Bif {formatMoney(project.prpty_price)}
-                  </div>
-                </div>
 
-                <div className="list-content">
-                  <h6 className="list-title">
-                    <Link href={`/development-project/${project.id}`}>
-                      {project.prpty_name}
+                  <div className="list-content">
+                    <h6 className="list-title">
+                      <Link
+                        href={`/investor-module/development-project/${project.id}`}
+                      >
+                        {project.prpty_name}
+                      </Link>
+                    </h6>
+                    <p className="list-text">{project.prpty_location}</p>
+                    <p className="list-text2">
+                      Launching date: {project.launching_date.split("T")[0]}
+                    </p>
+                    <p className="list-text2">
+                      Estimated Finishing date:{" "}
+                      {project.estimated_finishing_date.split("T")[0]}
+                    </p>
+                    <p className="list-text2">
+                      Total TKs: {project.total_tokens}
+                    </p>
+                    <button className="mt5 btn btn-dark">Order TKs</button>
+                    {/* <form>
+                      <div className="row">
+                        <div className="col-6 mb-0">
+                          <div className="">
+                            <Select
+                              name="colors"
+                              options={ratings}
+                              styles={customStyles}
+                              className="select-custom pl-0"
+                              classNamePrefix="select"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-5 mb-0">
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="No TKs"
+                            required
+                          />
+                        </div>
+                        <div className="row justify-content-center align-items-center mt5 ">
+                            <input className="col-10 btn btn-dark" type="submit" value="Confirm Order" />
+
+                          <div className="col-5 align-items-center text-center">
+                            <p className="curp text-underline">Cancel</p>
+                          </div>
+                        </div>
+                      </div>
+                    </form> */}
+                    <Link
+                      href={`/investor-module/development-project/${project.id}`}
+                      className="fwb"
+                    >
+                      View project details {">>"}
                     </Link>
-                  </h6>
-                  <p className="list-text">{project.prpty_location}</p>
-                  <p className="list-text2">
-                    Launching date: {project.launching_date.split("T")[0]}
-                  </p>
-                  <p className="list-text2">
-                    Estimated Finishing date:{" "}
-                    {project.estimated_finishing_date.split("T")[0]}
-                  </p>
-                  <p className="list-text2">
-                    Total TKs: {project.total_tokens}
-                  </p>
-                  <Link
-                    href={`/development-project/${project.id}`}
-                    className="fwb"
-                  >
-                    View project details {">>"}
-                  </Link>
+                  </div>
                 </div>
               </div>
+
+              <TokensTable projectId={project.id} setRatings={setRatings} />
             </div>
+          ))}
 
-            <TokensTable projectId={project.id}/>
-          </div>
-        ))}
-
-        {loadingProjects && (
-          <p className="text-center fz20">A moment please...</p>
-        )}
+          {loadingProjects && (
+            <p className="text-center fz20">A moment please...</p>
+          )}
         </>
       )}
     </>

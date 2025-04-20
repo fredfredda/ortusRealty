@@ -2,7 +2,7 @@ import formatMoney from "@/utilis/FormatMoney";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-const TokensTable = ({ projectId }) => {
+const TokensTable = ({ projectId, setRatings }) => {
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,6 +31,16 @@ const TokensTable = ({ projectId }) => {
         );
       } else if (data.tokens) {
         setTokens(data.tokens);
+        if (setRatings) {
+          setRatings(
+            data.tokens.map((token) => {
+              return {
+                value: token.token_rating_id,
+                label: token.token_rating,
+              };
+            })
+          );
+        }
       }
     } catch (error) {
       console.error("Error fetching Tks: ", error);
@@ -46,7 +56,6 @@ const TokensTable = ({ projectId }) => {
 
   return (
     <div className="col-xl-7">
-      <p className="text-center fz20 fwb mb0">Tks Info</p>
       <table className="table">
         <thead>
           <tr className="text-center">
@@ -81,7 +90,12 @@ const TokensTable = ({ projectId }) => {
           )}
         </tbody>
       </table>
-      <p className="fz13"><span className="fwb">N.B: </span>Some of these Tks might have been ordered already, and others might be on the exchange. Please Click on <span className="fwb">view project details</span> to get detailed information.</p>
+      <p className="fz13">
+        <span className="fwb">N.B: </span>Some of these Tks might have been
+        ordered already, and others might be on the exchange. Please Click on{" "}
+        <span className="fwb">view project details</span> to get detailed
+        information.
+      </p>
     </div>
   );
 };

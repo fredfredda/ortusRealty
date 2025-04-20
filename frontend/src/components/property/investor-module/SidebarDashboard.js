@@ -9,33 +9,33 @@ const SidebarDashboard = () => {
   const sidebarItems = [
     {
       href: "/portfolio",
-      icon: "flaticon-discovery",
+      icon: "far fa-file-invoice-dollar",
       text: "Portfolio",
     },
     {
       href: "/development-projects",
-      icon: "flaticon-chat-1",
-      text: "Development Projects",
+      icon: "far fa-chart-tree-map",
+      text: "Projects",
     },
     {
       href: "/token-orders",
-      icon: "flaticon-new-tab",
-      text: "My Token Orders",
+      icon: "far fa-money-check-pen",
+      text: "My TKs Orders",
     },
     {
       href: "/tokens",
-      icon: "flaticon-home",
-      text: "My Tokens",
+      icon: "far fa-coin",
+      text: "My TKs",
     },
     {
       href: "/exchange",
-      icon: "flaticon-like",
-      text: "Tokens Exchange",
+      icon: "far fa-coins",
+      text: "TKs Exchange",
     },
     {
       href: "/tokens-listings",
-      icon: "flaticon-search-2",
-      text: "My Tokens Listings",
+      icon: "far fa-money-check-dollar-pen",
+      text: "My TKs Listings",
     },
     {
       href: "/received-requests",
@@ -44,7 +44,7 @@ const SidebarDashboard = () => {
     },
     {
       href: "/sent-requests",
-      icon: "flaticon-protection",
+      icon: "far fa-money-check-dollar",
       text: "Sent Requests",
     }
   ];

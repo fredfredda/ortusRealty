@@ -28,18 +28,10 @@ const DashboardHome = () => {
 
           <div className="dashboard__main pl0-md">
             <div className="dashboard__content bgc-f7">
-              <div className="row pb15">
+              <div className="row">
                 <div className="col-lg-12">
                   <DboardMobileNavigation />
                 </div>
-                {/* End .col-12 */}
-
-                <div className="col-lg-12">
-                  <div className="dashboard_title_area">
-                    <h1>Portfolio</h1>
-                  </div>
-                </div>
-                {/* col-lg-12 */}
               </div>
               {/* End .row */}
 

@@ -12,17 +12,17 @@ import toast from "react-hot-toast";
 const menuItems = {
   items: [
     {
-      icon: "flaticon-user",
+      icon: "far fa-user",
       text: "My Profile",
       href: "/profile",
     },
     {
-      icon: "flaticon-home",
+      icon: "far fa-home",
       text: "Saved Properties",
       href: "/saved-properties",
     },
     {
-      icon: "flaticon-home",
+      icon: "far fa-user-tie",
       text: "Investor Module",
       href: "/investor-module/portfolio",
     },
@@ -183,7 +183,7 @@ const Header = () => {
                                   className="dropdown-item"
                                   onClick={handleLogout}
                                 >
-                                  <i className="flaticon-exit mr10" />
+                                  <i className="far fa-arrow-right-from-bracket mr10" />
                                   Logout
                                 </button>
                               </div>

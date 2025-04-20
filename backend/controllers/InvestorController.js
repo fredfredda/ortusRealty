@@ -148,10 +148,11 @@ const getInvestorTokens = async (req,res) => {
 
 const getTokensValuationHistory = async (req, res) => {
   try {
-    const { dataLength, offset } = req.query;
+    const { dataLength, offset, projectId } = req.query;
     const valuationHistory = await getTokensValuationHistoryFromDb(
       dataLength,
-      offset
+      offset,
+      Number(projectId)
     );
     if (valuationHistory.error)
       return res.status(500).json({ error: "Internal Server Error" });
@@ -164,8 +165,8 @@ const getTokensValuationHistory = async (req, res) => {
 
 const getTokensPriceHistory = async (req, res) => {
   try {
-    const { dataLength, offset } = req.query;
-    const priceHistory = await getTokensPriceHistoryFromDb(dataLength, offset);
+    const { dataLength, offset, projectId } = req.query;
+    const priceHistory = await getTokensPriceHistoryFromDb(dataLength, offset, Number(projectId));
     if (priceHistory.error)
       return res.status(500).json({ error: "Internal Server Error" });
     res.status(200).json({ priceHistory });

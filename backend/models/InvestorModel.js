@@ -92,7 +92,8 @@ const getPortfolioFromDb = async (userId) => {
 
 const getInvestorTokensFromDb = async (userId) => {
   try {
-    const tokens = await db.query(`
+    const tokens = await db.query(
+      `
       SELECT COUNT(pt.id) AS num_of_tokens, p.prpty_price,
       pt.development_project_id, p.prpty_name, p.prpty_location,
       p.images, dp.launching_date, dp.estimated_finishing_date,
@@ -111,30 +112,54 @@ const getInvestorTokensFromDb = async (userId) => {
           p.prpty_name, p.prpty_location, p.images,
           dp.launching_date, dp.estimated_finishing_date,
           ts.token_status, p.prpty_price)
-    `, [userId]);
+    `,
+      [userId]
+    );
     const data = tokens.rows;
     return data;
   } catch (error) {
     console.log(error);
     return { error };
   }
-}
+};
 
-const getTokensValuationHistoryFromDb = async (dataLength, offset) => {
+const getTokensValuationHistoryFromDb = async (
+  dataLength,
+  offset,
+  projectId
+) => {
   try {
-    const valuationHistory = await db.query(
-      `
-      SELECT tvh.*, p.prpty_name, tr.token_rating
-      FROM token_valuation_history AS tvh
-      JOIN token_ratings AS tr ON tvh.token_rating_id = tr.id
-      JOIN development_projects AS dp
-      ON tvh.development_project_id = dp.id
-      JOIN properties AS p ON dp.property_id = p.id
-      ORDER BY tvh.id DESC
-      LIMIT $1 OFFSET $2
-      `,
-      [dataLength, offset]
-    );
+    let valuationHistory;
+    if (projectId !== 0) {
+      valuationHistory = await db.query(
+        `
+       SELECT tvh.*, p.prpty_name, tr.token_rating
+       FROM token_valuation_history AS tvh
+       JOIN token_ratings AS tr ON tvh.token_rating_id = tr.id
+       JOIN development_projects AS dp
+       ON tvh.development_project_id = dp.id
+       JOIN properties AS p ON dp.property_id = p.id
+       WHERE tvh.development_project_id = $1
+       ORDER BY tvh.id DESC
+       LIMIT $2 OFFSET $3
+       `,
+        [projectId, dataLength, offset]
+      );
+    } else {
+      valuationHistory = await db.query(
+        `
+        SELECT tvh.*, p.prpty_name, tr.token_rating
+        FROM token_valuation_history AS tvh
+        JOIN token_ratings AS tr ON tvh.token_rating_id = tr.id
+        JOIN development_projects AS dp
+        ON tvh.development_project_id = dp.id
+        JOIN properties AS p ON dp.property_id = p.id
+        ORDER BY tvh.id DESC
+        LIMIT $1 OFFSET $2
+        `,
+        [dataLength, offset]
+      );
+    }
     return valuationHistory.rows;
   } catch (error) {
     console.log(error);
@@ -142,21 +167,39 @@ const getTokensValuationHistoryFromDb = async (dataLength, offset) => {
   }
 };
 
-const getTokensPriceHistoryFromDb = async (dataLength, offset) => {
+const getTokensPriceHistoryFromDb = async (dataLength, offset, projectId) => {
   try {
-    const priceHistory = await db.query(
-      `
-      SELECT thp.*, p.prpty_name, tr.token_rating
-      FROM token_history_prices AS thp
-      JOIN token_ratings AS tr ON thp.token_rating_id = tr.id
-      JOIN development_projects AS dp
-      ON thp.development_project_id = dp.id
-      JOIN properties AS p ON dp.property_id = p.id
-      ORDER BY thp.id DESC
-      LIMIT $1 OFFSET $2
-      `,
-      [dataLength, offset]
-    );
+    let priceHistory;
+    if (projectId !== 0) {
+      priceHistory = await db.query(
+        `
+       SELECT thp.*, p.prpty_name, tr.token_rating
+       FROM token_history_prices AS thp
+       JOIN token_ratings AS tr ON thp.token_rating_id = tr.id
+       JOIN development_projects AS dp
+       ON thp.development_project_id = dp.id
+       JOIN properties AS p ON dp.property_id = p.id
+       WHERE thp.development_project_id = $1
+       ORDER BY thp.id DESC
+       LIMIT $2 OFFSET $3
+       `,
+        [projectId, dataLength, offset]
+      );
+    } else {
+      priceHistory = await db.query(
+        `
+        SELECT thp.*, p.prpty_name, tr.token_rating
+        FROM token_history_prices AS thp
+        JOIN token_ratings AS tr ON thp.token_rating_id = tr.id
+        JOIN development_projects AS dp
+        ON thp.development_project_id = dp.id
+        JOIN properties AS p ON dp.property_id = p.id
+        ORDER BY thp.id DESC
+        LIMIT $1 OFFSET $2
+        `,
+        [dataLength, offset]
+      );
+    }
     return priceHistory.rows;
   } catch (error) {
     console.log(error);
@@ -193,15 +236,19 @@ const getAllDvpProjectsFromDb = async (dataLength, offset) => {
 const getDvpDetailsFromDb = async (projectId) => {
   try {
     const dvpDetails = await db.query(
-      `SELECT dp.id, dp.property_id, p.prpty_name, p.prpty_description,
-      dp.launching_date, dp.estimated_finishing_date, dp.total_tokens,
-      dp.minimum_tokens_to_buy, dp.tokens_description, 
-      dp.development_project_status_id, dps.development_project_status
-      FROM development_projects as dp
-      JOIN properties as p ON dp.property_id = p.id
-      JOIN development_project_statuses as dps
-      ON dp.development_project_status_id = dps.id
-      WHERE dp.development_project_status_id = 2 AND dp.id = $1`,
+      `SELECT dp.id, dp.property_id, p.prpty_name, p.images,
+        p.prpty_description, p.prpty_price, p.prpty_size, 
+        p.prpty_location, p.prpty_latitude, p.prpty_longitude,
+        pc.category_name, dp.launching_date, to_char(dp.launching_date, 'YYYY-MM-DD') as launching_date_as_string,
+        dp.estimated_finishing_date, to_char(dp.estimated_finishing_date, 'YYYY-MM-DD') as estimated_finishing_date_as_string,
+        dp.minimum_tokens_to_buy, dp.tokens_description_user, dp.total_tokens,
+        dp.development_project_status_id, dps.development_project_status
+        FROM development_projects AS dp
+        JOIN properties AS p ON dp.property_id = p.id
+        JOIN property_categories AS pc ON p.category_id = pc.id
+        JOIN development_project_statuses AS dps
+        ON dp.development_project_status_id = dps.id 
+        WHERE dp.development_project_status_id = 2 AND dp.id = $1`,
       [projectId]
     );
     const data = dvpDetails.rows[0];
@@ -216,7 +263,7 @@ const getTokensByProjectIdFromDb = async (projectId) => {
   try {
     const { rows: tokens } = await db.query(
       `
-      SELECT tr.token_rating, 
+      SELECT tr.token_rating, pt.token_rating_id,
       COUNT(pt.id) AS num_of_tokens, pt.estimated_return,
       pt.token_price
       FROM property_tokens AS pt

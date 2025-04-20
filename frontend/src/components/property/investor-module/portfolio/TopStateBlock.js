@@ -59,7 +59,7 @@ const TopStateBlock = () => {
         <>
           <div className="row gap-3 p-0 mb50">
             <div
-              className={`d-flex justify-content-between statistics_funfact active-investment`}
+              className={`d-flex justify-content-between statistics_funfact`}
             >
               <div className="details">
                 <div className={`text fz20`}>Active Investments</div>
@@ -67,7 +67,7 @@ const TopStateBlock = () => {
                   Bif {formatMoney(activeInvestments.balance) || "0"}
                 </div>
                 <p className="text">
-                  <span className="fwb">Tks: </span>
+                  <span className="fwb">TKs: </span>
                   {activeInvestments?.tokenInfo.length > 0
                     ? activeInvestments.tokenInfo.map(
                         (data, index) => data.rating + "(" + data.value + ")  "
@@ -79,7 +79,7 @@ const TopStateBlock = () => {
             </div>
 
             <div
-              className={`d-flex justify-content-between statistics_funfact ready-for-payout`}
+              className={`d-flex justify-content-between statistics_funfact`}
             >
               <div className="details">
                 <div className={`text fz20`}>Ready For Payout</div>
@@ -87,7 +87,7 @@ const TopStateBlock = () => {
                   Bif {formatMoney(readyForPayout.balance) || "0"}
                 </div>
                 <p className="text">
-                  <span className="fwb">Tks: </span>
+                  <span className="fwb">TKs: </span>
                   {readyForPayout?.tokenInfo.length > 0
                     ? readyForPayout.tokenInfo.map(
                         (data, index) => data.rating + "(" + data.value + ")  "
@@ -111,10 +111,10 @@ const TopStateBlock = () => {
                   {data.tokenInfo.map((data, index) => (
                     <div
                       key={index}
-                      className="d-flex justify-content-between statistics_funfact active-investment"
+                      className="d-flex justify-content-between statistics_funfact"
                     >
                       <div className="details">
-                        <div className="title active-investment">{data.value} Tks</div>
+                        <div className="title active-investment">{data.value} TKs</div>
                         <div className="text fz25">
                           Estimated return:{" "}
                           <span className="fwb active-investment">{data.return}%</span>
@@ -142,10 +142,10 @@ const TopStateBlock = () => {
                   {data.tokenInfo.map((data, index) => (
                     <div
                       key={index}
-                      className="d-flex justify-content-between statistics_funfact active-investment"
+                      className="d-flex justify-content-between statistics_funfact"
                     >
                       <div className="details">
-                        <div className="title ready-for-payout">{data.value} Tks</div>
+                        <div className="title ready-for-payout">{data.value} TKs</div>
                         <div className="text fz25">
                           Return:{" "}
                           <span className="fwb ready-for-payout">{data.return}%</span>
