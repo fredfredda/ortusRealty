@@ -97,7 +97,7 @@ const getInvestorTokensFromDb = async (userId) => {
       SELECT COUNT(pt.id) AS num_of_tokens, p.prpty_price,
       pt.development_project_id, p.prpty_name, p.prpty_location,
       p.images, dp.launching_date, dp.estimated_finishing_date,
-      tr.token_rating, pt.estimated_return, ts.token_status
+      tr.token_rating, pt.token_rating_id, pt.estimated_return, ts.token_status
       FROM property_tokens AS pt
       JOIN token_statuses AS ts ON pt.token_status_id = ts.id 
       JOIN investors_tokens AS it ON pt.id = it.property_token_id
@@ -107,7 +107,7 @@ const getInvestorTokensFromDb = async (userId) => {
       JOIN properties AS p ON dp.property_id = p.id
       WHERE pt.token_status_id != 1 AND it.user_id = $1
       AND it.investors_tokens_status_id = 1
-      GROUP BY(pt.development_project_id, tr.token_rating,
+      GROUP BY(pt.development_project_id, pt.token_rating_id, tr.token_rating,
             pt.estimated_return,
           p.prpty_name, p.prpty_location, p.images,
           dp.launching_date, dp.estimated_finishing_date,
@@ -391,12 +391,12 @@ const deleteOrderFromDb = async (orderId) => {
   }
 };
 
-const getAllTokenListingsFromDb = async () => {
+const getAllTokenListingsFromDb = async (dataLength, offset) => {
   try {
     const tokenListings = await db.query(
       `
       SELECT et.id, et.listed_by_id, et.description, et.num_of_tokens,
-      tr.token_rating, et.development_project_id, p.prpty_name,
+      tr.token_rating, et.development_project_id, p.prpty_name, p.images,
       p.prpty_location, p.prpty_price, dp.launching_date,
       dp.estimated_finishing_date, pt.estimated_return
       FROM exchange_tokens AS et
@@ -413,8 +413,42 @@ const getAllTokenListingsFromDb = async () => {
       ON et.development_project_id = dp.id
       JOIN properties AS p ON dp.property_id = p.id
       WHERE et.exchange_token_status_id = 1
-      `
+      ORDER BY et.id DESC
+      LIMIT $1 OFFSET $2
+      `, [dataLength, offset]
     );
+    const data = tokenListings.rows;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+const getInvestorTokenListingsFromDb = async (userId) => {
+  try {
+    const tokenListings = await db.query(
+      `
+      SELECT et.id, et.listed_by_id, et.description, et.num_of_tokens,
+      tr.token_rating, et.development_project_id, p.prpty_name,
+      p.prpty_location, p.prpty_price, p.images, dp.launching_date,
+      dp.estimated_finishing_date, pt.estimated_return
+      FROM exchange_tokens AS et
+      JOIN (
+        SELECT estimated_return, token_rating_id AS tkr_id,
+        development_project_id AS dp_id
+        FROM property_tokens
+        GROUP BY(development_project_id, token_rating_id, 
+            estimated_return)
+      ) AS pt ON et.development_project_id = pt.dp_id
+      AND et.token_rating_id = pt.tkr_id
+      JOIN token_ratings AS tr ON et.token_rating_id = tr.id
+      JOIN development_projects AS dp
+      ON et.development_project_id = dp.id
+      JOIN properties AS p ON dp.property_id = p.id
+      WHERE et.exchange_token_status_id = 1 AND et.listed_by_id = $1
+      `
+    , [userId]);
     const data = tokenListings.rows;
     return data;
   } catch (error) {
@@ -504,7 +538,7 @@ const checkUserTokensFromDb = async (
 const listTokensFromDb = async (
   userId,
   numOfTokens,
-  description,
+  // description,
   tokenRatingId,
   statusId,
   projectId,
@@ -516,7 +550,7 @@ const listTokensFromDb = async (
       [
         userId,
         numOfTokens,
-        description,
+        "",
         tokenRatingId,
         statusId,
         projectId,
@@ -838,6 +872,7 @@ export {
   getOrderDetailsFromDb,
   deleteOrderFromDb,
   getAllTokenListingsFromDb,
+  getInvestorTokenListingsFromDb,
   getTokenListingDetailsFromDb,
   checkUserTokensFromDb,
   listTokensFromDb,

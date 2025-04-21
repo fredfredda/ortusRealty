@@ -30,12 +30,12 @@ const SidebarDashboard = () => {
     {
       href: "/exchange",
       icon: "far fa-coins",
-      text: "TKs Exchange",
+      text: "TKs Auctions",
     },
     {
       href: "/tokens-listings",
       icon: "far fa-money-check-dollar-pen",
-      text: "My TKs Listings",
+      text: "My TKs Auctions",
     },
     {
       href: "/received-requests",

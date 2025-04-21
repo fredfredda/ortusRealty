@@ -26,6 +26,7 @@ import {
   getTokensPriceHistory,
   getTokensByProjectId,
   getInvestorTokens,
+  getInvestorTokenListings,
 } from "../controllers/InvestorController.js";
 
 const router = express.Router();
@@ -50,6 +51,7 @@ router.get(
   protectRoute,
   getTokenListingDetails
 );
+router.get("/investor-token-listings", protectRoute, getInvestorTokenListings)
 router.post("/list-tokens", protectRoute, listTokens);
 // to update token listing, delete and create a new one
 // router.put(

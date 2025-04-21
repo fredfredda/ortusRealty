@@ -1,6 +1,6 @@
 import React, { useState} from "react";
 
-const ProperytyDescriptions = ({ description }) => {
+const TokensDescription = ({ description }) => {
   const textLength = description.split("|").length;
   const introText = description.split("|")[0];
   const bodyText = description.split("|").slice(1, textLength);
@@ -47,4 +47,4 @@ const ProperytyDescriptions = ({ description }) => {
   );
 };
 
-export default ProperytyDescriptions;
+export default TokensDescription;

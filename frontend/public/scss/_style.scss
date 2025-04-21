@@ -1166,19 +1166,28 @@ li {
     -o-transition: all 0.4s ease;
     transition: all 0.4s ease;
 }
-.listing-style1 .list-price {
-    background-color: #ffffff;
+.listing-style1 .list-price, .listing-style1 .list-tokens {
     border-radius: 6px;
     bottom: 20px;
-    color: var(--headings-color);
     font-family: var(--title-font-family);
     font-weight: 600;
-    font-size: 15px;
     left: 20px;
-    padding: 3px 12px;
     position: absolute;
 }
-.listing-style1 .list-price span {
+.listing-style1 .list-price{
+    background-color: #ffffff;
+    color: var(--headings-color);
+    font-size: 15px;
+    padding: 3px 12px;
+}
+.listing-style1 .list-tokens{
+    background-color: var(--primary-color);
+    color: #fff;
+    // border: 1.5px solid #fff;
+    font-size: 40px;
+    padding: 16px 20px;
+}
+.listing-style1 .list-price span, .listing-style1 .list-tokens span {
     font-weight: normal;
 }
 .listing-style1 .list-meta a {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import formatMoney from "@/utilis/FormatMoney";
 import PaginationTwo from "@/components/listing/PaginationTwo";
+import ListTokensForm from "./ListTokensForm";
 
 const MyTokens = () => {
   const [tokens, setTokens] = useState([]);
@@ -67,7 +68,7 @@ const MyTokens = () => {
             <th scope="col">Project</th>
             <th scope="col">Num Of TKs</th>
             <th scope="col">Rating</th>
-            <th scope="col">Estimated Return</th>
+            <th scope="col">Projected Revenue</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
           </tr>
@@ -127,11 +128,17 @@ const MyTokens = () => {
                 <td className="vam">
                   <h5>{token.token_rating}</h5>
                 </td>
-                <td className="vam">Bif {formatMoney(token.estimated_return)}</td>
+                <td className="vam">
+                  Bif{" "}
+                  {formatMoney(token.estimated_return * token.num_of_tokens)}
+                </td>
                 <td className="vam">{token.token_status}</td>
                 <td className="vam">
                   {token.token_status === "active" && (
-                    <button className="btn btn-dark">List TKs</button>
+                    <ListTokensForm
+                      projectId={token.development_project_id}
+                      tokenRatingId={token.token_rating_id}
+                    />
                   )}
                 </td>
               </tr>

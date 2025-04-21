@@ -28,6 +28,7 @@ import {
   getTokensPriceHistoryFromDb,
   getTokensByProjectIdFromDb,
   getInvestorTokensFromDb,
+  getInvestorTokenListingsFromDb,
 } from "../models/InvestorModel.js";
 
 const getPortfolio = async (req, res) => {
@@ -328,10 +329,30 @@ const cancelOrder = async (req, res) => {
 const getAllTokenListings = async (req, res) => {
   try {
     const { userId } = req.user;
-    const tokenListings = await getAllTokenListingsFromDb();
-    if (tokenListings.error)
+    const { dataLength, page } = req.query;
+    const offset = (page - 1) * dataLength;
+    const listings = await getAllTokenListingsFromDb(dataLength, offset);
+    if (listings.error)
       return res.status(500).json({ error: "Internal server error" });
-    res.status(200).json({ tokenListings });
+
+    listings.forEach((token) => {
+      token.projected_revenue = token.estimated_return * token.num_of_tokens;
+    });
+
+    res.status(200).json({ listings });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getInvestorTokenListings = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const listings = await getInvestorTokenListingsFromDb(userId);
+    if (listings.error)
+      return res.status(500).json({ error: "Internal server error" });
+    res.status(200).json({ listings });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
@@ -359,7 +380,7 @@ const listTokens = async (req, res) => {
     const { userId } = req.user;
     const { numOfTokens, tokenRatingId, projectId, description } = req.body;
 
-    if (!numOfTokens || !tokenRatingId || !projectId || !description)
+    if (!numOfTokens || !tokenRatingId || !projectId)
       return res.status(400).json({ error: "Please provide all fields" });
 
     // check if the user has enough tokens to list
@@ -377,7 +398,7 @@ const listTokens = async (req, res) => {
     const list_tokens = await listTokensFromDb(
       userId,
       numOfTokens,
-      description,
+      // description,
       tokenRatingId,
       statusId,
       projectId,
@@ -742,6 +763,7 @@ export {
   orderTokens,
   cancelOrder,
   getAllTokenListings,
+  getInvestorTokenListings,
   getTokenListingDetails,
   listTokens,
   // updateTokenListing,

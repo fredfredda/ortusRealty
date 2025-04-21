@@ -114,10 +114,16 @@ const Project = ({ projectId }) => {
 
                 <div className="row flex-column mt30">
                     <TokensTable projectId={projectId} />
-                  <p>
+                  <p className="mb-0">
                     Minimum TKs to buy:{" "}
                     <span className="fwb">
                       {projectInfo.minimum_tokens_to_buy}
+                    </span>
+                  </p>
+                  <p>
+                    Total TKs:{" "}
+                    <span className="fwb">
+                      {projectInfo.total_tokens}
                     </span>
                   </p>
                 </div>

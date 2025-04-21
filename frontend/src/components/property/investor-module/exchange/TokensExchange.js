@@ -1,89 +1,134 @@
 "use client";
-import React from "react";
-import { Tooltip as ReactTooltip } from "react-tooltip";
-import listings from "@/data/listings";
-import Image from "next/image";
-import { useState } from "react";
+import toast from "react-hot-toast";
 import Link from "next/link";
+import ImageKit from "@/components/common/ImageKit";
+import { useEffect, useRef, useState } from "react";
+import formatMoney from "@/utilis/FormatMoney";
+import RequestTokensForm from "./RequestTokensForm";
+import { sessionStore } from "@/store/session";
 
-const ListingsFavourites = () => {
-  const [favoriteListings, setFavoriteListings] = useState(
-    listings.slice(0, 8)
-  );
+const TokensExchange = () => {
+  const session = sessionStore((state) => state.session);
+  const userId = session?.userId;
 
-  const handleDeleteListing = (id) => {
-    const updatedListings = favoriteListings.filter(
-      (listing) => listing.id !== id
-    );
-    setFavoriteListings(updatedListings);
+  const [tokens, setTokens] = useState([]);
+  const [loadingTokens, setLoadingTokens] = useState(true);
+  const dataLength = 6;
+  const [page, setPage] = useState(1);
+  const fetchTokensRef = useRef(false);
+  const [numOfItems, setNumOfItems] = useState(dataLength);
+
+  const fetchTokensFunc = async () => {
+    if (fetchTokensRef.current === true) return;
+    setLoadingTokens(true);
+    fetchTokensRef.current = true;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/investor/token-listings?dataLength=${dataLength}&page=${page}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+      if (data.error) {
+        console.error("Error fetching auctions: ", data.error);
+        toast.error(
+          typeof data.error === "string" ? data.error : "An error occured"
+        );
+      } else if (data.listings) {
+        setTokens((prev) => [...prev, ...data.listings]);
+        setNumOfItems(data.listings.length);
+      }
+    } catch (error) {
+      console.log("Error fetching auctions: ", error);
+      toast.error("Error fetching auctions");
+    } finally {
+      setLoadingTokens(false);
+    }
   };
 
+  useEffect(() => {
+    fetchTokensFunc();
+  }, [page]);
+
+  const handleScroll = () => {
+    if (numOfItems < dataLength) return;
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {
+      fetchTokensRef.current = false;
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
-    <>
-      {favoriteListings.length === 0 ? (
-        <h3>No items available.</h3>
+    <div className="row">
+      {loadingTokens ? (
+        <p className="text-center fz20">A moment please... </p>
+      ) : tokens.length === 0 ? (
+        <p className="text-center fz20">No items available.</p>
       ) : (
-        favoriteListings.map((listing) => (
-            <div className="listing-style1 listing-type">
+        tokens.map((token) => (
+          <div className="col-sm-12 col-lg-6" key={token.id}>
+            <div className="listing-style1">
+              <div className="list-thumb">
+                <ImageKit
+                  width={382}
+                  height={248}
+                  className="w-100 h-100 cover"
+                  pathName={token.images.split(",")[0]}
+                  transformation={[{ quality: 80 }]}
+                  loading="lazy"
+                  alt="listings"
+                />
 
-              <div className="col-xl-5 mb15">
-                <p className="fz20 fwb mb5">Project Info</p>
-                <div className="row project-info mb15">
-                  <div className="list-thumb">
-                    <Image
-                      width={382}
-                      height={248}
-                      className="w-100 h-100 cover"
-                      src={"/images/listings/g1-2.jpg"}
-                      alt="listings"
-                    />
-                    <div className="sale-sticker-wrap">
-                      {!listing.forRent && (
-                        <div className="list-tag fz12">
-                          <span className="flaticon-electricity me-2" />
-                          FEATURED
-                        </div>
-                      )}
-                    </div>
-                    <div className="list-price">
-                      {listing.price} / <span>mo</span>
-                    </div>
-                  </div>
-
-                  <div className="list-content">
-                    <h6 className="list-title">
-                      <Link href={`/single-v4/${listing.id}`}>
-                        {listing.title}
-                      </Link>
-                    </h6>
-                    <p className="list-text order-text">{listing.location}</p>
-                    <p className="list-text2">Launching date: 26/03/2025</p>
-                    <p className="list-text2">Estimated Finishing date: 26/03/2025</p>
-                    <Link href="#" className="fwb">View project details {">>"}</Link>
-                  </div>
-                </div>
+                <div className="list-tokens">{token.num_of_tokens} TKs</div>
               </div>
-
-              <div className="col-xl-5">
-                <p className="fz20 fwb mb0">Tokens Info</p>
-                  <div className="list-content token-order-info">
-                    <p className="list-text2">Num of Tokens: 12</p>
-                    <p className="list-text2">Tokens Rating: BB</p>
-                    <p className="list-text2">Tokens Expiry date: 26/03/2027 23:59:59</p>
-                    <p className="list-text2">Total Cost: Bif 36,000,000</p>
-                    <p className="list-text2">Estimated Return: 5.7%</p>
-                    <p className="list-text2">Date of order: 20/04/2025</p>
-                    <p className="list-text2">Order Complete At: 26/04/2025 23:59:59</p>
-                    <p className="list-text2">Tokens status: Active</p>
-                    <Link href="#" className="fwb">View Tokens History {">>"}</Link>
-                  </div>
+              <div className="list-content">
+                <h6 className="list-title">
+                  <Link
+                    href={`/investor-module/development-project/${token.development_project_id}`}
+                  >
+                    {token.prpty_name}
+                  </Link>
+                </h6>
+                <p className="list-text">{token.prpty_location}</p>
+                <p className="list-text2 mb-0">
+                  Launching Date: {token.launching_date.split("T")[0]}
+                </p>
+                <p className="list-text2 mb-0">
+                  Estimated Finishing Date:{" "}
+                  {token.estimated_finishing_date.split("T")[0]}
+                </p>
+                <p className="list-text2 mb-0">
+                  TKs Projected Revenue: Bif{" "}
+                  {formatMoney(token.projected_revenue)}
+                </p>
+                <p className="list-text2">
+                  Property Value: Bif {formatMoney(token.prpty_price)}
+                </p>
+                {userId !== token.listed_by_id && (
+                  <RequestTokensForm listingId={token.id} />
+                )}
               </div>
-
             </div>
+          </div>
         ))
       )}
-    </>
+    </div>
   );
 };
 
-export default ListingsFavourites;
+export default TokensExchange;

@@ -3,10 +3,10 @@ import MobileMenu from "@/components/common/mobile-menu";
 import DboardMobileNavigation from "@/components/property/investor-module/DboardMobileNavigation";
 import Footer from "@/components/property/investor-module/Footer";
 import SidebarDashboard from "@/components/property/investor-module/SidebarDashboard";
-import SidebarDashboard from "@/components/property/investor-module/exchange/TokensExchange";
+import TokenListings from "@/components/property/investor-module/token-listings/TokenListings"
 
 export const metadata = {
-  title: "Ortus Realty - My Tokens",
+  title: "Ortus Realty - My TKs Listings",
 };
 
 const DashboardMyFavourites = () => {
@@ -40,7 +40,7 @@ const DashboardMyFavourites = () => {
                 <div className="col-xl-12">
                   <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
                     <div className="packages_table table-responsive">
-                      <TokensExchange />
+                      <TokenListings />
                     </div>
                   </div>
                 </div>

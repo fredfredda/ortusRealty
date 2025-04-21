@@ -4,6 +4,7 @@ import DboardMobileNavigation from "@/components/property/investor-module/Dboard
 import Footer from "@/components/property/investor-module/Footer";
 import SidebarDashboard from "@/components/property/investor-module/SidebarDashboard";
 import Tokens from "@/components/property/investor-module/tokens/Tokens";
+import Link from "next/link";
 
 export const metadata = {
   title: "Ortus Realty - My Tokens",
@@ -34,7 +35,7 @@ const DashboardMyFavourites = () => {
                 </div>
                 {/* End .col-12 */}
               </div>
-              {/* End .row */} 
+              {/* End .row */}
 
               <div className="row">
                 <div className="col-xl-12">
